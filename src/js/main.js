@@ -19,4 +19,6 @@ var app = angular
       })
     })
 
-  .controller('mainController', function() {});
+  .controller('mainController', function() {
+    console.log("hola");
+  });
