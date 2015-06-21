@@ -90,7 +90,7 @@ gulp.task('copy', function () {
 });
 
 //gulp.task('build:prod', ['jade:prod', 'sass:prod', 'js:prod', 'bower', 'copy']);
-gulp.task('build:dev', ['jade:dev', 'sass:dev', 'js:dev', 'bower']);
+gulp.task('build:dev', ['jade:dev', 'sass:dev', 'js:dev', 'bower', 'copy']);
 
 gulp.task('serve', ['build:dev'], function () {
   gulp.start('browser-sync');
