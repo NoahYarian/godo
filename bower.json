@@ -1,0 +1,16 @@
+{
+  "name": "godo",
+  "version": "1.0.0",
+  "homepage": "https://github.com/NoahYarian/godo",
+  "authors": [
+    "Noah Yarian <noah.yarian@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
