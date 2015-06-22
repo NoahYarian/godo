@@ -1,8 +1,11 @@
+.container-cover {
+  background: linear-gradient(to top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 100%),
+              center/cover no-repeat url('../images/group-biking-sillouette.jpg');
+  min-height: 650px;
+}
+
 body {
   padding-top: 50px;
-  background-image: url('../images/group-biking-sillouette.jpg');
-  background-size: cover;
-  background-repeat-y: no-repeat;
 }
 
 .starter-template {
