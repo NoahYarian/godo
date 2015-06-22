@@ -1,6 +1,13 @@
-h1 {
-  color: red; }
+.container-cover {
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 100%), center/cover no-repeat url("../images/group-biking-sillouette.jpg");
+  min-height: 650px; }
 
-li a {
-  color: black;
-  font-size: 1.5em; }
+body {
+  padding-top: 50px; }
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: center; }
+
+h1 {
+  color: white; }
