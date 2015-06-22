@@ -1,7 +1,7 @@
 # godo
 ------
 
-- a site where you can easily take your now virtual friendships back into the real world.
+- a site that helps you take your now virtual friendships back into the real world.
 - create a profile of activities you're interested in participating in and how you're willing to contribute
 - specify your availability on the calendar
 - see what's happening in your network that you might want to get in on
