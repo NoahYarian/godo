@@ -87,6 +87,8 @@ gulp.task('browser-sync', function() {
 gulp.task('copy', function () {
   gulp.src('src/CNAME')
     .pipe(gulp.dest('public'));
+  gulp.src('src/images/*')
+    .pipe(gulp.dest('public/images'));
 });
 
 //gulp.task('build:prod', ['jade:prod', 'sass:prod', 'js:prod', 'bower', 'copy']);
