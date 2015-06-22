@@ -5,18 +5,18 @@
       | More social, less media.
     img(src= 'http://www.kilnandco.com/gallery/var/albums/facebook-login-button.png?m=1375582078')
 
-    input(type="text" ng-model="data.text")
-    h1 You said: {{ data.text }}
+  //-   input(type="text" ng-model="data.text")
+  //-   h1 You said: {{ data.text }}
 
-  .starter-template(ng-controller="ArrayCtrl")
-    ul
-      li(ng-repeat="message in messages")
-        p {{ message.text }}
-        input(ng-model="message.text" ng-change="messages.$save(message)")
-        button(ng-click="messages.$remove(message)") Delete Message
-    form(ng-submit="addMessage()")
-      input(ng-model="newMessageText")
-      button(type="submit") Add Message
+  //- .starter-template(ng-controller="ArrayCtrl")
+  //-   ul
+  //-     li(ng-repeat="message in messages")
+  //-       p {{ message.text }}
+  //-       input(ng-model="message.text" ng-change="messages.$save(message)")
+  //-       button(ng-click="messages.$remove(message)") Delete Message
+  //-   form(ng-submit="addMessage()")
+  //-     input(ng-model="newMessageText")
+  //-     button(type="submit") Add Message
 
-  .starter-template(ng-controller="FBCtrl as fb")
-    button(ng-click="fb.login()") Login with FB
+  //- .starter-template(ng-controller="FBCtrl as fb")
+  //-   button(ng-click="fb.login()") Login with FB
