@@ -16,5 +16,22 @@ nav.navbar.navbar-inverse.navbar-fixed-top
         li(ng-controller='FBCtrl as fb')
           a(href='/#/logout' ng-click='fb.logout()') Log out
 .container
-  .starter-template
-    p This is it. You logged in.
+  .interests(ng-controller="InterestsCtrl")
+    form(name="addInterest", novalidate)
+      .form-group
+        label.control-label Add Interest
+        input.form-control(name="intName" type="text" placeholder='e.g. "Ultimate Frisbee"' ng-model="name" required)
+        button.btn.btn-primary(ng-click="addOne()") Add
+    ul
+      li(ng-repeat="interest in list")
+        p(data-id="interest.id") {{interest.name}}
+        button(ng-click="removeOne($index)") Delete
+
+  //-   ul
+  //-     li(ng-repeat="message in messages")
+  //-       p {{ message.text }}
+  //-       input(ng-model="message.text" ng-change="messages.$save(message)")
+  //-       button(ng-click="messages.$remove(message)") Delete Message
+  //-   form(ng-submit="addMessage()")
+  //-     input(ng-model="newMessageText")
+  //-     button(type="submit") Add Message

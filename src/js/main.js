@@ -2,78 +2,78 @@ var app = angular
 
   .module("goDo", ['ngRoute', 'firebase'])
 
-  .run(['$rootScope', '$window'/*, 'srvAuth'*/,
-    function($rootScope, $window/*, sAuth*/) {
+  // .run(['$rootScope', '$window', 'srvAuth',
+  //   function($rootScope, $window, sAuth) {
 
-    $rootScope.user = {};
+  //   $rootScope.user = {};
 
-    $window.fbAsyncInit = function() {
-      // Executed when the SDK is loaded
+  //   $window.fbAsyncInit = function() {
+  //     // Executed when the SDK is loaded
 
-      FB.init({
+  //     FB.init({
 
-        /*
-         The app id of the web app;
-         To register a new app visit Facebook App Dashboard
-         ( https://developers.facebook.com/apps/ )
-        */
+  //       /*
+  //        The app id of the web app;
+  //        To register a new app visit Facebook App Dashboard
+  //        ( https://developers.facebook.com/apps/ )
+  //       */
 
-        appId: '103273773349279',
+  //       appId: '103273773349279',
 
-        /*
-         Adding a Channel File improves the performance
-         of the javascript SDK, by addressing issues
-         with cross-domain communication in certain browsers.
-        */
+  //       /*
+  //        Adding a Channel File improves the performance
+  //        of the javascript SDK, by addressing issues
+  //        with cross-domain communication in certain browsers.
+  //       */
 
-        channelUrl: '../channel.html',
+  //       channelUrl: '../channel.html',
 
-        /*
-         Set if you want to check the authentication status
-         at the start up of the app
-        */
 
-        status: true,
+  //        Set if you want to check the authentication status
+  //        at the start up of the app
 
-        /*
-         Enable cookies to allow the server to access
-         the session
-        */
 
-        cookie: true,
+  //       status: true,
 
-        /* Parse XFBML */
+  //       /*
+  //        Enable cookies to allow the server to access
+  //        the session
+  //       */
 
-        xfbml: true
-      });
+  //       cookie: true,
 
-      //sAuth.watchAuthenticationStatusChange();
+  //       /* Parse XFBML */
 
-    };
+  //       xfbml: true
+  //     });
 
-    // Are you familiar to IIFE ( http://bit.ly/iifewdb ) ?
+  //     sAuth.watchAuthenticationStatusChange();
 
-    (function(d){
-      // load the Facebook javascript SDK
+  //   };
 
-      var js,
-      id = 'facebook-jssdk',
-      ref = d.getElementsByTagName('script')[0];
+  //   // Are you familiar to IIFE ( http://bit.ly/iifewdb ) ?
 
-      if (d.getElementById(id)) {
-        return;
-      }
+  //   (function(d){
+  //     // load the Facebook javascript SDK
 
-      js = d.createElement('script');
-      js.id = id;
-      js.async = true;
-      js.src = "//connect.facebook.net/en_US/all.js";
+  //     var js,
+  //     id = 'facebook-jssdk',
+  //     ref = d.getElementsByTagName('script')[0];
 
-      ref.parentNode.insertBefore(js, ref);
+  //     if (d.getElementById(id)) {
+  //       return;
+  //     }
 
-    }(document));
+  //     js = d.createElement('script');
+  //     js.id = id;
+  //     js.async = true;
+  //     js.src = "//connect.facebook.net/en_US/all.js";
 
-  }])
+  //     ref.parentNode.insertBefore(js, ref);
+
+  //   }(document));
+
+  // }])
 
   .config(function($routeProvider) {
     $routeProvider
@@ -127,9 +127,10 @@ var app = angular
           console.log("Login Failed!", error);
         } else {
           console.log("Authenticated successfully with payload:", authData);
+
           location.href = "/#/loggedin";
         }
-      }, {scope: 'user_friends'});
+      }/*, {scope: 'user_friends'}*/);
     }
     vm.logout = function() {
       vm.ref = new Firebase("https://goanddo.firebaseio.com");
@@ -137,3 +138,66 @@ var app = angular
       location.href = "/#/";
     }
   })
+
+  .controller("InterestsCtrl", function($scope, $firebaseArray) {
+    var ref = new Firebase("https://goanddo.firebaseio.com/interests");
+    $scope.list = $firebaseArray(ref);
+    $scope.addOne = function() {
+      $scope.list.$add({ name: $scope.name }).then(function(ref) {
+        $scope.id = ref.key();
+        console.log($scope.id);
+        console.log("added record " + "{name: " + $scope.name + "} with id " + ref.key());
+      });
+    }
+    $scope.removeOne = function(item) {
+      $scope.list.$remove(item).then(function(ref) {
+        console.log(ref.key())
+      });
+    }
+  })
+
+  // .factory('srvAuth', function () {
+
+  //   watchLoginChange = function() {
+  //     var vm = this;
+  //     FB.Event.subscribe('auth.authResponseChange', function(res) {
+  //       if (res.status === 'connected') {
+  //         /*
+  //          The user is already logged,
+  //          is possible retrieve his personal info
+  //         */
+  //         vm.getUserInfo();
+  //         /*
+  //          This is also the point where you should create a
+  //          session for the current user.
+  //          For this purpose you can use the data inside the
+  //          res.authResponse object.
+  //         */
+  //       }
+  //       else {
+  //         /*
+  //          The user is not logged to the app, or into Facebook:
+  //          destroy the session on the server.
+  //         */
+  //       }
+  //     });
+  //   }
+
+  //   getUserInfo = function() {
+  //     var vm = this;
+  //     FB.api('/me', function(res) {
+  //       $rootScope.$apply(function() {
+  //         $rootScope.user = vm.user = res;
+  //       });
+  //     });
+  //   }
+
+  //   logout = function() {
+  //     var vm = this;
+  //     FB.logout(function(response) {
+  //       $rootScope.$apply(function() {
+  //         $rootScope.user = vm.user = {};
+  //       });
+  //     });
+  //   }
+  // })

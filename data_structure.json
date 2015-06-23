@@ -1,0 +1,76 @@
+User object
+-----------
+
+{
+  "name": "Noah Yarian",
+  "interests": {
+    "01": "Ultimate Frisbee",
+    "02": "8-ball",
+    "03": "Darts",
+    "04": "Ping-pong",
+    "05": "Disc Golf"
+  },
+  "schedule": {
+    "monday": {
+      "start": "16:30",
+      "end": "18:30"
+    },
+    "tuesday": {
+      "start": "16:30",
+      "end": "22:00"
+    },
+    "wednesday": {
+      "start": "16:30",
+      "end": "18:30"
+    },
+    "thursday": {},
+    "friday": {},
+    "saturday": {},
+    "sunday": {}
+  },
+  "friends": {
+    "01": "Caleb Gregory",
+    "02": "Matt Fili",
+    "03": "Greg Dick",
+    "04": "Brien Pafford"
+  }
+}
+
+Event Object
+------------
+
+{
+  "interest": "Disc Golf",
+  "time": {
+    "start": "Tue Jun 23 2015 16:30:00 GMT-0500 (CDT)",
+    "end": "Tue Jun 23 2015 18:30:00 GMT-0500 (CDT)"
+  },
+  "invitees": {
+    "01": "Caleb Gregory",
+    "02": "Matt Fili",
+    "03": "Greg Dick",
+    "04": "Brien Pafford",
+    "05": "Noah Yarian"
+  },
+  "confirmed": {
+    "01": "Noah Yarian",
+    "02": "Brien Pafford"
+  },
+  "declined": {
+    "01": "Matt Fili",
+  },
+  "status": "scheduled"
+}
+
+Interest Object
+---------------
+
+{
+  "name": "Disc Golf",
+  "requirements": {
+    "01": "discs"
+  },
+  "min-people": "2",
+  "max-people": "5",
+  "time": "02:00:00",
+}
