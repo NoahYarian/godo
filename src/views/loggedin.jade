@@ -24,8 +24,1164 @@ nav.navbar.navbar-inverse.navbar-fixed-top
         button.btn.btn-primary(ng-click="addOne()") Add
     ul
       li(ng-repeat="interest in list")
-        p(data-id="interest.id") {{interest.name}}
+        p {{interest.name}}
         button(ng-click="removeOne($index)") Delete
+
+  .schedule(ng-controller="ScheduleCtrl")
+    table
+      thead
+        tr
+          th
+          th Mon
+          th Tue
+          th Wed
+          th Thu
+          th Fri
+          th Sat
+          th Sun
+      tbody
+        tr
+          td 12:00am - 12:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0000" ng-model="data.mon0000")
+            label.tgl-btn(for='mon0000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0000" ng-model="data.tue0000")
+            label.tgl-btn(for='tue0000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0000" ng-model="data.wed0000")
+            label.tgl-btn(for='wed0000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0000" ng-model="data.thu0000")
+            label.tgl-btn(for='thu0000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0000" ng-model="data.fri0000")
+            label.tgl-btn(for='fri0000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0000" ng-model="data.sat0000")
+            label.tgl-btn(for='sat0000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0000" ng-model="data.sun0000")
+            label.tgl-btn(for='sun0000')
+        tr
+          td 12:30am - 1:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0030" ng-model="data.mon0030")
+            label.tgl-btn(for='mon0030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0030" ng-model="data.tue0030")
+            label.tgl-btn(for='tue0030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0030" ng-model="data.wed0030")
+            label.tgl-btn(for='wed0030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0030" ng-model="data.thu0030")
+            label.tgl-btn(for='thu0030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0030" ng-model="data.fri0030")
+            label.tgl-btn(for='fri0030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0030" ng-model="data.sat0030")
+            label.tgl-btn(for='sat0030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0030" ng-model="data.sun0030")
+            label.tgl-btn(for='sun0030')
+        tr
+          td 1:00am - 1:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0100" ng-model="data.mon0100")
+            label.tgl-btn(for='mon0100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0100" ng-model="data.tue0100")
+            label.tgl-btn(for='tue0100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0100" ng-model="data.wed0100")
+            label.tgl-btn(for='wed0100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0100" ng-model="data.thu0100")
+            label.tgl-btn(for='thu0100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0100" ng-model="data.fri0100")
+            label.tgl-btn(for='fri0100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0100" ng-model="data.sat0100")
+            label.tgl-btn(for='sat0100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0100" ng-model="data.sun0100")
+            label.tgl-btn(for='sun0100')
+        tr
+          td 1:30am - 2:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0130" ng-model="data.mon0130")
+            label.tgl-btn(for='mon0130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0130" ng-model="data.tue0130")
+            label.tgl-btn(for='tue0130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0130" ng-model="data.wed0130")
+            label.tgl-btn(for='wed0130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0130" ng-model="data.thu0130")
+            label.tgl-btn(for='thu0130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0130" ng-model="data.fri0130")
+            label.tgl-btn(for='fri0130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0130" ng-model="data.sat0130")
+            label.tgl-btn(for='sat0130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0130" ng-model="data.sun0130")
+            label.tgl-btn(for='sun0130')
+        tr
+          td 2:00am - 2:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0200" ng-model="data.mon0200")
+            label.tgl-btn(for='mon0200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0200" ng-model="data.tue0200")
+            label.tgl-btn(for='tue0200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0200" ng-model="data.wed0200")
+            label.tgl-btn(for='wed0200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0200" ng-model="data.thu0200")
+            label.tgl-btn(for='thu0200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0200" ng-model="data.fri0200")
+            label.tgl-btn(for='fri0200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0200" ng-model="data.sat0200")
+            label.tgl-btn(for='sat0200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0200" ng-model="data.sun0200")
+            label.tgl-btn(for='sun0200')
+        tr
+          td 2:30am - 3:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0230" ng-model="data.mon0230")
+            label.tgl-btn(for='mon0230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0230" ng-model="data.tue0230")
+            label.tgl-btn(for='tue0230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0230" ng-model="data.wed0230")
+            label.tgl-btn(for='wed0230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0230" ng-model="data.thu0230")
+            label.tgl-btn(for='thu0230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0230" ng-model="data.fri0230")
+            label.tgl-btn(for='fri0230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0230" ng-model="data.sat0230")
+            label.tgl-btn(for='sat0230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0230" ng-model="data.sun0230")
+            label.tgl-btn(for='sun0230')
+        tr
+          td 3:00am - 3:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0300" ng-model="data.mon0300")
+            label.tgl-btn(for='mon0300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0300" ng-model="data.tue0300")
+            label.tgl-btn(for='tue0300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0300" ng-model="data.wed0300")
+            label.tgl-btn(for='wed0300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0300" ng-model="data.thu0300")
+            label.tgl-btn(for='thu0300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0300" ng-model="data.fri0300")
+            label.tgl-btn(for='fri0300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0300" ng-model="data.sat0300")
+            label.tgl-btn(for='sat0300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0300" ng-model="data.sun0300")
+            label.tgl-btn(for='sun0300')
+        tr
+          td 3:30am - 4:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0330" ng-model="data.mon0330")
+            label.tgl-btn(for='mon0330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0330" ng-model="data.tue0330")
+            label.tgl-btn(for='tue0330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0330" ng-model="data.wed0330")
+            label.tgl-btn(for='wed0330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0330" ng-model="data.thu0330")
+            label.tgl-btn(for='thu0330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0330" ng-model="data.fri0330")
+            label.tgl-btn(for='fri0330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0330" ng-model="data.sat0330")
+            label.tgl-btn(for='sat0330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0330" ng-model="data.sun0330")
+            label.tgl-btn(for='sun0330')
+        tr
+          td 4:00am - 4:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0400" ng-model="data.mon0400")
+            label.tgl-btn(for='mon0400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0400" ng-model="data.tue0400")
+            label.tgl-btn(for='tue0400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0400" ng-model="data.wed0400")
+            label.tgl-btn(for='wed0400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0400" ng-model="data.thu0400")
+            label.tgl-btn(for='thu0400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0400" ng-model="data.fri0400")
+            label.tgl-btn(for='fri0400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0400" ng-model="data.sat0400")
+            label.tgl-btn(for='sat0400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0400" ng-model="data.sun0400")
+            label.tgl-btn(for='sun0400')
+        tr
+          td 4:30am - 5:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0430" ng-model="data.mon0430")
+            label.tgl-btn(for='mon0430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0430" ng-model="data.tue0430")
+            label.tgl-btn(for='tue0430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0430" ng-model="data.wed0430")
+            label.tgl-btn(for='wed0430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0430" ng-model="data.thu0430")
+            label.tgl-btn(for='thu0430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0430" ng-model="data.fri0430")
+            label.tgl-btn(for='fri0430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0430" ng-model="data.sat0430")
+            label.tgl-btn(for='sat0430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0430" ng-model="data.sun0430")
+            label.tgl-btn(for='sun0430')
+        tr
+          td 5:00am - 5:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0500" ng-model="data.mon0500")
+            label.tgl-btn(for='mon0500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0500" ng-model="data.tue0500")
+            label.tgl-btn(for='tue0500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0500" ng-model="data.wed0500")
+            label.tgl-btn(for='wed0500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0500" ng-model="data.thu0500")
+            label.tgl-btn(for='thu0500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0500" ng-model="data.fri0500")
+            label.tgl-btn(for='fri0500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0500" ng-model="data.sat0500")
+            label.tgl-btn(for='sat0500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0500" ng-model="data.sun0500")
+            label.tgl-btn(for='sun0500')
+        tr
+          td 5:30am - 6:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0530" ng-model="data.mon0530")
+            label.tgl-btn(for='mon0530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0530" ng-model="data.tue0530")
+            label.tgl-btn(for='tue0530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0530" ng-model="data.wed0530")
+            label.tgl-btn(for='wed0530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0530" ng-model="data.thu0530")
+            label.tgl-btn(for='thu0530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0530" ng-model="data.fri0530")
+            label.tgl-btn(for='fri0530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0530" ng-model="data.sat0530")
+            label.tgl-btn(for='sat0530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0530" ng-model="data.sun0530")
+            label.tgl-btn(for='sun0530')
+        tr
+          td 6:00am - 6:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0600" ng-model="data.mon0600")
+            label.tgl-btn(for='mon0600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0600" ng-model="data.tue0600")
+            label.tgl-btn(for='tue0600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0600" ng-model="data.wed0600")
+            label.tgl-btn(for='wed0600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0600" ng-model="data.thu0600")
+            label.tgl-btn(for='thu0600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0600" ng-model="data.fri0600")
+            label.tgl-btn(for='fri0600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0600" ng-model="data.sat0600")
+            label.tgl-btn(for='sat0600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0600" ng-model="data.sun0600")
+            label.tgl-btn(for='sun0600')
+        tr
+          td 6:30am - 7:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0630" ng-model="data.mon0630")
+            label.tgl-btn(for='mon0630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0630" ng-model="data.tue0630")
+            label.tgl-btn(for='tue0630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0630" ng-model="data.wed0630")
+            label.tgl-btn(for='wed0630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0630" ng-model="data.thu0630")
+            label.tgl-btn(for='thu0630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0630" ng-model="data.fri0630")
+            label.tgl-btn(for='fri0630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0630" ng-model="data.sat0630")
+            label.tgl-btn(for='sat0630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0630" ng-model="data.sun0630")
+            label.tgl-btn(for='sun0630')
+        tr
+          td 7:00am - 7:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0700" ng-model="data.mon0700")
+            label.tgl-btn(for='mon0700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0700" ng-model="data.tue0700")
+            label.tgl-btn(for='tue0700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0700" ng-model="data.wed0700")
+            label.tgl-btn(for='wed0700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0700" ng-model="data.thu0700")
+            label.tgl-btn(for='thu0700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0700" ng-model="data.fri0700")
+            label.tgl-btn(for='fri0700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0700" ng-model="data.sat0700")
+            label.tgl-btn(for='sat0700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0700" ng-model="data.sun0700")
+            label.tgl-btn(for='sun0700')
+        tr
+          td 7:30am - 8:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0730" ng-model="data.mon0730")
+            label.tgl-btn(for='mon0730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0730" ng-model="data.tue0730")
+            label.tgl-btn(for='tue0730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0730" ng-model="data.wed0730")
+            label.tgl-btn(for='wed0730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0730" ng-model="data.thu0730")
+            label.tgl-btn(for='thu0730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0730" ng-model="data.fri0730")
+            label.tgl-btn(for='fri0730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0730" ng-model="data.sat0730")
+            label.tgl-btn(for='sat0730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0730" ng-model="data.sun0730")
+            label.tgl-btn(for='sun0730')
+        tr
+          td 8:00am - 8:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0800" ng-model="data.mon0800")
+            label.tgl-btn(for='mon0800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0800" ng-model="data.tue0800")
+            label.tgl-btn(for='tue0800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0800" ng-model="data.wed0800")
+            label.tgl-btn(for='wed0800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0800" ng-model="data.thu0800")
+            label.tgl-btn(for='thu0800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0800" ng-model="data.fri0800")
+            label.tgl-btn(for='fri0800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0800" ng-model="data.sat0800")
+            label.tgl-btn(for='sat0800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0800" ng-model="data.sun0800")
+            label.tgl-btn(for='sun0800')
+        tr
+          td 8:30am - 9:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0830" ng-model="data.mon0830")
+            label.tgl-btn(for='mon0830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0830" ng-model="data.tue0830")
+            label.tgl-btn(for='tue0830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0830" ng-model="data.wed0830")
+            label.tgl-btn(for='wed0830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0830" ng-model="data.thu0830")
+            label.tgl-btn(for='thu0830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0830" ng-model="data.fri0830")
+            label.tgl-btn(for='fri0830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0830" ng-model="data.sat0830")
+            label.tgl-btn(for='sat0830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0830" ng-model="data.sun0830")
+            label.tgl-btn(for='sun0830')
+        tr
+          td 9:00am - 9:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0900" ng-model="data.mon0900")
+            label.tgl-btn(for='mon0900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0900" ng-model="data.tue0900")
+            label.tgl-btn(for='tue0900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0900" ng-model="data.wed0900")
+            label.tgl-btn(for='wed0900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0900" ng-model="data.thu0900")
+            label.tgl-btn(for='thu0900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0900" ng-model="data.fri0900")
+            label.tgl-btn(for='fri0900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0900" ng-model="data.sat0900")
+            label.tgl-btn(for='sat0900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0900" ng-model="data.sun0900")
+            label.tgl-btn(for='sun0900')
+        tr
+          td 9:30am - 10:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon0930" ng-model="data.mon0930")
+            label.tgl-btn(for='mon0930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue0930" ng-model="data.tue0930")
+            label.tgl-btn(for='tue0930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed0930" ng-model="data.wed0930")
+            label.tgl-btn(for='wed0930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu0930" ng-model="data.thu0930")
+            label.tgl-btn(for='thu0930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri0930" ng-model="data.fri0930")
+            label.tgl-btn(for='fri0930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat0930" ng-model="data.sat0930")
+            label.tgl-btn(for='sat0930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun0930" ng-model="data.sun0930")
+            label.tgl-btn(for='sun0930')
+        tr
+          td 10:00am - 10:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1000" ng-model="data.mon1000")
+            label.tgl-btn(for='mon1000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1000" ng-model="data.tue1000")
+            label.tgl-btn(for='tue1000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1000" ng-model="data.wed1000")
+            label.tgl-btn(for='wed1000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1000" ng-model="data.thu1000")
+            label.tgl-btn(for='thu1000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1000" ng-model="data.fri1000")
+            label.tgl-btn(for='fri1000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1000" ng-model="data.sat1000")
+            label.tgl-btn(for='sat1000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1000" ng-model="data.sun1000")
+            label.tgl-btn(for='sun1000')
+        tr
+          td 10:30am - 11:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1030" ng-model="data.mon1030")
+            label.tgl-btn(for='mon1030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1030" ng-model="data.tue1030")
+            label.tgl-btn(for='tue1030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1030" ng-model="data.wed1030")
+            label.tgl-btn(for='wed1030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1030" ng-model="data.thu1030")
+            label.tgl-btn(for='thu1030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1030" ng-model="data.fri1030")
+            label.tgl-btn(for='fri1030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1030" ng-model="data.sat1030")
+            label.tgl-btn(for='sat1030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1030" ng-model="data.sun1030")
+            label.tgl-btn(for='sun1030')
+        tr
+          td 11:00am - 11:30am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1100" ng-model="data.mon1100")
+            label.tgl-btn(for='mon1100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1100" ng-model="data.tue1100")
+            label.tgl-btn(for='tue1100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1100" ng-model="data.wed1100")
+            label.tgl-btn(for='wed1100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1100" ng-model="data.thu1100")
+            label.tgl-btn(for='thu1100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1100" ng-model="data.fri1100")
+            label.tgl-btn(for='fri1100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1100" ng-model="data.sat1100")
+            label.tgl-btn(for='sat1100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1100" ng-model="data.sun1100")
+            label.tgl-btn(for='sun1100')
+        tr
+          td 11:30am - 12:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1130" ng-model="data.mon1130")
+            label.tgl-btn(for='mon1130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1130" ng-model="data.tue1130")
+            label.tgl-btn(for='tue1130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1130" ng-model="data.wed1130")
+            label.tgl-btn(for='wed1130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1130" ng-model="data.thu1130")
+            label.tgl-btn(for='thu1130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1130" ng-model="data.fri1130")
+            label.tgl-btn(for='fri1130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1130" ng-model="data.sat1130")
+            label.tgl-btn(for='sat1130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1130" ng-model="data.sun1130")
+            label.tgl-btn(for='sun1130')
+        tr
+          td 12:00pm - 12:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1200" ng-model="data.mon1200")
+            label.tgl-btn(for='mon1200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1200" ng-model="data.tue1200")
+            label.tgl-btn(for='tue1200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1200" ng-model="data.wed1200")
+            label.tgl-btn(for='wed1200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1200" ng-model="data.thu1200")
+            label.tgl-btn(for='thu1200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1200" ng-model="data.fri1200")
+            label.tgl-btn(for='fri1200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1200" ng-model="data.sat1200")
+            label.tgl-btn(for='sat1200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1200" ng-model="data.sun1200")
+            label.tgl-btn(for='sun1200')
+        tr
+          td 12:30pm - 1:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1230" ng-model="data.mon1230")
+            label.tgl-btn(for='mon1230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1230" ng-model="data.tue1230")
+            label.tgl-btn(for='tue1230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1230" ng-model="data.wed1230")
+            label.tgl-btn(for='wed1230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1230" ng-model="data.thu1230")
+            label.tgl-btn(for='thu1230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1230" ng-model="data.fri1230")
+            label.tgl-btn(for='fri1230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1230" ng-model="data.sat1230")
+            label.tgl-btn(for='sat1230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1230" ng-model="data.sun1230")
+            label.tgl-btn(for='sun1230')
+        tr
+          td 1:00pm - 1:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1300" ng-model="data.mon1300")
+            label.tgl-btn(for='mon1300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1300" ng-model="data.tue1300")
+            label.tgl-btn(for='tue1300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1300" ng-model="data.wed1300")
+            label.tgl-btn(for='wed1300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1300" ng-model="data.thu1300")
+            label.tgl-btn(for='thu1300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1300" ng-model="data.fri1300")
+            label.tgl-btn(for='fri1300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1300" ng-model="data.sat1300")
+            label.tgl-btn(for='sat1300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1300" ng-model="data.sun1300")
+            label.tgl-btn(for='sun1300')
+        tr
+          td 1:30pm - 2:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1330" ng-model="data.mon1330")
+            label.tgl-btn(for='mon1330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1330" ng-model="data.tue1330")
+            label.tgl-btn(for='tue1330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1330" ng-model="data.wed1330")
+            label.tgl-btn(for='wed1330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1330" ng-model="data.thu1330")
+            label.tgl-btn(for='thu1330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1330" ng-model="data.fri1330")
+            label.tgl-btn(for='fri1330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1330" ng-model="data.sat1330")
+            label.tgl-btn(for='sat1330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1330" ng-model="data.sun1330")
+            label.tgl-btn(for='sun1330')
+        tr
+          td 2:00pm - 2:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1400" ng-model="data.mon1400")
+            label.tgl-btn(for='mon1400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1400" ng-model="data.tue1400")
+            label.tgl-btn(for='tue1400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1400" ng-model="data.wed1400")
+            label.tgl-btn(for='wed1400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1400" ng-model="data.thu1400")
+            label.tgl-btn(for='thu1400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1400" ng-model="data.fri1400")
+            label.tgl-btn(for='fri1400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1400" ng-model="data.sat1400")
+            label.tgl-btn(for='sat1400')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1400" ng-model="data.sun1400")
+            label.tgl-btn(for='sun1400')
+        tr
+          td 2:30pm - 3:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1430" ng-model="data.mon1430")
+            label.tgl-btn(for='mon1430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1430" ng-model="data.tue1430")
+            label.tgl-btn(for='tue1430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1430" ng-model="data.wed1430")
+            label.tgl-btn(for='wed1430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1430" ng-model="data.thu1430")
+            label.tgl-btn(for='thu1430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1430" ng-model="data.fri1430")
+            label.tgl-btn(for='fri1430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1430" ng-model="data.sat1430")
+            label.tgl-btn(for='sat1430')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1430" ng-model="data.sun1430")
+            label.tgl-btn(for='sun1430')
+        tr
+          td 3:00pm - 3:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1500" ng-model="data.mon1500")
+            label.tgl-btn(for='mon1500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1500" ng-model="data.tue1500")
+            label.tgl-btn(for='tue1500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1500" ng-model="data.wed1500")
+            label.tgl-btn(for='wed1500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1500" ng-model="data.thu1500")
+            label.tgl-btn(for='thu1500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1500" ng-model="data.fri1500")
+            label.tgl-btn(for='fri1500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1500" ng-model="data.sat1500")
+            label.tgl-btn(for='sat1500')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1500" ng-model="data.sun1500")
+            label.tgl-btn(for='sun1500')
+        tr
+          td 3:30pm - 4:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1530" ng-model="data.mon1530")
+            label.tgl-btn(for='mon1530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1530" ng-model="data.tue1530")
+            label.tgl-btn(for='tue1530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1530" ng-model="data.wed1530")
+            label.tgl-btn(for='wed1530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1530" ng-model="data.thu1530")
+            label.tgl-btn(for='thu1530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1530" ng-model="data.fri1530")
+            label.tgl-btn(for='fri1530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1530" ng-model="data.sat1530")
+            label.tgl-btn(for='sat1530')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1530" ng-model="data.sun1530")
+            label.tgl-btn(for='sun1530')
+        tr
+          td 4:00pm - 4:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1600" ng-model="data.mon1600")
+            label.tgl-btn(for='mon1600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1600" ng-model="data.tue1600")
+            label.tgl-btn(for='tue1600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1600" ng-model="data.wed1600")
+            label.tgl-btn(for='wed1600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1600" ng-model="data.thu1600")
+            label.tgl-btn(for='thu1600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1600" ng-model="data.fri1600")
+            label.tgl-btn(for='fri1600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1600" ng-model="data.sat1600")
+            label.tgl-btn(for='sat1600')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1600" ng-model="data.sun1600")
+            label.tgl-btn(for='sun1600')
+        tr
+          td 4:30pm - 5:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1630" ng-model="data.mon1630")
+            label.tgl-btn(for='mon1630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1630" ng-model="data.tue1630")
+            label.tgl-btn(for='tue1630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1630" ng-model="data.wed1630")
+            label.tgl-btn(for='wed1630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1630" ng-model="data.thu1630")
+            label.tgl-btn(for='thu1630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1630" ng-model="data.fri1630")
+            label.tgl-btn(for='fri1630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1630" ng-model="data.sat1630")
+            label.tgl-btn(for='sat1630')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1630" ng-model="data.sun1630")
+            label.tgl-btn(for='sun1630')
+        tr
+          td 5:00pm - 5:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1700" ng-model="data.mon1700")
+            label.tgl-btn(for='mon1700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1700" ng-model="data.tue1700")
+            label.tgl-btn(for='tue1700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1700" ng-model="data.wed1700")
+            label.tgl-btn(for='wed1700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1700" ng-model="data.thu1700")
+            label.tgl-btn(for='thu1700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1700" ng-model="data.fri1700")
+            label.tgl-btn(for='fri1700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1700" ng-model="data.sat1700")
+            label.tgl-btn(for='sat1700')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1700" ng-model="data.sun1700")
+            label.tgl-btn(for='sun1700')
+        tr
+          td 5:30pm - 6:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1730" ng-model="data.mon1730")
+            label.tgl-btn(for='mon1730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1730" ng-model="data.tue1730")
+            label.tgl-btn(for='tue1730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1730" ng-model="data.wed1730")
+            label.tgl-btn(for='wed1730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1730" ng-model="data.thu1730")
+            label.tgl-btn(for='thu1730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1730" ng-model="data.fri1730")
+            label.tgl-btn(for='fri1730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1730" ng-model="data.sat1730")
+            label.tgl-btn(for='sat1730')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1730" ng-model="data.sun1730")
+            label.tgl-btn(for='sun1730')
+        tr
+          td 6:00pm - 6:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1800" ng-model="data.mon1800")
+            label.tgl-btn(for='mon1800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1800" ng-model="data.tue1800")
+            label.tgl-btn(for='tue1800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1800" ng-model="data.wed1800")
+            label.tgl-btn(for='wed1800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1800" ng-model="data.thu1800")
+            label.tgl-btn(for='thu1800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1800" ng-model="data.fri1800")
+            label.tgl-btn(for='fri1800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1800" ng-model="data.sat1800")
+            label.tgl-btn(for='sat1800')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1800" ng-model="data.sun1800")
+            label.tgl-btn(for='sun1800')
+        tr
+          td 6:30pm - 7:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1830" ng-model="data.mon1830")
+            label.tgl-btn(for='mon1830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1830" ng-model="data.tue1830")
+            label.tgl-btn(for='tue1830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1830" ng-model="data.wed1830")
+            label.tgl-btn(for='wed1830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1830" ng-model="data.thu1830")
+            label.tgl-btn(for='thu1830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1830" ng-model="data.fri1830")
+            label.tgl-btn(for='fri1830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1830" ng-model="data.sat1830")
+            label.tgl-btn(for='sat1830')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1830" ng-model="data.sun1830")
+            label.tgl-btn(for='sun1830')
+        tr
+          td 7:00pm - 7:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1900" ng-model="data.mon1900")
+            label.tgl-btn(for='mon1900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1900" ng-model="data.tue1900")
+            label.tgl-btn(for='tue1900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1900" ng-model="data.wed1900")
+            label.tgl-btn(for='wed1900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1900" ng-model="data.thu1900")
+            label.tgl-btn(for='thu1900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1900" ng-model="data.fri1900")
+            label.tgl-btn(for='fri1900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1900" ng-model="data.sat1900")
+            label.tgl-btn(for='sat1900')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1900" ng-model="data.sun1900")
+            label.tgl-btn(for='sun1900')
+        tr
+          td 7:30pm - 8:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon1930" ng-model="data.mon1930")
+            label.tgl-btn(for='mon1930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue1930" ng-model="data.tue1930")
+            label.tgl-btn(for='tue1930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed1930" ng-model="data.wed1930")
+            label.tgl-btn(for='wed1930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu1930" ng-model="data.thu1930")
+            label.tgl-btn(for='thu1930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri1930" ng-model="data.fri1930")
+            label.tgl-btn(for='fri1930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat1930" ng-model="data.sat1930")
+            label.tgl-btn(for='sat1930')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun1930" ng-model="data.sun1930")
+            label.tgl-btn(for='sun1930')
+        tr
+          td 8:00pm - 8:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon2000" ng-model="data.mon2000")
+            label.tgl-btn(for='mon2000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue2000" ng-model="data.tue2000")
+            label.tgl-btn(for='tue2000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed2000" ng-model="data.wed2000")
+            label.tgl-btn(for='wed2000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu2000" ng-model="data.thu2000")
+            label.tgl-btn(for='thu2000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri2000" ng-model="data.fri2000")
+            label.tgl-btn(for='fri2000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat2000" ng-model="data.sat2000")
+            label.tgl-btn(for='sat2000')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun2000" ng-model="data.sun2000")
+            label.tgl-btn(for='sun2000')
+        tr
+          td 8:30pm - 9:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon2030" ng-model="data.mon2030")
+            label.tgl-btn(for='mon2030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue2030" ng-model="data.tue2030")
+            label.tgl-btn(for='tue2030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed2030" ng-model="data.wed2030")
+            label.tgl-btn(for='wed2030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu2030" ng-model="data.thu2030")
+            label.tgl-btn(for='thu2030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri2030" ng-model="data.fri2030")
+            label.tgl-btn(for='fri2030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat2030" ng-model="data.sat2030")
+            label.tgl-btn(for='sat2030')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun2030" ng-model="data.sun2030")
+            label.tgl-btn(for='sun2030')
+        tr
+          td 9:00pm - 9:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon2100" ng-model="data.mon2100")
+            label.tgl-btn(for='mon2100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue2100" ng-model="data.tue2100")
+            label.tgl-btn(for='tue2100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed2100" ng-model="data.wed2100")
+            label.tgl-btn(for='wed2100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu2100" ng-model="data.thu2100")
+            label.tgl-btn(for='thu2100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri2100" ng-model="data.fri2100")
+            label.tgl-btn(for='fri2100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat2100" ng-model="data.sat2100")
+            label.tgl-btn(for='sat2100')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun2100" ng-model="data.sun2100")
+            label.tgl-btn(for='sun2100')
+        tr
+          td 9:30pm - 10:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon2130" ng-model="data.mon2130")
+            label.tgl-btn(for='mon2130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue2130" ng-model="data.tue2130")
+            label.tgl-btn(for='tue2130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed2130" ng-model="data.wed2130")
+            label.tgl-btn(for='wed2130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu2130" ng-model="data.thu2130")
+            label.tgl-btn(for='thu2130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri2130" ng-model="data.fri2130")
+            label.tgl-btn(for='fri2130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat2130" ng-model="data.sat2130")
+            label.tgl-btn(for='sat2130')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun2130" ng-model="data.sun2130")
+            label.tgl-btn(for='sun2130')
+        tr
+          td 10:00pm - 10:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon2200" ng-model="data.mon2200")
+            label.tgl-btn(for='mon2200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue2200" ng-model="data.tue2200")
+            label.tgl-btn(for='tue2200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed2200" ng-model="data.wed2200")
+            label.tgl-btn(for='wed2200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu2200" ng-model="data.thu2200")
+            label.tgl-btn(for='thu2200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri2200" ng-model="data.fri2200")
+            label.tgl-btn(for='fri2200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat2200" ng-model="data.sat2200")
+            label.tgl-btn(for='sat2200')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun2200" ng-model="data.sun2200")
+            label.tgl-btn(for='sun2200')
+        tr
+          td 10:30pm - 11:00pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon2230" ng-model="data.mon2230")
+            label.tgl-btn(for='mon2230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue2230" ng-model="data.tue2230")
+            label.tgl-btn(for='tue2230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed2230" ng-model="data.wed2230")
+            label.tgl-btn(for='wed2230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu2230" ng-model="data.thu2230")
+            label.tgl-btn(for='thu2230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri2230" ng-model="data.fri2230")
+            label.tgl-btn(for='fri2230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat2230" ng-model="data.sat2230")
+            label.tgl-btn(for='sat2230')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun2230" ng-model="data.sun2230")
+            label.tgl-btn(for='sun2230')
+        tr
+          td 11:00pm - 11:30pm
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon2300" ng-model="data.mon2300")
+            label.tgl-btn(for='mon2300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue2300" ng-model="data.tue2300")
+            label.tgl-btn(for='tue2300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed2300" ng-model="data.wed2300")
+            label.tgl-btn(for='wed2300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu2300" ng-model="data.thu2300")
+            label.tgl-btn(for='thu2300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri2300" ng-model="data.fri2300")
+            label.tgl-btn(for='fri2300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat2300" ng-model="data.sat2300")
+            label.tgl-btn(for='sat2300')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun2300" ng-model="data.sun2300")
+            label.tgl-btn(for='sun2300')
+        tr
+          td 11:30pm - 12:00am
+          td
+            input.tgl.tgl-light(type="checkbox" id="mon2330" ng-model="data.mon2330")
+            label.tgl-btn(for='mon2330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="tue2330" ng-model="data.tue2330")
+            label.tgl-btn(for='tue2330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="wed2330" ng-model="data.wed2330")
+            label.tgl-btn(for='wed2330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="thu2330" ng-model="data.thu2330")
+            label.tgl-btn(for='thu2330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="fri2330" ng-model="data.fri2330")
+            label.tgl-btn(for='fri2330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sat2330" ng-model="data.sat2330")
+            label.tgl-btn(for='sat2330')
+          td
+            input.tgl.tgl-light(type="checkbox" id="sun2330" ng-model="data.sun2330")
+            label.tgl-btn(for='sun2330')
+
+    //- form(name="modifySchedule", novalidate)
+    //-   .form-group
+    //-     label.control-label Monday
+    //-     input.form-control(name="monday-from" type="text" placeholder="From" ng-model="monday.from" required)
+    //-   .form-group
+    //-     input.form-control(name="monday-until" type="text" placeholder="Until" ng-model="monday.until" required)
+    //-   .form-group
+    //-     label.control-label Tuesday
+    //-     input.form-control(name="tuesday-from" type="text" placeholder="From" ng-model="tuesday.from" required)
+    //-   .form-group
+    //-     input.form-control(name="tuesday-until" type="text" placeholder="Until" ng-model="tuesday.until" required)
+    //-   .form-group
+    //-     label.control-label Wednesday
+    //-     input.form-control(name="wednesday-from" type="text" placeholder="From" ng-model="wednesday.from" required)
+    //-   .form-group
+    //-     input.form-control(name="wednesday-until" type="text" placeholder="Until" ng-model="wednesday.until" required)
+    //-   .form-group
+    //-     label.control-label Thursday
+    //-     input.form-control(name="thursday-from" type="text" placeholder="From" ng-model="thursday.from" required)
+    //-   .form-group
+    //-     input.form-control(name="thursday-until" type="text" placeholder="Until" ng-model="thursday.until" required)
+    //-   .form-group
+    //-     label.control-label Friday
+    //-     input.form-control(name="friday-from" type="text" placeholder="From" ng-model="friday.from" required)
+    //-   .form-group
+    //-     input.form-control(name="friday-until" type="text" placeholder="Until" ng-model="friday.until" required)
+    //-   .form-group
+    //-     label.control-label Saturday
+    //-     input.form-control(name="saturday-from" type="text" placeholder="From" ng-model="saturday.from" required)
+    //-   .form-group
+    //-     input.form-control(name="saturday-until" type="text" placeholder="Until" ng-model="saturday.until" required)
+    //-   .form-group
+    //-     label.control-label Sunday
+    //-     input.form-control(name="sunday-from" type="text" placeholder="From" ng-model="sunday.from" required)
+    //-   .form-group
+    //-     input.form-control(name="sunday-until" type="text" placeholder="Until" ng-model="sunday.until" required)
+    //-   button.btn.btn-primary(ng-click="save()") Save
 
   //-   ul
   //-     li(ng-repeat="message in messages")

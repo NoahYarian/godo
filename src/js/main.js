@@ -118,7 +118,7 @@ var app = angular
     };
   })
 
-  .controller("FBCtrl", function($scope, $firebaseAuth) {
+  .controller("FBCtrl", function($rootScope, $scope, $firebaseAuth) {
     var vm = this;
     vm.login = function() {
       vm.ref = new Firebase("https://goanddo.firebaseio.com");
@@ -127,7 +127,8 @@ var app = angular
           console.log("Login Failed!", error);
         } else {
           console.log("Authenticated successfully with payload:", authData);
-
+          $rootScope.loggedInUser = authData.uid;
+          console.log($rootScope.loggedInUser);
           location.href = "/#/loggedin";
         }
       }/*, {scope: 'user_friends'}*/);
@@ -139,14 +140,13 @@ var app = angular
     }
   })
 
-  .controller("InterestsCtrl", function($scope, $firebaseArray) {
-    var ref = new Firebase("https://goanddo.firebaseio.com/interests");
+  .controller("InterestsCtrl", function($rootScope, $scope, $firebaseArray) {
+    var ref = new Firebase(`https://goanddo.firebaseio.com/${$rootScope.loggedInUser}/interests`);
     $scope.list = $firebaseArray(ref);
     $scope.addOne = function() {
       $scope.list.$add({ name: $scope.name }).then(function(ref) {
-        $scope.id = ref.key();
-        console.log($scope.id);
-        console.log("added record " + "{name: " + $scope.name + "} with id " + ref.key());
+        console.log("added record {name: " + $scope.name + "} with id " + ref.key());
+        $scope.name = '';
       });
     }
     $scope.removeOne = function(item) {
@@ -154,6 +154,15 @@ var app = angular
         console.log(ref.key())
       });
     }
+  })
+
+  .controller("ScheduleCtrl", function($rootScope, $scope, $firebaseObject) {
+    var ref = new Firebase(`https://goanddo.firebaseio.com/${$rootScope.loggedInUser}/schedule`);
+    // download the data into a local object
+    var syncObject = $firebaseObject(ref);
+    // synchronize the object with a three-way data binding
+    // click on `index.html` above to see it used in the DOM!
+    syncObject.$bindTo($scope, "data");
   })
 
   // .factory('srvAuth', function () {
