@@ -144,6 +144,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         }
       });
     });
-    console.log(hourBlocks);
+    setTimeout(function () {
+      console.log(hourBlocks);
+    }, 5000);
   };
 });
