@@ -66,7 +66,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       // }, function(error) {
       //   console.log("Error:", error);
       // });
-      // console.log("Friend obj: ", obj);
+      console.log('Friend obj: ', obj);
     }, function (err) {
       console.log(err);
     });
