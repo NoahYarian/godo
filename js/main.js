@@ -35,6 +35,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     });
   };
   $scope.getMyInfo = function () {
+    $scope.friends = {};
     $facebook.api('/me').then(function (response) {
       $rootScope.loggedInUser = response.id;
       $scope.loginInfo = response;
