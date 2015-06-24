@@ -37,6 +37,7 @@ var app = angular
     function refresh() {
       $facebook.api("/me").then(
         function(response) {
+          console.log(response);
           $scope.welcomeMsg = "Welcome " + response.name;
           $scope.isLoggedIn = true;
         },
