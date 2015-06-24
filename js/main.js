@@ -132,9 +132,11 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   $scope.getUserStartTimes = function (facebookId) {
     var ref = new Firebase('https://goanddo.firebaseio.com/users/' + facebookId + '/schedule');
     var syncObject = $firebaseObject(ref);
+    console.log(syncObject);
     var hourBlocks = {};
     syncObject.forEach(function (day, i) {
       hourBlocks[day] = {};
+      console.log(hourBlocks, day);
       day.forEach(function (halfHour, j) {
         if (halfHour) {
           hourBlocks[day][halfHour] = 0.5;
