@@ -1,22 +1,22 @@
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<div ng-controller="FaceCtrl" class="container">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#" class="navbar-brand">Go and Do</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/#/loggedin">Log In</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#" class="navbar-brand">Go and Do</a>
+    <div class="starter-template">
+      <h1>Go and Do</h1>
+      <p class="lead">More social, less media.</p>
+      <button ng-click="login()">Log in with FB</button>
     </div>
-    <div id="navbar" class="collapse navbar-collapse">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/#/login">Log in</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<div class="container">
-  <div ng-controller="LandingCtrl" class="starter-template">
-    <h1>Go and Do</h1>
-    <p class="lead">More social, less media.</p><img src="http://www.kilnandco.com/gallery/var/albums/facebook-login-button.png?m=1375582078"/>
-  </div>
-  <div ng-controller="FBCtrl as fb" class="starter-template">
-    <button ng-click="fb.login()">Log in with FB</button>
   </div>
 </div>

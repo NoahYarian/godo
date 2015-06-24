@@ -1,74 +1,45 @@
 'use strict';
 
-var app = angular.module('goDo', ['ngRoute', 'firebase']).run(['$rootScope', '$window' /*, 'srvAuth'*/
-, function ($rootScope, $window /*, sAuth*/) {
-
-  $rootScope.user = {};
-
-  $window.fbAsyncInit = function () {
-    // Executed when the SDK is loaded
-
-    FB.init({
-
-      /*
-       The app id of the web app;
-       To register a new app visit Facebook App Dashboard
-       ( https://developers.facebook.com/apps/ )
-      */
-
-      appId: '103273773349279',
-
-      /*
-       Adding a Channel File improves the performance
-       of the javascript SDK, by addressing issues
-       with cross-domain communication in certain browsers.
-      */
-
-      channelUrl: '../channel.html',
-
-      /*
-       Set if you want to check the authentication status
-       at the start up of the app
-      */
-
-      status: true,
-
-      /*
-       Enable cookies to allow the server to access
-       the session
-      */
-
-      cookie: true,
-
-      /* Parse XFBML */
-
-      xfbml: true
-    });
-
-    //sAuth.watchAuthenticationStatusChange();
-  };
-
-  // Are you familiar to IIFE ( http://bit.ly/iifewdb ) ?
-
-  (function (d) {
-    // load the Facebook javascript SDK
-
-    var js,
-        id = 'facebook-jssdk',
-        ref = d.getElementsByTagName('script')[0];
-
-    if (d.getElementById(id)) {
+var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(function ($facebookProvider) {
+  $facebookProvider.setAppId('103273773349279');
+}).run(function ($rootScope) {
+  // Load the facebook SDK asynchronously
+  (function () {
+    // If we've already installed the SDK, we're done
+    if (document.getElementById('facebook-jssdk')) {
       return;
     }
 
-    js = d.createElement('script');
-    js.id = id;
-    js.async = true;
-    js.src = '//connect.facebook.net/en_US/all.js';
+    // Get the first script element, which we'll use to find the parent node
+    var firstScriptElement = document.getElementsByTagName('script')[0];
 
-    ref.parentNode.insertBefore(js, ref);
-  })(document);
-}]).config(function ($routeProvider) {
+    // Create a new script element and set its id
+    var facebookJS = document.createElement('script');
+    facebookJS.id = 'facebook-jssdk';
+
+    // Set the new script's source to the source of the Facebook JS SDK
+    facebookJS.src = '//connect.facebook.net/en_US/sdk.js';
+
+    // Insert the Facebook JS SDK into the DOM
+    firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
+  })();
+}).controller('FaceCtrl', function ($scope, $facebook) {
+  $scope.isLoggedIn = false;
+  $scope.login = function () {
+    $facebook.login().then(function () {
+      refresh();
+    });
+  };
+  function refresh() {
+    $facebook.api('/me').then(function (response) {
+      $scope.welcomeMsg = 'Welcome ' + response.name;
+      $scope.isLoggedIn = true;
+    }, function (err) {
+      $scope.welcomeMsg = 'Please log in';
+    });
+  }
+  refresh();
+}).config(function ($routeProvider) {
   $routeProvider.when('/', {
     templateUrl: 'views/landing.html'
   }).when('/happenings', {
@@ -80,42 +51,102 @@ var app = angular.module('goDo', ['ngRoute', 'firebase']).run(['$rootScope', '$w
   }).when('/logout', {
     templateUrl: 'views/landing.html'
   });
-}).controller('LandingCtrl', function ($scope, $firebaseObject) {
-  var ref = new Firebase('https://goanddo.firebaseio.com/data');
-  // download the data into a local object
-  var syncObject = $firebaseObject(ref);
-  // synchronize the object with a three-way data binding
-  // click on `index.html` above to see it used in the DOM!
-  syncObject.$bindTo($scope, 'data');
-}).controller('ArrayCtrl', function ($scope, $firebaseArray) {
-  var ref = new Firebase('https://goanddo.firebaseio.com/messages');
-  // create a synchronized array
-  // click on `index.html` above to see it used in the DOM!
-  $scope.messages = $firebaseArray(ref);
+})
 
-  // add new items to the array
-  // the message is automatically added to our Firebase database!
-  $scope.addMessage = function () {
-    $scope.messages.$add({
-      text: $scope.newMessageText
-    });
+// .controller("LandingCtrl", function($scope, $firebaseObject) {
+//   var ref = new Firebase("https://goanddo.firebaseio.com/data");
+//   var syncObject = $firebaseObject(ref);
+//   syncObject.$bindTo($scope, "data");
+// })
+
+// .controller("FBCtrl", function($rootScope, $scope, $firebaseAuth) {
+//   var vm = this;
+//   vm.login = function() {
+//     vm.ref = new Firebase("https://goanddo.firebaseio.com");
+//     vm.ref.authWithOAuthPopup("facebook", function(error, authData) {
+//       if (error) {
+//         console.log("Login Failed!", error);
+//       } else {
+//         console.log("Authenticated successfully with payload:", authData);
+//         $rootScope.loggedInUser = authData.uid;
+//         console.log($rootScope.loggedInUser);
+//         location.href = "/#/loggedin";
+//       }
+//     }/*, {scope: 'user_friends'}*/);
+//   }
+//   vm.logout = function() {
+//     vm.ref = new Firebase("https://goanddo.firebaseio.com");
+//     vm.ref.unauth();
+//     location.href = "/#/";
+//   }
+// })
+
+.controller('InterestsCtrl', function ($rootScope, $scope, $firebaseObject) {
+  var ref = new Firebase('https://goanddo.firebaseio.com/interests');
+  var syncObject = $firebaseObject(ref);
+  syncObject.$bindTo($scope, 'data');
+
+  var refUser = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/interests');
+  var syncObjectUser = $firebaseObject(refUser);
+  syncObjectUser.$bindTo($scope, 'dataUser');
+
+  $scope.addOne = function (item) {
+    $scope.data[item] = true;
+    $scope.name = '';
   };
-}).controller('FBCtrl', function ($scope, $firebaseAuth) {
-  var vm = this;
-  vm.login = function () {
-    vm.ref = new Firebase('https://goanddo.firebaseio.com');
-    vm.ref.authWithOAuthPopup('facebook', function (error, authData) {
-      if (error) {
-        console.log('Login Failed!', error);
-      } else {
-        console.log('Authenticated successfully with payload:', authData);
-        location.href = '/#/loggedin';
-      }
-    }, { scope: 'user_friends' });
+
+  $scope.pickInterest = function (item) {
+    $scope.dataUser[item] = $scope.dataUser[item] ? false : true;
   };
-  vm.logout = function () {
-    vm.ref = new Firebase('https://goanddo.firebaseio.com');
-    vm.ref.unauth();
-    location.href = '/#/';
-  };
-});
+}).controller('ScheduleCtrl', function ($rootScope, $scope, $firebaseObject) {
+  var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/schedule');
+  var syncObject = $firebaseObject(ref);
+  syncObject.$bindTo($scope, 'data');
+})
+
+// .factory('srvAuth', function () {
+
+//   watchLoginChange = function() {
+//     var _self = this;
+//     FB.Event.subscribe('auth.authResponseChange', function(res) {
+//       if (res.status === 'connected') {
+//         /*
+//          The user is already logged,
+//          is possible retrieve his personal info
+//         */
+//         _self.getUserInfo();
+//         /*
+//          This is also the point where you should create a
+//          session for the current user.
+//          For this purpose you can use the data inside the
+//          res.authResponse object.
+//         */
+//       }
+//       else {
+//         /*
+//          The user is not logged to the app, or into Facebook:
+//          destroy the session on the server.
+//         */
+//       }
+//     });
+//   }
+
+//   getUserInfo = function() {
+//     var _self = this;
+//     FB.api('/me', function(res) {
+//       $rootScope.$apply(function() {
+//         $rootScope.user = _self.user = res;
+//       });
+//     });
+//   }
+
+//   logout = function() {
+//     var _self = this;
+//     FB.logout(function(response) {
+//       $rootScope.$apply(function() {
+//         $rootScope.user = _self.user = {};
+//       });
+//     });
+//   }
+// })
+;
