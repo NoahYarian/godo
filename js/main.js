@@ -45,10 +45,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       location.href = '/#/loggedin';
     }, function (err) {
       console.log('Facebook login issue...', err);
-    });
-  };
-  $scope.getFriends = function () {
-    $facebook.api('/me/friends').then(function (response) {
+    }).then($facebook.api('/me/friends')).then(function (response) {
       console.log('getFriends response: ', response);
       console.log('getFriends loggedInUser: ', $rootScope.loggedInUser);
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/friends');
