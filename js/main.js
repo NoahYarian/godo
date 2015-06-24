@@ -33,7 +33,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     $facebook.login().then(function () {
       setTimeout(function () {
         $scope.refresh();
-      }, 1000);
+      }, 5000);
       $scope.getFriends();
     });
   };
