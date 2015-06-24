@@ -48,7 +48,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       obj.loginObj = response;
       // });
       obj.$save().then(function (ref) {
-        console.log(ref.key() === obj.$id); // true
+        ref.key() === obj.$id; // true
       }, function (error) {
         console.log('Error:', error);
       });
