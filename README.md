@@ -11,6 +11,15 @@
 - when you see current events you'll see who said they'll go, their reliability % and who is already there.
 - nobody has to create an event for one to be suggested. If there are enough people with the same interest, the same availability, and if everything needed can be contributed, then you will get a notification asking you if you want to join in.
 
+Before 7/6:
+-----------
+
+- Logging in to the site
+- Creating a list of interests
+- Specifying availability
+- Notification of possible events
+- Event invite confirm / decline
+- Communication with other invited users on event page
 
 Technologies used:
 ------------------
@@ -19,6 +28,8 @@ Technologies used:
 -Firebase
 -Angular.JS
 -AngularFire
+-ngRoute
+-ngFacebook
 -Bootstrap
 -JQuery
 -lodash

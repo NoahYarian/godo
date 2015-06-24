@@ -68,12 +68,18 @@ var app = angular
           var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}`);
           var obj = $firebaseObject(ref);
           obj.friends = response;
-          // obj.$save().then(function(ref) {
-          //   ref.key() === obj.$id; // true
-          // }, function(error) {
-          //   console.log("Error:", error);
-          // });
-          // console.log("Friend obj: ", obj);
+          obj.friends.data.forEach(function(friend) {
+            console.log(friend.id, friend.name);
+            var id = friend.id;
+            obj.friends[id] = true;
+          });
+          obj.$save().then(function(ref) {
+            ref.key() === obj.$id; // true
+          }, function(error) {
+            console.log("Error:", error);
+          });
+          console.log("Friend obj: ", obj.friends);
+
         },
         function(err) {
           console.log(err);

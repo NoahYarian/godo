@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
     $    = require('gulp-load-plugins')({
-      pattern: ['gulp-*', 'del', 'main-bower-files', 'browser-sync']
+      pattern: ['gulp-*', 'del', 'main-bower-files', 'browser-sync', 'open']
     });
 
 gulp.task('clean', function (cb) {
@@ -89,6 +89,10 @@ gulp.task('copy', function () {
     .pipe(gulp.dest('public'));
   gulp.src('src/images/*')
     .pipe(gulp.dest('public/images'));
+});
+
+gulp.task('open', function () {
+  $.open('http://godo.tehcode.com');
 });
 
 //gulp.task('build:prod', ['jade:prod', 'sass:prod', 'js:prod', 'bower', 'copy']);
