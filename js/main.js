@@ -40,18 +40,20 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       $rootScope.loggedInUser = response.id;
       $scope.loginInfo = response;
     });
-    $facebook.api('/me/friends').then(function (response) {
-      var id;
-      response.data.forEach(function (friend) {
-        id = friend.id;
-        $scope.friends[id] = true;
+    setTimeout(function () {
+      $facebook.api('/me/friends').then(function (response) {
+        var id;
+        response.data.forEach(function (friend) {
+          id = friend.id;
+          $scope.friends[id] = true;
+        });
       });
-    });
+    }, 3000);
     setTimeout(function () {
       console.log($scope.loginInfo);
       console.log($rootScope.loggedInUser);
       console.log($scope.friends);
-    }, 3000);
+    }, 6000);
   };
   //location.href = "/#/loggedin";
   $scope.logout = function () {
