@@ -47,9 +47,11 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         $scope.friends[id] = true;
       });
     });
-    console.log($scope.loginInfo);
-    console.log($rootScope.loggedInUser);
-    console.log($scope.friends);
+    setTimeout(function () {
+      console.log($scope.loginInfo);
+      console.log($rootScope.loggedInUser);
+      console.log($scope.friends);
+    }, 3000);
   };
   //location.href = "/#/loggedin";
   $scope.logout = function () {
