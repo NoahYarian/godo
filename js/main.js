@@ -39,6 +39,10 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     $facebook.api('/me').then(function (response) {
       console.log(response);
       $rootScope.loggedInUser = response.id;
+      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
+      var syncObject = $firebaseObject(ref);
+      syncObject.$bindTo($scope, 'data');
+      $scope.data.name = response.name;
       location.href = '/#/loggedin';
     }, function (err) {
       console.log('Facebook login issue...', err);
@@ -49,10 +53,10 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       console.log(response);
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/friends');
       var syncObject = $firebaseObject(ref);
-      syncObject.$bindTo($scope, 'data');
-      $scope.data = response;
-      console.log('$scope.data = ', $scope.data);
-      $scope.data = { 'what': true };
+      syncObject.$bindTo($scope, 'dataFriends');
+      $scope.dataFriends = response;
+      console.log('$scope.data = ', $scope.dataFriends);
+      $scope.dataFriends = { 'what': true };
     }, function (err) {
       console.log(err);
     });
