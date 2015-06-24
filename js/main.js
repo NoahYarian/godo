@@ -46,11 +46,12 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       //   .then(function() {
       obj = response;
       // });
-      obj.$save().then(function (ref) {
-        ref.key() === obj.$id; // true
-      }, function (error) {
-        console.log('Error:', error);
-      });
+      // obj.$save()
+      //   .then(function(ref) {
+      //     ref.key() === obj.$id; // true
+      //   }, function(error) {
+      //     console.log("Error:", error);
+      //   });
       console.log('Login obj: ', obj);
       location.href = '/#/loggedin';
     }, function (err) {
@@ -71,11 +72,11 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         obj[id] = true;
       });
       // });
-      obj.$save().then(function (ref) {
-        ref.key() === obj.$id; // true
-      }, function (error) {
-        console.log('Error:', error);
-      });
+      // obj.$save().then(function(ref) {
+      //   ref.key() === obj.$id; // true
+      // }, function(error) {
+      //   console.log("Error:", error);
+      // });
       console.log('Friend obj: ', obj);
     }, function (err) {
       console.log(err);
