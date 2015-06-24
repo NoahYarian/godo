@@ -32,6 +32,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   $scope.login = function () {
     $facebook.login().then(function () {
       $scope.getMyInfo();
+      location.href = '/#/loggedin';
     });
   };
   $scope.getMyInfo = function () {
@@ -58,7 +59,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       ref.child('friends').set($scope.friends);
     }, 600);
   };
-  //location.href = "/#/loggedin";
+
   $scope.logout = function () {
     $facebook.logout().then(function () {
       location.href = '/#/';
