@@ -2,6 +2,11 @@
 
 var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(function ($facebookProvider) {
   $facebookProvider.setAppId('103273773349279');
+  $facebookProvider.setPermissions('user_friends');
+  $facebookProvider.setCustomInit({
+    channelUrl: '//godo.tehcode.com/channel.html',
+    xfbml: true
+  });
 }).run(function ($rootScope) {
   // Load the facebook SDK asynchronously
   (function () {
@@ -23,23 +28,33 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     // Insert the Facebook JS SDK into the DOM
     firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
   })();
-}).controller('FaceCtrl', function ($scope, $facebook) {
-  $scope.isLoggedIn = false;
+}).controller('FaceCtrl', function ($rootScope, $scope, $facebook, $firebaseObject) {
   $scope.login = function () {
     $facebook.login().then(function () {
       refresh();
+      getFriends();
     });
   };
-  function refresh() {
+  $scope.refresh = function () {
     $facebook.api('/me').then(function (response) {
       console.log(response);
-      $scope.welcomeMsg = 'Welcome ' + response.name;
-      $scope.isLoggedIn = true;
+      $rootScope.loggedInUser = response.id;
+      location.href = '/#/loggedin';
     }, function (err) {
-      $scope.welcomeMsg = 'Please log in';
+      console.log('Facebook login issue...', err);
     });
-  }
-  refresh();
+  };
+  $scope.getFriends = function () {
+    $facebook.api('/me/friends').then(function (response) {
+      console.log(response);
+      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/friends');
+      var syncObject = $firebaseObject(ref);
+      syncObject.$bindTo($scope, 'data');
+      $scope.data;
+    }, function (err) {
+      console.log(err);
+    });
+  };
 }).config(function ($routeProvider) {
   $routeProvider.when('/', {
     templateUrl: 'views/landing.html'
