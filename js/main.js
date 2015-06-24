@@ -49,18 +49,18 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       // $scope.resMe = response;
       // $rootScope.loggedInUser = response.id;
       console.log('refresh loggedInUser: ', $rootScope.loggedInUser);
-      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/loginObj');
-      var obj = $firebaseObject(ref);
+      var refMe = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/loginObj');
+      var objMe = $firebaseObject(refMe);
       // obj.$loaded()
       //   .then(function() {
-      obj.loginInfo = response;
+      objMe.loginInfo = response;
       // });
-      obj.$save().then(function (ref) {
-        ref.key() === obj.$id; // true
+      objMe.$save().then(function (refMe) {
+        refMe.key() === objMe.$id; // true
       }, function (error) {
         console.log('Error:', error);
       });
-      console.log('Login obj: ', obj);
+      console.log('Login obj: ', objMe);
       location.href = '/#/loggedin';
     }, function (err) {
       console.log('Facebook login issue...', err);
@@ -71,14 +71,14 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       // $scope.resFriends = response;
       console.log('getFriends response: ', response);
       console.log('getFriends loggedInUser: ', $rootScope.loggedInUser);
-      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/friends');
-      var obj = $firebaseObject(ref);
+      var refFriends = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/friends');
+      var objFriends = $firebaseObject(refFriends);
       // obj.$loaded().then(function () {
-      obj = response;
-      obj.data.forEach(function (friend) {
+      objFriends = response;
+      objFriends.data.forEach(function (friend) {
         console.log(friend.id, friend.name);
         var id = friend.id;
-        obj[id] = true;
+        objFriends[id] = true;
       });
       // });
       // obj.$save().then(function(ref) {
@@ -86,7 +86,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       // }, function(error) {
       //   console.log("Error:", error);
       // });
-      console.log('Friend obj: ', obj);
+      console.log('Friend obj: ', objFriends);
     }, function (err) {
       console.log(err);
     });
