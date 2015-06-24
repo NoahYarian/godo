@@ -51,6 +51,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       var syncObject = $firebaseObject(ref);
       syncObject.$bindTo($scope, 'data');
       $scope.data = response;
+      console.log('$scope.data = ', $scope.data);
+      $scope.data = { 'what': true };
     }, function (err) {
       console.log(err);
     });
