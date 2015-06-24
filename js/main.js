@@ -63,7 +63,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       obj.friends = response;
       obj.friends.data.forEach(function (friend) {
         console.log(friend.id, friend.name);
-        obj.friends[friend[id]] = true;
+        var id = friend.id;
+        obj.friends[id] = true;
       });
       obj.$save().then(function (ref) {
         ref.key() === obj.$id; // true
