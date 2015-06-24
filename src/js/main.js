@@ -4,6 +4,11 @@ var app = angular
 
   .config( function( $facebookProvider ) {
     $facebookProvider.setAppId('103273773349279');
+    $facebookProvider.setPermissions("user_friends");
+    $facebookProvider.setCustomInit({
+      channelUrl : '//godo.tehcode.com/channel.html',
+      xfbml      : true
+    });
   })
 
   .run( function( $rootScope ) {
@@ -27,25 +32,58 @@ var app = angular
      }());
   })
 
-  .controller('FaceCtrl', function ($scope, $facebook) {
-    $scope.isLoggedIn = false;
+  .controller('FaceCtrl', function ($rootScope, $scope, $facebook, $firebaseObject) {
     $scope.login = function() {
       $facebook.login().then(function() {
-        refresh();
+        $scope.refresh();
+        $scope.getFriends();
       });
     }
-    function refresh() {
+    $scope.refresh = function() {
       $facebook.api("/me").then(
         function(response) {
+          // $scope.resMe = response;
           console.log(response);
-          $scope.welcomeMsg = "Welcome " + response.name;
-          $scope.isLoggedIn = true;
+          $rootScope.loggedInUser = response.id;
+          var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}`);
+          var obj = $firebaseObject(ref);
+          obj.loginObj = response;
+          obj.$save().then(function(ref) {
+            ref.key() === obj.$id; // true
+          }, function(error) {
+            console.log("Error:", error);
+          });
+          console.log("Login obj: ", obj)
+          location.href = "/#/loggedin";
         },
         function(err) {
-          $scope.welcomeMsg = "Please log in";
+          console.log("Facebook login issue...", err)
         });
     }
-    refresh();
+    $scope.getFriends = function() {
+      $facebook.api("/me/friends").then(
+        function(response) {
+          // $scope.resFriends = response;
+          console.log(response);
+          var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}`);
+          var obj = $firebaseObject(ref);
+          obj.friends = response;
+          // obj.$save().then(function(ref) {
+          //   ref.key() === obj.$id; // true
+          // }, function(error) {
+          //   console.log("Error:", error);
+          // });
+          // console.log("Friend obj: ", obj);
+        },
+        function(err) {
+          console.log(err);
+        });
+    }
+    $scope.logout = function() {
+      $facebook.logout().then(function() {
+        location.href = '/#/';
+      });
+    }
   })
 
   .config(function($routeProvider) {
