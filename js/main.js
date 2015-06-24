@@ -61,7 +61,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       var syncObject = $firebaseObject(ref);
       syncObject.$bindTo($scope, 'dataFriends');
       $scope.dataFriends = response;
-      $scope.dataFriends.$save().then(function (ref) {
+      syncObject.$save().then(function (ref) {
         ref.key() === $scope.dataFriends.$id; // true
       }, function (error) {
         console.log('Error:', error);
