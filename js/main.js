@@ -34,8 +34,10 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       $scope.getId();
       setTimeout(function () {
         $scope.refresh();
-        $scope.getFriends();
-      }, 5000);
+        setTimeout(function () {
+          $scope.getFriends();
+        }, 2000);
+      }, 2000);
     });
   };
   $scope.getId = function () {
