@@ -32,7 +32,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   $scope.login = function () {
     $facebook.login().then(function () {
       $scope.getMyInfo();
-      //$scope.getFriends();
+      $scope.getFriends();
     });
   };
   $scope.getMyInfo = function () {
