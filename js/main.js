@@ -31,8 +31,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 }).controller('FaceCtrl', function ($rootScope, $scope, $facebook, $firebaseObject) {
   $scope.login = function () {
     $facebook.login().then(function () {
-      refresh();
-      getFriends();
+      $scope.refresh();
+      $scope.getFriends();
     });
   };
   $scope.refresh = function () {
@@ -50,7 +50,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/friends');
       var syncObject = $firebaseObject(ref);
       syncObject.$bindTo($scope, 'data');
-      $scope.data;
+      $scope.data = response;
     }, function (err) {
       console.log(err);
     });
