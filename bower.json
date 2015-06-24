@@ -20,6 +20,7 @@
     "bootstrap": "3.3.4",
     "angular-route": "~1.4.1",
     "firebase": "~2.2.7",
-    "angularfire": "~1.1.1"
+    "angularfire": "~1.1.1",
+    "ng-facebook": "~0.1.6"
   }
 }

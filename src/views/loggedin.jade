@@ -13,25 +13,18 @@ nav.navbar.navbar-inverse.navbar-fixed-top
           a(href='/#/profile') Profile
         li
           a(href='/#/happenings') Happenings
-        li(ng-controller='FBCtrl as fb')
-          a(href='/#/logout' ng-click='fb.logout()') Log out
+        //- li(ng-controller='FBCtrl as fb')
+        //-   a(href='/#/logout' ng-click='fb.logout()') Log out
 .container
   .interests(ng-controller="InterestsCtrl")
+    ul
+      li(ng-repeat="(key, value) in data")
+        button.btn(ng-click="pickInterest(key)", ng-class="{'btn-success': dataUser[key], 'btn-primary': !dataUser[key]}") {{key}}
     form(name="addInterest", novalidate)
       .form-group
         label.control-label Add Interest
         input.form-control(name="intName" type="text" placeholder='e.g. "Ultimate Frisbee"' ng-model="name" required)
         button.btn.btn-primary(ng-click="addOne(name)") Add
-    ul
-      li(ng-repeat="(key, value) in data")
-        button.btn(ng-click="pickInterest(key)", ng-class="{'btn-success': dataUser[key], 'btn-primary': !dataUser[key]}") {{key}}
-       //- button(ng-click="removeOne($index)") Delete
-
-  //- .pickInterests(ng-controller="InterestsCtrl")
-  //-   ul
-  //-     li(ng-repeat="interest in data")
-  //-       button.btn.btn-primary(ng-click="pickInterest(interest)") {{interest.key}}
-
 
   .schedule(ng-controller="ScheduleCtrl")
     table
@@ -1150,50 +1143,3 @@ nav.navbar.navbar-inverse.navbar-fixed-top
           td
             input.tgl.tgl-light(type="checkbox" id="sun2330" ng-model="data.sun2330")
             label.tgl-btn(for='sun2330')
-
-    //- form(name="modifySchedule", novalidate)
-    //-   .form-group
-    //-     label.control-label Monday
-    //-     input.form-control(name="monday-from" type="text" placeholder="From" ng-model="monday.from" required)
-    //-   .form-group
-    //-     input.form-control(name="monday-until" type="text" placeholder="Until" ng-model="monday.until" required)
-    //-   .form-group
-    //-     label.control-label Tuesday
-    //-     input.form-control(name="tuesday-from" type="text" placeholder="From" ng-model="tuesday.from" required)
-    //-   .form-group
-    //-     input.form-control(name="tuesday-until" type="text" placeholder="Until" ng-model="tuesday.until" required)
-    //-   .form-group
-    //-     label.control-label Wednesday
-    //-     input.form-control(name="wednesday-from" type="text" placeholder="From" ng-model="wednesday.from" required)
-    //-   .form-group
-    //-     input.form-control(name="wednesday-until" type="text" placeholder="Until" ng-model="wednesday.until" required)
-    //-   .form-group
-    //-     label.control-label Thursday
-    //-     input.form-control(name="thursday-from" type="text" placeholder="From" ng-model="thursday.from" required)
-    //-   .form-group
-    //-     input.form-control(name="thursday-until" type="text" placeholder="Until" ng-model="thursday.until" required)
-    //-   .form-group
-    //-     label.control-label Friday
-    //-     input.form-control(name="friday-from" type="text" placeholder="From" ng-model="friday.from" required)
-    //-   .form-group
-    //-     input.form-control(name="friday-until" type="text" placeholder="Until" ng-model="friday.until" required)
-    //-   .form-group
-    //-     label.control-label Saturday
-    //-     input.form-control(name="saturday-from" type="text" placeholder="From" ng-model="saturday.from" required)
-    //-   .form-group
-    //-     input.form-control(name="saturday-until" type="text" placeholder="Until" ng-model="saturday.until" required)
-    //-   .form-group
-    //-     label.control-label Sunday
-    //-     input.form-control(name="sunday-from" type="text" placeholder="From" ng-model="sunday.from" required)
-    //-   .form-group
-    //-     input.form-control(name="sunday-until" type="text" placeholder="Until" ng-model="sunday.until" required)
-    //-   button.btn.btn-primary(ng-click="save()") Save
-
-  //-   ul
-  //-     li(ng-repeat="message in messages")
-  //-       p {{ message.text }}
-  //-       input(ng-model="message.text" ng-change="messages.$save(message)")
-  //-       button(ng-click="messages.$remove(message)") Delete Message
-  //-   form(ng-submit="addMessage()")
-  //-     input(ng-model="newMessageText")
-  //-     button(type="submit") Add Message
