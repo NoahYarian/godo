@@ -31,22 +31,19 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 }).controller('FaceCtrl', function ($rootScope, $scope, $facebook, $firebaseObject) {
   $scope.login = function () {
     $facebook.login().then(function () {
-      setTimeout(function () {
-        $scope.refresh();
-      }, 5000);
+      $scope.refresh();
       $scope.getFriends();
     });
   };
   $scope.refresh = function () {
     $facebook.api('/me').then(function (response) {
       // $scope.resMe = response;
-      console.log(response);
       $rootScope.loggedInUser = response.id;
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/loginObj');
       var obj = $firebaseObject(ref);
       // obj.$loaded()
       //   .then(function() {
-      obj = response;
+      obj.loginInfo = response;
       // });
       // obj.$save()
       //   .then(function(ref) {
