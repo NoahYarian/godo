@@ -140,24 +140,65 @@ var app = angular
     }
   })
 
-  .controller("InterestsCtrl", function($rootScope, $scope, $firebaseArray) {
-    var ref = new Firebase(`https://goanddo.firebaseio.com/${$rootScope.loggedInUser}/interests`);
-    $scope.list = $firebaseArray(ref);
-    $scope.addOne = function() {
-      $scope.list.$add({ name: $scope.name }).then(function(ref) {
-        console.log("added record {name: " + $scope.name + "} with id " + ref.key());
-        $scope.name = '';
-      });
+  // .controller("addInterestsCtrl", function($rootScope, $scope, $firebaseArray) {
+  //   var ref = new Firebase(`https://goanddo.firebaseio.com/interests`);
+  //   $scope.list = $firebaseArray(ref);
+  //   $scope.addOne = function() {
+  //     $scope.list.$add({ name: $scope.name }).then(function(ref) {
+  //       console.log("added record {name: " + $scope.name + "} with id " + ref.key());
+  //       $scope.name = '';
+  //     });
+  //   }
+  //   $scope.removeOne = function(item) {
+  //     $scope.list.$remove(item).then(function(ref) {
+  //       console.log(ref.key())
+  //     });
+  //   }
+  // })
+
+  .controller("InterestsCtrl", function($rootScope, $scope, $firebaseObject) {
+    var ref = new Firebase(`https://goanddo.firebaseio.com/interests`);
+    var syncObject = $firebaseObject(ref);
+    syncObject.$bindTo($scope, "data");
+
+    var refUser = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}/interests`);
+    var syncObjectUser = $firebaseObject(refUser);
+    syncObjectUser.$bindTo($scope, "dataUser");
+
+    $scope.addOne = function (item) {
+      $scope.data[item] = true;
+      $scope.name = '';
     }
-    $scope.removeOne = function(item) {
-      $scope.list.$remove(item).then(function(ref) {
-        console.log(ref.key())
-      });
+
+    // $scope.addOne = function() {
+    //   $scope.interestsList.$add({ name: $scope.name }).then(function(ref) {
+    //     console.log("added record {name: " + $scope.name + "} with id " + ref.key());
+    //     $scope.name = '';
+    //   });
+    // }
+    // $scope.removeOne = function(item) {
+    //   $scope.interestsList.$remove(item).then(function(ref) {
+    //     console.log(ref.key())
+    //   });
+    // }
+    $scope.pickInterest = function(item) {
+      $scope.dataUser[item] = $scope.dataUser[item] ? false : true;
+    }
+  })
+
+  .controller("pickInterestsCtrl", function($rootScope, $scope, $firebaseObject) {
+    var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}/interests`);
+    var syncObject = $firebaseObject(ref);
+    syncObject.$bindTo($scope, "data");
+    console.log(syncObject);
+    $scope.pickInterest = function (interestClicked) {
+      data[interestClicked] = "true";
+      console.log(interestClicked);
     }
   })
 
   .controller("ScheduleCtrl", function($rootScope, $scope, $firebaseObject) {
-    var ref = new Firebase(`https://goanddo.firebaseio.com/${$rootScope.loggedInUser}/schedule`);
+    var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}/schedule`);
     // download the data into a local object
     var syncObject = $firebaseObject(ref);
     // synchronize the object with a three-way data binding

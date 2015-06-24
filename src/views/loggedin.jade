@@ -21,11 +21,17 @@ nav.navbar.navbar-inverse.navbar-fixed-top
       .form-group
         label.control-label Add Interest
         input.form-control(name="intName" type="text" placeholder='e.g. "Ultimate Frisbee"' ng-model="name" required)
-        button.btn.btn-primary(ng-click="addOne()") Add
+        button.btn.btn-primary(ng-click="addOne(name)") Add
     ul
-      li(ng-repeat="interest in list")
-        p {{interest.name}}
-        button(ng-click="removeOne($index)") Delete
+      li(ng-repeat="(key, value) in data")
+        button.btn(ng-click="pickInterest(key)", ng-class="{'btn-success': dataUser[key], 'btn-primary': !dataUser[key]}") {{key}}
+       //- button(ng-click="removeOne($index)") Delete
+
+  //- .pickInterests(ng-controller="InterestsCtrl")
+  //-   ul
+  //-     li(ng-repeat="interest in data")
+  //-       button.btn.btn-primary(ng-click="pickInterest(interest)") {{interest.key}}
+
 
   .schedule(ng-controller="ScheduleCtrl")
     table
