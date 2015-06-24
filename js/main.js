@@ -31,10 +31,11 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 }).controller('FaceCtrl', function ($rootScope, $scope, $facebook, $firebaseObject) {
   $scope.login = function () {
     $facebook.login().then(function () {
-      $scope.getId().then(function () {
+      $scope.getId();
+      setTimeout(function () {
         $scope.refresh();
         $scope.getFriends();
-      });
+      }, 5000);
     });
   };
   $scope.getId = function () {
