@@ -43,11 +43,11 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
       var obj = $firebaseObject(ref);
       obj.loginObj = response;
-      obj.$save().then(function (ref) {
-        ref.key() === obj.$id; // true
-      }, function (error) {
-        console.log('Error:', error);
-      });
+      // obj.$save().then(function(ref) {
+      //   ref.key() === obj.$id; // true
+      // }, function(error) {
+      //   console.log("Error:", error);
+      // });
       console.log('Login obj: ', obj);
       location.href = '/#/loggedin';
     }, function (err) {
@@ -61,12 +61,12 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
       var obj = $firebaseObject(ref);
       obj.friends = response;
-      obj.$save().then(function (ref) {
-        ref.key() === obj.$id; // true
-      }, function (error) {
-        console.log('Error:', error);
-      });
-      console.log('Friend obj: ', obj);
+      // obj.$save().then(function(ref) {
+      //   ref.key() === obj.$id; // true
+      // }, function(error) {
+      //   console.log("Error:", error);
+      // });
+      // console.log("Friend obj: ", obj);
     }, function (err) {
       console.log(err);
     });
