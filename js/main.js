@@ -32,6 +32,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   };
   function refresh() {
     $facebook.api('/me').then(function (response) {
+      console.log(response);
       $scope.welcomeMsg = 'Welcome ' + response.name;
       $scope.isLoggedIn = true;
     }, function (err) {
