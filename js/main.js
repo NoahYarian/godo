@@ -32,7 +32,6 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   $scope.login = function () {
     $facebook.login().then(function () {
       $scope.getMyInfo();
-      location.href = '/#/loggedin';
     });
   };
   $scope.getMyInfo = function () {
@@ -49,7 +48,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           $scope.friends[id] = true;
         });
       });
-    }, 300);
+    }, 500);
     setTimeout(function () {
       console.log($scope.loginInfo);
       console.log($rootScope.loggedInUser);
@@ -57,7 +56,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
       ref.child('basicInfo').set($scope.loginInfo);
       ref.child('friends').set($scope.friends);
-    }, 600);
+      location.href = '/#/loggedin';
+    }, 1000);
   };
 
   $scope.logout = function () {
