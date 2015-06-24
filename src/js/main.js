@@ -32,59 +32,40 @@ var app = angular
      }());
   })
 
-  .controller('FaceCtrl', function ($rootScope, $scope, $facebook, $firebaseObject) {
+  .controller('FaceCtrl', function ($rootScope, $scope, $facebook) {
     $scope.login = function() {
       $facebook.login().then(function() {
-        $scope.refresh();
-        $scope.getFriends();
+        $scope.getMyInfo();
       });
     }
-    $scope.refresh = function() {
-      $facebook.api("/me").then(
-        function(response) {
-          // $scope.resMe = response;
-          console.log(response);
+    $scope.getMyInfo = function() {
+      $scope.friends = {};
+      $facebook.api("/me")
+        .then(function(response) {
           $rootScope.loggedInUser = response.id;
-          var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}`);
-          var obj = $firebaseObject(ref);
-          obj.loginObj = response;
-          obj.$save().then(function(ref) {
-            ref.key() === obj.$id; // true
-          }, function(error) {
-            console.log("Error:", error);
-          });
-          console.log("Login obj: ", obj)
-          location.href = "/#/loggedin";
-        },
-        function(err) {
-          console.log("Facebook login issue...", err)
+          $scope.loginInfo = response;
         });
+      setTimeout(function() {
+        $facebook.api("/me/friends")
+          .then(function(response) {
+            var id;
+            response.data.forEach(function(friend) {
+              id = friend.id;
+              $scope.friends[id] = true;
+            });
+          });
+      }, 2000);
+      setTimeout(function() {
+        console.log($scope.loginInfo);
+        console.log($rootScope.loggedInUser);
+        console.log($scope.friends);
+        var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}`);
+        ref.child('basicInfo').set($scope.loginInfo);
+        ref.child('friends').set($scope.friends);
+        location.href = "/#/loggedin";
+      }, 4000);
     }
-    $scope.getFriends = function() {
-      $facebook.api("/me/friends").then(
-        function(response) {
-          // $scope.resFriends = response;
-          console.log(response);
-          var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}`);
-          var obj = $firebaseObject(ref);
-          obj.friends = response;
-          obj.friends.data.forEach(function(friend) {
-            console.log(friend.id, friend.name);
-            var id = friend.id;
-            obj.friends[id] = true;
-          });
-          obj.$save().then(function(ref) {
-            ref.key() === obj.$id; // true
-          }, function(error) {
-            console.log("Error:", error);
-          });
-          console.log("Friend obj: ", obj.friends);
 
-        },
-        function(err) {
-          console.log(err);
-        });
-    }
     $scope.logout = function() {
       $facebook.logout().then(function() {
         location.href = '/#/';
