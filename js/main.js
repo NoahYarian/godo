@@ -53,10 +53,9 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       console.log('refresh loggedInUser: ', $rootScope.loggedInUser);
       var refMe = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/loginObj');
       var objMe = $firebaseObject(refMe);
-      // obj.$loaded()
-      //   .then(function() {
-      objMe.loginInfo = response;
-      // });
+      objMe.$loaded().then(function (objMe) {
+        objMe.loginInfo = response;
+      });
       objMe.$save().then(function (refMe) {
         refMe.key() === objMe.$id; // true
       }, function (error) {
