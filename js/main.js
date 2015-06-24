@@ -40,9 +40,9 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       $scope.resMe = response;
       console.log(response);
       $rootScope.loggedInUser = response.id;
-      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
+      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/loginObj');
       var obj = $firebaseObject(ref);
-      obj.loginObj = response;
+      obj = response;
       obj.$save().then(function (ref) {
         ref.key() === obj.$id; // true
       }, function (error) {
@@ -60,7 +60,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       console.log(response);
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/friends');
       var obj = $firebaseObject(ref);
-      obj.data = response;
+      obj = response;
       obj.$save().then(function (ref) {
         ref.key() === obj.$id; // true
       }, function (error) {
