@@ -31,14 +31,21 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 }).controller('FaceCtrl', function ($rootScope, $scope, $facebook, $firebaseObject) {
   $scope.login = function () {
     $facebook.login().then(function () {
+      $scope.getId();
       $scope.refresh();
       $scope.getFriends();
+    });
+  };
+  $scope.getId = function () {
+    $facebook.api('/me').then(function (response) {
+      $rootScope.loggedInUser = response.id;
     });
   };
   $scope.refresh = function () {
     $facebook.api('/me').then(function (response) {
       // $scope.resMe = response;
-      $rootScope.loggedInUser = response.id;
+      // $rootScope.loggedInUser = response.id;
+      console.log('refresh loggedInUser: ', $rootScope.loggedInUser);
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/loginObj');
       var obj = $firebaseObject(ref);
       // obj.$loaded()
@@ -61,6 +68,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     $facebook.api('/me/friends').then(function (response) {
       // $scope.resFriends = response;
       console.log(response);
+      console.log('getFriends loggedInUser: ', $rootScope.loggedInUser);
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/friends');
       var obj = $firebaseObject(ref);
       // obj.$loaded().then(function () {
