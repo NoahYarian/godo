@@ -39,10 +39,10 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     $facebook.api('/me').then(function (response) {
       console.log(response);
       $rootScope.loggedInUser = response.id;
-      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
+      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/name');
       var syncObject = $firebaseObject(ref);
       syncObject.$bindTo($scope, 'data');
-      $scope.data.name = response.name;
+      $scope.data = response.name;
       location.href = '/#/loggedin';
     }, function (err) {
       console.log('Facebook login issue...', err);
