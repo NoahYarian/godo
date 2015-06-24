@@ -28,35 +28,29 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     // Insert the Facebook JS SDK into the DOM
     firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
   })();
-}).controller('FaceCtrl', function ($rootScope, $scope, $facebook, $firebaseObject) {
+}).controller('FaceCtrl', function ($rootScope, $scope, $facebook) {
   $scope.login = function () {
     $facebook.login().then(function () {
       $scope.getMyInfo();
-      $scope.getFriends();
     });
   };
   $scope.getMyInfo = function () {
     $facebook.api('/me').then(function (response) {
-      console.log('getMyInfo response: ', response);
       $rootScope.loggedInUser = response.id;
-      console.log('getMyInfo loggedInUser: ', $rootScope.loggedInUser);
-      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
-      ref.set({ loginObj: response });
-      location.href = '/#/loggedin';
-    }, function (err) {
-      console.log('Facebook login issue...', err);
-    }).then($facebook.api('/me/friends')).then(function (response) {
-      console.log('getFriends response: ', response);
-      console.log('getFriends loggedInUser: ', $rootScope.loggedInUser);
-      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser + '/friends');
-      response.data.forEach(function (friend) {
-        console.log(friend.id, friend.name);
-        ref.child(friend.id).set(true);
-      });
-    }, function (err) {
-      console.log('error: ', err);
+      $scope.loginInfo = response;
     });
+    $facebook.api('/me/friends').then(function (response) {
+      var id;
+      response.data.forEach(function (friend) {
+        id = friend.id;
+        $scope.friends[id] = true;
+      });
+    });
+    console.log($scope.loginInfo);
+    console.log($rootScope.loggedInUser);
+    console.log($scope.friends);
   };
+  //location.href = "/#/loggedin";
   $scope.logout = function () {
     $facebook.logout().then(function () {
       location.href = '/#/';
