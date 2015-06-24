@@ -48,7 +48,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           $scope.friends[id] = true;
         });
       });
-    }, 500);
+    }, 2000);
     setTimeout(function () {
       console.log($scope.loginInfo);
       console.log($rootScope.loggedInUser);
@@ -57,7 +57,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       ref.child('basicInfo').set($scope.loginInfo);
       ref.child('friends').set($scope.friends);
       location.href = '/#/loggedin';
-    }, 1000);
+    }, 4000);
   };
 
   $scope.logout = function () {
