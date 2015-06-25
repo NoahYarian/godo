@@ -191,7 +191,6 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           $scope.timeBlocks[i][halfHour] = 0.5;
           console.log('day[j] ', day[j]);
           console.log('day[j+1] ', day[j + 1]);
-          console.log('is Next?', $scope.isNextHalfHour(day[j], day[j + 1]));
           while (k < day.length - 1 - j) {
             if ($scope.isNextHalfHour(day[j + k], day[j + k + 1])) {
               $scope.timeBlocks[i][halfHour] += 0.5;
