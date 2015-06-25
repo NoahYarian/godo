@@ -150,7 +150,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   };
 
   $scope.isNextHour = function (halfHour1, halfHour2) {
-    if (arguments.length < 2) {
+    if (!halfHour1 || !halfHour2) {
       return false;
     }
     var half1Arr = halfHour1.split('');
