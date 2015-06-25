@@ -182,16 +182,16 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   $scope.getBlocks = function (facebookId) {
     $scope.getAvailability(facebookId, function () {
       $scope.freeHalfHours.forEach(function (day, i) {
-        console.log(day);
-        $scope.timeBlocks[day] = {};
+        console.log(i, day);
+        $scope.timeBlocks[i] = {};
         // day.forEach(function(halfHour, j) {
         for (var j = 0; j < day.length - 1; j++) {
-          $scope.timeBlocks[day][day[j]] = 0.5;
+          $scope.timeBlocks[i][day[j]] = 0.5;
           console.log('day[j] ', day[j]);
           console.log('day[j+1] ', day[j + 1]);
           console.log('is Next?', $scope.isNextHalfHour(day[j], day[j + 1]));
           if ($scope.isNextHalfHour(day[j], day[j + 1])) {
-            $scope.timeBlocks[day][day[j]] += 0.5;
+            $scope.timeBlocks[i][day[j]] += 0.5;
           }
         }
       });
