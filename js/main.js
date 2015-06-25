@@ -131,6 +131,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 }).controller('EventCtrl', function ($scope, $rootScope, $firebase, $firebaseObject) {
   $scope.freeHalfHours = [];
   $scope.timeBlocks = [];
+  $scope.possibleEvents = [];
   $scope.getAvailability = function (facebookId, callback) {
     $.get('https://goanddo.firebaseio.com/users/' + facebookId + '/schedule.json', function (data) {
       var dayObjArr = [];
@@ -180,7 +181,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     }
   };
 
-  $scope.getBlocks = function (facebookId) {
+  // TODO: Fix this shit for days with multiple time blocks
+  $scope.getBlocks = function (facebookId, callback) {
     $scope.getAvailability(facebookId, function () {
       var k;
       $scope.freeHalfHours.forEach(function (day, i) {
@@ -199,7 +201,25 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           }
         });
       });
-      console.log('timeblocks', $scope.timeBlocks);
+      console.log('timeBlocks', $scope.timeBlocks);
+    });
+    typeof callback === 'function' && callback();
+  };
+
+  $scope.getPossibleEvents = function (facebookId, callback) {
+    $scope.getBlocks(facebookId, function () {
+      $.get('https://goanddo.firebaseio.com/users/' + facebookId + '/interests.json', function (data) {
+        var interestsArr = [];
+        for (var interest in data) {
+          if (data[interest] === 'true') {
+            interestsArr.push(interest);
+          }
+        }
+        console.log(interestsArr);
+      }).done(function () {
+        console.log($scope.possibleEvents);
+        typeof callback === 'function' && callback();
+      });
     });
   };
 });
