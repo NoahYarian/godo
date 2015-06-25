@@ -145,13 +145,17 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       week.forEach(function (day) {
         week2[day] = [];
         $.each(day, function (key, value) {
-          week2[day].push(key);
+          if (value) {
+            week2[day].push(key);
+          }
         });
       });
+      console.log(week);
       console.log(week2);
     });
-  };
-  setTimeout(function () {
-    console.log($scope.hourBlocks);
-  }, 5000);
+  }
+  // setTimeout(function() {
+  //   console.log($scope.hourBlocks);
+  // }, 5000);
+  ;
 });
