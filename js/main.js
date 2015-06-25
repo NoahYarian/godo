@@ -154,13 +154,16 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     var half2Arr = halfHour2.split('');
     if (half1Arr[3] === '0' && half2Arr[3] === '3') {
       if (Number(half1Arr.slice(1, 3)) === Number(half2Arr.slice(1, 3))) {
+        console.log('yep');
         return true;
       }
     } else if (half1Arr[3] === '3' && half2Arr[3] === '0') {
       if (Number(half1Arr.slice(1, 3)) + 1 === Number(half2Arr.slice(1, 3))) {
+        console.log('yep');
         return true;
       }
     } else {
+      console.log('nope');
       return false;
     }
   };
@@ -168,6 +171,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   $scope.getBlocks = function (facebookId) {
     $scope.getAvailability(facebookId, function () {
       $scope.freeHalfHours.forEach(function (day, i) {
+        console.log(day);
         $scope.timeBlocks[day] = {};
         day.forEach(function (halfHour, j) {
           $scope.timeBlocks[day][halfHour] = 0.5;
