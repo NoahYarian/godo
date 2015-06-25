@@ -145,48 +145,33 @@ var app = angular
     syncObject.$bindTo($scope, "data");
   })
 
-  // .factory('srvAuth', function () {
+  .controller('EventCtrl', function($scope, $rootScope, $firebase, $firebaseObject) {
+    $scope.hourBlocks = {};
 
-  //   watchLoginChange = function() {
-  //     var _self = this;
-  //     FB.Event.subscribe('auth.authResponseChange', function(res) {
-  //       if (res.status === 'connected') {
-  //         /*
-  //          The user is already logged,
-  //          is possible retrieve his personal info
-  //         */
-  //         _self.getUserInfo();
-  //         /*
-  //          This is also the point where you should create a
-  //          session for the current user.
-  //          For this purpose you can use the data inside the
-  //          res.authResponse object.
-  //         */
-  //       }
-  //       else {
-  //         /*
-  //          The user is not logged to the app, or into Facebook:
-  //          destroy the session on the server.
-  //         */
-  //       }
-  //     });
-  //   }
+    $scope.scheduleToArray = function(facebookId) {
+      var week = [];
+      var week2 = [];
+      $.get(`https://goanddo.firebaseio.com/users/${facebookId}/schedule.json`, function(data) {
+        week.push(data.mon, data.tue, data.wed, data.thu, data.fri, data.sat, data.sun);
+        week.forEach(function(day, i) {
+          week2[i] = [];
+          for (var halfHour in day) {
+            if (day[halfHour] === "true") {
+              week2[i].push(halfHour);
+            }
+          }
+        });
+        console.log(week);
+        console.log(week2);
+      });
+    }
+    // setTimeout(function() {
+    //   console.log($scope.hourBlocks);
+    // }, 5000);
+  })
 
-  //   getUserInfo = function() {
-  //     var _self = this;
-  //     FB.api('/me', function(res) {
-  //       $rootScope.$apply(function() {
-  //         $rootScope.user = _self.user = res;
-  //       });
-  //     });
-  //   }
 
-  //   logout = function() {
-  //     var _self = this;
-  //     FB.logout(function(response) {
-  //       $rootScope.$apply(function() {
-  //         $rootScope.user = _self.user = {};
-  //       });
-  //     });
-  //   }
-  // })
+
+
+
+
