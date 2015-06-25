@@ -129,12 +129,11 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   var syncObject = $firebaseObject(ref);
   syncObject.$bindTo($scope, 'data');
 }).controller('EventCtrl', function ($scope, $rootScope, $firebase, $firebaseObject) {
+  $scope.hourBlocks = {};
+
   $scope.getUserStartTimes = function (facebookId) {
-    var ref = new Firebase('https://goanddo.firebaseio.com/users/' + facebookId + '/schedule');
-    var obj = $firebaseObject(ref);
-    obj.$bindTo($scope, 'data').then(function () {
-      $scope.hourBlocks = {};
-      $scope.data.forEach(function (day, i) {
+    $.get('https://goanddo.firebaseio.com/users/' + facebookId + '/schedule', function (data) {
+      data.forEach(function (day, i) {
         $scope.hourBlocks[day] = {};
         console.log($scope.hourBlocks, day);
         day.forEach(function (halfHour, j) {
@@ -147,8 +146,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         });
       });
     });
-    setTimeout(function () {
-      console.log($scope.hourBlocks);
-    }, 5000);
   };
+  setTimeout(function () {
+    console.log($scope.hourBlocks);
+  }, 5000);
 });
