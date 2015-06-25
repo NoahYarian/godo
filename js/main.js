@@ -133,21 +133,23 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 
   $scope.getUserStartTimes = function (facebookId) {
     $.get('https://goanddo.firebaseio.com/users/' + facebookId + '/schedule', function (data) {
-      $.each(data, function (day, value) {
-        $scope.hourBlocks[day] = {};
-        console.log($scope.hourBlocks, day);
-        $.each(day, function (halfHour, value) {
-          if (value) {
-            $scope.hourBlocks[day][halfHour] = 0.5;
-            // while (day[j+1]) {
-            //   $scope.hourBlocks[day][halfHour] += 0.5;
-            // }
-          }
-        });
-      });
+      console.log(data);
+      // $.each( data, function( day, value ) {
+      //   $scope.hourBlocks[day] = {};
+      //   console.log($scope.hourBlocks, day);
+      //   $.each( day, function( halfHour, value ) {
+      //     if (value) {
+      //       $scope.hourBlocks[day][halfHour] = 0.5;
+      //       // while (day[j+1]) {
+      //       //   $scope.hourBlocks[day][halfHour] += 0.5;
+      //       // }
+      //     }
+      //   });
+      // });
     });
-  };
-  setTimeout(function () {
-    console.log($scope.hourBlocks);
-  }, 5000);
+  }
+  // setTimeout(function() {
+  //   console.log($scope.hourBlocks);
+  // }, 5000);
+  ;
 });
