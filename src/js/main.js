@@ -148,6 +148,9 @@ var app = angular
   .controller('EventCtrl', function($scope, $rootScope, $firebase, $firebaseObject) {
     $scope.freeHalfHours = [];
     $scope.timeBlocks = [];
+    $scope.interestsArr = [];
+    $scope.interestTimes = {};
+    $scope.possibleEvents = [];
     $scope.getAvailability = function(facebookId, callback) {
       $.get(`https://goanddo.firebaseio.com/users/${facebookId}/schedule.json`, function(data) {
         var dayObjArr = [];
@@ -198,7 +201,8 @@ var app = angular
       }
     }
 
-    $scope.getBlocks = function(facebookId) {
+    // TODO: Fix this shit for days with multiple time blocks
+    $scope.getBlocks = function(facebookId, callback) {
       $scope.getAvailability(facebookId, function () {
         var k;
         $scope.freeHalfHours.forEach(function(day, i) {
@@ -209,7 +213,7 @@ var app = angular
             $scope.timeBlocks[i][halfHour] = 0.5;
             console.log("day[j] ", day[j]);
             console.log("day[j+1] ", day[j+1]);
-            while (k < day.length - 1 - j) {
+            while (k < day.length + 1 - j) {
               if ($scope.isNextHalfHour(day[j+k], day[j+k+1])) {
                 $scope.timeBlocks[i][halfHour] += 0.5;
               }
@@ -217,7 +221,48 @@ var app = angular
             }
           });
         });
-        console.log("timeblocks", $scope.timeBlocks);
+        console.log("timeBlocks", $scope.timeBlocks);
+      });
+      typeof callback === 'function' && callback();
+    }
+
+    $scope.getPossibleEvents = function(facebookId, callback) {
+      $scope.getBlocks(facebookId, function () {
+        $.get(`https://goanddo.firebaseio.com/users/${facebookId}/interests.json`, function(data) {
+          for (var interest in data) {
+            console.log("interest: ", interest, "data[interest]: ", data[interest]);
+            if (data[interest]) {
+              $scope.interestsArr.push(interest);
+            }
+          }
+          console.log("interestsArr: ", $scope.interestsArr);
+          $.get('https://goanddo.firebaseio.com/interests.json', function(data) {
+            for (var interest in data) {
+              $scope.interestTimes[interest] = data[interest].time;
+            }
+            console.log("$scope.interestTimes: ", $scope.interestTimes);
+            // now make an object of interests and their possible times for the user's availability
+            // $scope.timeBlocks.forEach(function(day, i) {
+            $scope.freeHalfHours.forEach(function(day, i) {
+              $scope.possibleEvents[i] = {};
+              for (var startingTime in day) {
+                for (var interest in data) {
+                  $scope.possibleEvents[i][interest] = [];
+                  if ($scope.timeBlocks[i][startingTime] >= data[interest].time) {
+                    console.log("$scope.timeBlocks[i][startingTime]: ", $scope.timeBlocks[i][startingTime]);
+                    $scope.possibleEvents[i][interest].push(startingTime);
+                  }
+                }
+              }
+            });
+
+          console.log($scope.possibleEvents);
+          });
+        })
+        .done(function() {
+          console.log($scope.possibleEvents);
+          typeof callback === 'function' && callback();
+        });
       });
     }
 
