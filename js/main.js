@@ -133,6 +133,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 
   $scope.getUserStartTimes = function () {
     var week = [];
+    var week2 = [];
     $.get('https://goanddo.firebaseio.com/users/fakeface/schedule.json', function (data) {
       week[0] = data.monday;
       week[1] = data.tuesday;
@@ -142,11 +143,12 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       week[5] = data.saturday;
       week[6] = data.sunday;
       week.forEach(function (day) {
+        week2[day] = [];
         $.each(day, function (key, value) {
-          week[day].push(key);
+          week2[day].push(key);
         });
       });
-      console.log(week);
+      console.log(week2);
     });
   };
   setTimeout(function () {
