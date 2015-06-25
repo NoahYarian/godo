@@ -144,11 +144,11 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       week[6] = data.sunday;
       week.forEach(function (day) {
         week2[day] = [];
-        $.each(day, function (key, value) {
-          if (key === 'true') {
-            week2[day].push(key);
+        for (halfHour in day) {
+          if (halfHour === 'true') {
+            week2[day].push(halfHour);
           }
-        });
+        }
       });
       console.log(week);
       console.log(week2);
