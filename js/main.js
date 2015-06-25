@@ -152,10 +152,10 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   $scope.isNextHour = function (halfHour1, halfHour2) {
     var half1Arr = halfHour1.split('');
     var half2Arr = halfHour2.split('');
-    console.log(Number(half1Arr.slice(1, 3)));
-    console.log(Number(half2Arr.slice(1, 3)));
+    console.log(Number(half1Arr.slice(1, 3).join('')));
+    console.log(Number(half2Arr.slice(1, 3).join('')));
     if (half1Arr[3] === '0' && half2Arr[3] === '3') {
-      if (Number(half1Arr.slice(1, 3)) === Number(half2Arr.slice(1, 3))) {
+      if (Number(half1Arr.slice(1, 3).join('')) === Number(half2Arr.slice(1, 3).join(''))) {
         console.log('yep');
         return true;
       } else {
@@ -163,7 +163,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         return false;
       }
     } else if (half1Arr[3] === '3' && half2Arr[3] === '0') {
-      if (Number(half1Arr.slice(1, 3)) + 1 === Number(half2Arr.slice(1, 3))) {
+      if (Number(half1Arr.slice(1, 3).join('')) + 1 === Number(half2Arr.slice(1, 3).join(''))) {
         console.log('yep');
         return true;
       } else {
