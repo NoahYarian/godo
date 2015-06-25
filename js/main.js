@@ -151,6 +151,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 
   $scope.isNextHalfHour = function (halfHour1, halfHour2) {
     if (!halfHour1 || !halfHour2) {
+      console.log('nope, undefined arg', '1: ', halfHour1, '2: ', halfHour2);
       return false;
     }
     var half1Arr = halfHour1.split('');
@@ -159,22 +160,22 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     console.log(Number(half2Arr.slice(1, 3).join('')));
     if (half1Arr[3] === '0' && half2Arr[3] === '3') {
       if (Number(half1Arr.slice(1, 3).join('')) === Number(half2Arr.slice(1, 3).join(''))) {
-        console.log('yep');
+        console.log('yep', halfHour1, halfHour2);
         return true;
       } else {
-        console.log('nope');
+        console.log('nope', halfHour1, halfHour2);
         return false;
       }
     } else if (half1Arr[3] === '3' && half2Arr[3] === '0') {
       if (Number(half1Arr.slice(1, 3).join('')) + 1 === Number(half2Arr.slice(1, 3).join(''))) {
-        console.log('yep');
+        console.log('yep', halfHour1, halfHour2);
         return true;
       } else {
-        console.log('nope');
+        console.log('nope', halfHour1, halfHour2);
         return false;
       }
     } else {
-      console.log('nope');
+      console.log('nope', halfHour1, halfHour2);
       return false;
     }
   };
