@@ -150,9 +150,9 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   };
 
   $scope.isNextHour = function (halfHour1, halfHour2) {
-    if (!halfHour1 || !halfHour2) {
-      return false;
-    }
+    // if (!halfHour1 || !halfHour2) {
+    //   return false;
+    // }
     var half1Arr = halfHour1.split('');
     var half2Arr = halfHour2.split('');
     console.log(Number(half1Arr.slice(1, 3).join('')));
@@ -189,7 +189,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           console.log('day[j] ', day[j]);
           console.log('day[j+1] ', day[j + 1]);
           console.log('is Next?', $scope.isNextHour(day[j], day[j + 1]));
-          if (day[j + 1] && $scope.isNextHour(day[j], day[j + 1])) {
+          if (typeof day[j + 1] !== 'undefined' && $scope.isNextHour(day[j], day[j + 1])) {
             $scope.timeBlocks[day][halfHour] += 0.5;
           }
         });
