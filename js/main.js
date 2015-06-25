@@ -142,6 +142,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           }
         }
       });
+      console.log($scope.freeHours);
     });
     console.log($scope.freeHours);
     return $scope.freeHours;
