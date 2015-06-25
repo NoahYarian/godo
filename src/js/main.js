@@ -167,8 +167,9 @@ var app = angular
       })
     }
 
-    $scope.isNextHour = function(halfHour1, halfHour2) {
-      if (arguments.length < 2) {
+    $scope.isNextHalfHour = function(halfHour1, halfHour2) {
+      if (!halfHour1 || !halfHour2) {
+        console.log("nope, undefined arg", "1: ", halfHour1, "2: ", halfHour2)
         return false;
       }
       var half1Arr = halfHour1.split('');
@@ -177,38 +178,42 @@ var app = angular
       console.log(Number(half2Arr.slice(1,3).join('')));
       if (half1Arr[3] === "0" && half2Arr[3] === "3") {
         if (Number(half1Arr.slice(1,3).join('')) === Number(half2Arr.slice(1,3).join(''))) {
-          console.log("yep");
+          console.log("yep", halfHour1, halfHour2);
           return true;
         } else {
-          console.log("nope");
+          console.log("nope", halfHour1, halfHour2);
           return false;
         }
       } else if (half1Arr[3] === "3" && half2Arr[3] === "0") {
         if (Number(half1Arr.slice(1,3).join('')) + 1 === Number(half2Arr.slice(1,3).join(''))) {
-          console.log("yep");
+          console.log("yep", halfHour1, halfHour2);
           return true;
         } else {
-          console.log("nope");
+          console.log("nope", halfHour1, halfHour2);
           return false;
         }
       } else {
-        console.log("nope");
+        console.log("nope", halfHour1, halfHour2);
         return false;
       }
     }
 
     $scope.getBlocks = function(facebookId) {
       $scope.getAvailability(facebookId, function () {
+        var k;
         $scope.freeHalfHours.forEach(function(day, i) {
-          console.log(day);
-          $scope.timeBlocks[day] = {};
+          console.log(i, day);
+          $scope.timeBlocks[i] = {};
           day.forEach(function(halfHour, j) {
-            $scope.timeBlocks[day][halfHour] = 0.5;
+            k = 0;
+            $scope.timeBlocks[i][halfHour] = 0.5;
             console.log("day[j] ", day[j]);
             console.log("day[j+1] ", day[j+1]);
-            console.log("is Next?", $scope.isNextHour(day[j], day[j+1]));
-            if (day[j+1] && $scope.isNextHour(day[j], day[j+1])) {
-              $scope.timeBlocks[day][halfHour] += 0.5;
+            while (k < day.length - 1 - j) {
+              if ($scope.isNextHalfHour(day[j+k], day[j+k+1])) {
+                $scope.timeBlocks[i][halfHour] += 0.5;
+              }
+              k++;
             }
           });
         });
