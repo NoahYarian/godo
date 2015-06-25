@@ -182,7 +182,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           }
         });
       });
+      console.log('timeblocks', $scope.timeBlocks);
     });
-    console.log($scope.timeBlocks);
   };
 });
