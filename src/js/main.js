@@ -146,28 +146,76 @@ var app = angular
   })
 
   .controller('EventCtrl', function($scope, $rootScope, $firebase, $firebaseObject) {
-    $scope.hourBlocks = {};
-
-    $scope.scheduleToArray = function(facebookId) {
-      var week = [];
-      var week2 = [];
+    $scope.freeHalfHours = [];
+    $scope.timeBlocks = [];
+    $scope.getAvailability = function(facebookId, callback) {
       $.get(`https://goanddo.firebaseio.com/users/${facebookId}/schedule.json`, function(data) {
-        week.push(data.mon, data.tue, data.wed, data.thu, data.fri, data.sat, data.sun);
-        week.forEach(function(day, i) {
-          week2[i] = [];
+        var dayObjArr = [];
+        dayObjArr.push(data.mon, data.tue, data.wed, data.thu, data.fri, data.sat, data.sun);
+        dayObjArr.forEach(function(day, i) {
+          $scope.freeHalfHours[i] = [];
           for (var halfHour in day) {
             if (day[halfHour] === "true") {
-              week2[i].push(halfHour);
+              $scope.freeHalfHours[i].push(halfHour);
             }
           }
         });
-        console.log(week);
-        console.log(week2);
+      })
+      .done(function() {
+        console.log($scope.freeHalfHours);
+        typeof callback === 'function' && callback();
+      })
+    }
+
+    $scope.isNextHour = function(halfHour1, halfHour2) {
+      if (arguments.length < 2) {
+        return false;
+      }
+      var half1Arr = halfHour1.split('');
+      var half2Arr = halfHour2.split('');
+      console.log(Number(half1Arr.slice(1,3).join('')));
+      console.log(Number(half2Arr.slice(1,3).join('')));
+      if (half1Arr[3] === "0" && half2Arr[3] === "3") {
+        if (Number(half1Arr.slice(1,3).join('')) === Number(half2Arr.slice(1,3).join(''))) {
+          console.log("yep");
+          return true;
+        } else {
+          console.log("nope");
+          return false;
+        }
+      } else if (half1Arr[3] === "3" && half2Arr[3] === "0") {
+        if (Number(half1Arr.slice(1,3).join('')) + 1 === Number(half2Arr.slice(1,3).join(''))) {
+          console.log("yep");
+          return true;
+        } else {
+          console.log("nope");
+          return false;
+        }
+      } else {
+        console.log("nope");
+        return false;
+      }
+    }
+
+    $scope.getBlocks = function(facebookId) {
+      $scope.getAvailability(facebookId, function () {
+        $scope.freeHalfHours.forEach(function(day, i) {
+          console.log(day);
+          $scope.timeBlocks[day] = {};
+          day.forEach(function(halfHour, j) {
+            $scope.timeBlocks[day][halfHour] = 0.5;
+            console.log("day[j] ", day[j]);
+            console.log("day[j+1] ", day[j+1]);
+            console.log("is Next?", $scope.isNextHour(day[j], day[j+1]));
+            if (day[j+1] && $scope.isNextHour(day[j], day[j+1])) {
+              $scope.timeBlocks[day][halfHour] += 0.5;
+            }
+          });
+        });
+        console.log("timeblocks", $scope.timeBlocks);
       });
     }
-    // setTimeout(function() {
-    //   console.log($scope.hourBlocks);
-    // }, 5000);
+
   })
 
 
