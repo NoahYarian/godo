@@ -171,6 +171,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         $scope.timeBlocks[day] = {};
         day.forEach(function (halfHour, j) {
           $scope.timeBlocks[day][halfHour] = 0.5;
+          console.log('day[j] ', day[j]);
+          console.log('day[j+1] ', day[j + 1]);
           if ($scope.isNextHour(day[j], day[j + 1])) {
             $scope.timeBlocks[day][halfHour] += 0.5;
           }
