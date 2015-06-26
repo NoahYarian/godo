@@ -28,43 +28,6 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     // Insert the Facebook JS SDK into the DOM
     firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
   })();
-}).controller('FaceCtrl', function ($rootScope, $scope, $facebook) {
-  $scope.login = function () {
-    $facebook.login().then(function () {
-      $scope.getMyInfo();
-    });
-  };
-  $scope.getMyInfo = function () {
-    $scope.friends = {};
-    $facebook.api('/me').then(function (response) {
-      $rootScope.loggedInUser = response.id;
-      $scope.loginInfo = response;
-    });
-    setTimeout(function () {
-      $facebook.api('/me/friends').then(function (response) {
-        var id;
-        response.data.forEach(function (friend) {
-          id = friend.id;
-          $scope.friends[id] = true;
-        });
-      });
-    }, 2000);
-    setTimeout(function () {
-      console.log($scope.loginInfo);
-      console.log($rootScope.loggedInUser);
-      console.log($scope.friends);
-      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
-      ref.child('basicInfo').set($scope.loginInfo);
-      ref.child('friends').set($scope.friends);
-      location.href = '/#/loggedin';
-    }, 4000);
-  };
-
-  $scope.logout = function () {
-    $facebook.logout().then(function () {
-      location.href = '/#/';
-    });
-  };
 }).config(function ($routeProvider) {
   $routeProvider.when('/', {
     templateUrl: 'views/landing.html'
@@ -77,6 +40,43 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   }).when('/logout', {
     templateUrl: 'views/landing.html'
   });
+}).controller('FaceCtrl', function ($rootScope, $scope, $facebook) {
+  $scope.login = function () {
+    $facebook.login().then(function () {
+      $scope.getMyInfo();
+    });
+  };
+  $scope.getMyInfo = function () {
+    $rootScope.friends = {};
+    $facebook.api('/me').then(function (response) {
+      $rootScope.loggedInUser = response.id;
+      $scope.loginInfo = response;
+    });
+    setTimeout(function () {
+      $facebook.api('/me/friends').then(function (response) {
+        var id;
+        response.data.forEach(function (friend) {
+          id = friend.id;
+          $rootScope.friends[id] = true;
+        });
+      });
+    }, 2000);
+    setTimeout(function () {
+      console.log($scope.loginInfo);
+      console.log($rootScope.loggedInUser);
+      console.log($rootScope.friends);
+      var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
+      ref.child('basicInfo').set($scope.loginInfo);
+      ref.child('friends').set($rootScope.friends);
+      location.href = '/#/loggedin';
+    }, 4000);
+  };
+
+  $scope.logout = function () {
+    $facebook.logout().then(function () {
+      location.href = '/#/';
+    });
+  };
 })
 
 // .controller("LandingCtrl", function($scope, $firebaseObject) {
@@ -131,7 +131,10 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 }).controller('EventCtrl', function ($scope, $rootScope, $firebase, $firebaseObject) {
   $scope.freeHalfHours = [];
   $scope.timeBlocks = [];
-  $scope.possibleEvents = [];
+  $scope.interestsArr = [];
+  $scope.interestTimes = {};
+  $scope.possibleEventsUser = [];
+
   $scope.getAvailability = function (facebookId, callback) {
     $.get('https://goanddo.firebaseio.com/users/' + facebookId + '/schedule.json', function (data) {
       var dayObjArr = [];
@@ -145,7 +148,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         }
       });
     }).done(function () {
-      console.log($scope.freeHalfHours);
+      console.log('$scope.freeHalfHours: ', $scope.freeHalfHours);
       typeof callback === 'function' && callback();
     });
   };
@@ -206,20 +209,59 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     typeof callback === 'function' && callback();
   };
 
-  $scope.getPossibleEvents = function (facebookId, callback) {
+  $scope.getPossibleEventsUser = function (facebookId, callback) {
     $scope.getBlocks(facebookId, function () {
       $.get('https://goanddo.firebaseio.com/users/' + facebookId + '/interests.json', function (data) {
-        var interestsArr = [];
         for (var interest in data) {
-          if (data[interest] === 'true') {
-            interestsArr.push(interest);
+          // console.log("interest: ", interest, "data[interest]: ", data[interest]);
+          if (data[interest]) {
+            $scope.interestsArr.push(interest);
           }
         }
-        console.log(interestsArr);
-      }).done(function () {
-        console.log($scope.possibleEvents);
-        typeof callback === 'function' && callback();
-      });
+        // console.log("interestsArr: ", $scope.interestsArr);
+        $.get('https://goanddo.firebaseio.com/interests.json', function (data) {
+          for (var interest in data) {
+            $scope.interestTimes[interest] = data[interest].time;
+          }
+          // console.log("$scope.interestTimes: ", $scope.interestTimes);
+          // now make an object of interests and their possible times for the user's availability
+          $scope.freeHalfHours.forEach(function (day, i) {
+            //day => ["t0530", "t0600", "t1230"]
+            $scope.possibleEventsUser[i] = {}; //$scope.possibleEventsUser => [{},{},{},{},{},{},{}]
+            day.forEach(function (freeHalfHour, j) {
+              //freeHalfHour => "t0530"
+              $scope.interestsArr.forEach(function (userInterest) {
+                //userInterest => "Ultimate Frisbee"
+                // console.log("$scope.timeBlocks[i][freeHalfHour]: ", $scope.timeBlocks[i][freeHalfHour]);
+                // console.log("$scope.interestTimes[userInterest]: ", $scope.interestTimes[userInterest]);
+                if ($scope.timeBlocks[i][freeHalfHour] >= $scope.interestTimes[userInterest]) {
+                  //time block length starting this halfhour > interest time req.?
+                  if (!$scope.possibleEventsUser[i][userInterest]) {
+                    $scope.possibleEventsUser[i][userInterest] = [];
+                  }
+                  $scope.possibleEventsUser[i][userInterest].push(freeHalfHour);
+                  // console.log("freeHalfHour: ", freeHalfHour);
+                }
+              });
+            });
+          });
+        }).done(function () {
+          console.log('$scope.possibleEventsUser: ', $scope.possibleEventsUser);
+          var ref = new Firebase('https://goanddo.firebaseio.com/users/fakeface');
+          ref.child('possibleEvents').set($scope.possibleEventsUser);
+          typeof callback === 'function' && callback();
+        });
+      }).done(function () {});
     });
+  };
+
+  $scope.getPossibleEvents = function (facebookId, callback) {
+    $scope.getPossibleEventsUser(facebookId, function () {
+      console.log('new', $scope.possibleEventsUser);
+      for (var friendId in $rootScope.friends) {
+        console.log($rootScope.friends[friendId]);
+      }
+    });
+    typeof callback === 'function' && callback();
   };
 });

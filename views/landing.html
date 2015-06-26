@@ -17,6 +17,12 @@
       <h1>Go and Do</h1>
       <p class="lead">More social, less media.</p>
       <button ng-click="login()">Log in with FB</button>
+      <div ng-controller="EventCtrl" class="container">
+        <button ng-click="getAvailability('fakeface')" class="btn btn-primary">getAvailability('fakeface')</button>
+        <button ng-click="getBlocks('fakeface')" class="btn btn-primary">getBlocks('fakeface')</button>
+        <button ng-click="getPossibleEventsUser('fakeface')" class="btn btn-primary">getPossibleEventsUser('fakeface')</button>
+        <button ng-click="getPossibleEvents('fakeface')" class="btn btn-primary">getPossibleEvents('fakeface')</button>
+      </div>
     </div>
   </div>
 </div>
