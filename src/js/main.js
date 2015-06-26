@@ -32,6 +32,25 @@ var app = angular
      }());
   })
 
+  .config(function($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: 'views/landing.html'
+      })
+      .when('/happenings', {
+        templateUrl: 'views/happenings.html'
+      })
+      .when('/profile', {
+        templateUrl: 'views/profile.html'
+      })
+      .when('/loggedin', {
+        templateUrl: 'views/loggedin.html'
+      })
+      .when('/logout', {
+        templateUrl: 'views/landing.html'
+      });
+    })
+
   .controller('FaceCtrl', function ($rootScope, $scope, $facebook) {
     $scope.login = function() {
       $facebook.login().then(function() {
@@ -73,24 +92,7 @@ var app = angular
     }
   })
 
-  .config(function($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/landing.html'
-      })
-      .when('/happenings', {
-        templateUrl: 'views/happenings.html'
-      })
-      .when('/profile', {
-        templateUrl: 'views/profile.html'
-      })
-      .when('/loggedin', {
-        templateUrl: 'views/loggedin.html'
-      })
-      .when('/logout', {
-        templateUrl: 'views/landing.html'
-      })
-    })
+
 
   // .controller("LandingCtrl", function($scope, $firebaseObject) {
   //   var ref = new Firebase("https://goanddo.firebaseio.com/data");
@@ -150,7 +152,8 @@ var app = angular
     $scope.timeBlocks = [];
     $scope.interestsArr = [];
     $scope.interestTimes = {};
-    $scope.possibleEvents = [];
+    $scope.possibleEventsUser = [];
+
     $scope.getAvailability = function(facebookId, callback) {
       $.get(`https://goanddo.firebaseio.com/users/${facebookId}/schedule.json`, function(data) {
         var dayObjArr = [];
@@ -165,14 +168,14 @@ var app = angular
         });
       })
       .done(function() {
-        console.log($scope.freeHalfHours);
+        console.log("$scope.freeHalfHours: ", $scope.freeHalfHours);
         typeof callback === 'function' && callback();
-      })
-    }
+      });
+    };
 
     $scope.isNextHalfHour = function(halfHour1, halfHour2) {
       if (!halfHour1 || !halfHour2) {
-        console.log("nope, undefined arg", "1: ", halfHour1, "2: ", halfHour2)
+        console.log("nope, undefined arg", "1: ", halfHour1, "2: ", halfHour2);
         return false;
       }
       var half1Arr = halfHour1.split('');
@@ -199,7 +202,7 @@ var app = angular
         console.log("nope", halfHour1, halfHour2);
         return false;
       }
-    }
+    };
 
     // TODO: Fix this shit for days with multiple time blocks
     $scope.getBlocks = function(facebookId, callback) {
@@ -224,51 +227,54 @@ var app = angular
         console.log("timeBlocks", $scope.timeBlocks);
       });
       typeof callback === 'function' && callback();
-    }
+    };
 
-    $scope.getPossibleEvents = function(facebookId, callback) {
+    $scope.getPossibleEventsUser = function(facebookId, callback) {
       $scope.getBlocks(facebookId, function () {
         $.get(`https://goanddo.firebaseio.com/users/${facebookId}/interests.json`, function(data) {
           for (var interest in data) {
-            console.log("interest: ", interest, "data[interest]: ", data[interest]);
+            // console.log("interest: ", interest, "data[interest]: ", data[interest]);
             if (data[interest]) {
               $scope.interestsArr.push(interest);
             }
           }
-          console.log("interestsArr: ", $scope.interestsArr);
+          // console.log("interestsArr: ", $scope.interestsArr);
           $.get('https://goanddo.firebaseio.com/interests.json', function(data) {
             for (var interest in data) {
               $scope.interestTimes[interest] = data[interest].time;
             }
-            console.log("$scope.interestTimes: ", $scope.interestTimes);
+            // console.log("$scope.interestTimes: ", $scope.interestTimes);
             // now make an object of interests and their possible times for the user's availability
-            // $scope.timeBlocks.forEach(function(day, i) {
-            $scope.freeHalfHours.forEach(function(day, i) {
-              $scope.possibleEvents[i] = {};
-              for (var startingTime in day) {
-                for (var interest in data) {
-                  $scope.possibleEvents[i][interest] = [];
-                  if ($scope.timeBlocks[i][startingTime] >= data[interest].time) {
-                    console.log("$scope.timeBlocks[i][startingTime]: ", $scope.timeBlocks[i][startingTime]);
-                    $scope.possibleEvents[i][interest].push(startingTime);
+            $scope.freeHalfHours.forEach(function(day, i) {  //day => ["t0530", "t0600", "t1230"]
+              $scope.possibleEventsUser[i] = {}; //$scope.possibleEventsUser => [{},{},{},{},{},{},{}]
+              day.forEach(function(freeHalfHour, j) { //freeHalfHour => "t0530"
+                $scope.interestsArr.forEach(function(userInterest) { //userInterest => "Ultimate Frisbee"
+                  // console.log("$scope.timeBlocks[i][freeHalfHour]: ", $scope.timeBlocks[i][freeHalfHour]);
+                  // console.log("$scope.interestTimes[userInterest]: ", $scope.interestTimes[userInterest]);
+                  if ($scope.timeBlocks[i][freeHalfHour] >= $scope.interestTimes[userInterest]) { //time block length starting this halfhour > interest time req.?
+                    if (!$scope.possibleEventsUser[i][userInterest]) {
+                      $scope.possibleEventsUser[i][userInterest] = [];
+                    }
+                    $scope.possibleEventsUser[i][userInterest].push(freeHalfHour);
+                    // console.log("freeHalfHour: ", freeHalfHour);
                   }
-                }
-              }
+                });
+              });
             });
-
-          console.log($scope.possibleEvents);
-          });
+          })
+          .done(function() {
+            console.log("$scope.possibleEventsUser: ", $scope.possibleEventsUser);
+            var ref = new Firebase(`https://goanddo.firebaseio.com/users/fakeface`);
+            ref.child('possibleEvents').set($scope.possibleEventsUser);
+          })
         })
         .done(function() {
-          console.log($scope.possibleEvents);
           typeof callback === 'function' && callback();
         });
       });
-    }
+    };
 
   })
-
-
 
 
 
