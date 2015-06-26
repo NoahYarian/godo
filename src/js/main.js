@@ -155,7 +155,7 @@ var app = angular
       $.get(`https://goanddo.firebaseio.com/users/${facebookId}/schedule.json`, function(data) {
         var dayObjArr = [];
         dayObjArr.push(data.mon, data.tue, data.wed, data.thu, data.fri, data.sat, data.sun);
-        //console.log("dayObjArr: ", dayObjArr);
+        console.log("dayObjArr: ", dayObjArr);
         dayObjArr.forEach(function(day, i) {
           $scope.freeHalfHours[i] = [];
           for (var halfHour in day) {
@@ -265,7 +265,7 @@ var app = angular
             });
           })
           .done(function() {
-            console.log(facebookId, " $scope.possibleEventsUser[facebookId]: ", $scope.possibleEventsUser[facebookId]);
+            // console.log(facebookId, " $scope.possibleEventsUser[facebookId]: ", $scope.possibleEventsUser[facebookId]);
             var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}`);
             ref.child('possibleEvents').set($scope.possibleEventsUser[facebookId]);
             typeof callback === 'function' && callback();
@@ -277,13 +277,13 @@ var app = angular
       });
     };
 
-    $scope.getPossibleEvents = function (facebookId) {
+    $scope.getFriendPossibleEvents = function (facebookId, callback) {
       $scope.friendPossibleEvents = {};
       $rootScope.friends = {fakedata2: true, fakedata3: true, fakedata4: true, fakedata5: true};
       $rootScope.friends[facebookId] = true;
-      console.log($rootScope.friends);
+      // console.log($rootScope.friends);
       $.each($rootScope.friends, function (friendId, truth) {
-        console.log(friendId);
+        // console.log(friendId);
           $.get(`https://goanddo.firebaseio.com/users/${friendId}/possibleEvents.json`, function(data) {
             $scope.friendPossibleEvents[friendId] = data;
             // $scope.friendPossibleEvents.push(data);
@@ -294,8 +294,55 @@ var app = angular
               var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}`);
               ref.child('friendPossibleEvents').set($scope.friendPossibleEvents);
             }
+            typeof callback === 'function' && callback();
           });
       });
+    }
+
+    //TODO: maybe restructure data so startTimes are objects instead of members of an array?
+    $scope.makeEvents = function (facebookId) {
+      $scope.events = $scope.possibleEventsUser[facebookId];
+      // $scope.getFriendPossibleEvents(facebookId, function() {
+        // console.log($scope.friendPossibleEvents);
+        for (var friend in $scope.friendPossibleEvents) {
+          // console.log("$scope.friendPossibleEvents[",friend,"]: ", $scope.friendPossibleEvents[friend]);
+        // $scope.friendPossibleEvents.forEach(function(friend) {
+          $scope.friendPossibleEvents[friend].forEach(function(day, i) {
+            // console.log($scope.events);
+            // if (!$scope.events[i]) {
+            //   $scope.events[i] = {};
+            // }
+            // console.log("friend: ", friend, "day index: ", i, "day: ", day);
+            if (day) {
+              for (var interest in day) {
+                console.log(friend, i, interest, day[interest]);
+                day[interest].forEach(function(startTime) {
+                  for (var friend2 in $scope.friendPossibleEvents) {
+                    console.log(friend, friend2, i, startTime, interest);
+                    console.log("$scope.friendPossibleEvents[friend2][i]: ", $scope.friendPossibleEvents[friend2][i]);
+                    if ($scope.events[i][interest] &&
+                        (!$scope.friendPossibleEvents[friend2][i] ||
+                        !$scope.friendPossibleEvents[friend2][i][interest] ||
+                        $scope.friendPossibleEvents[friend2][i][interest].indexOf(startTime) === -1)) {
+                      $scope.events[i][interest].splice($scope.events[i][interest].indexOf(startTime), 1);
+                    }
+                  }
+                });
+              }
+              // $scope.events[day][interest] = $scope.friendPossibleEvents[friend][interest].map(function(startTime) {
+              //   for (var friend2 in $scope.friendPossibleEvents) {
+              //     if (!$scope.friendPossibleEvents[friend][interest][startTime]) {
+              //       return `{${startTime}: false}`;
+              //     }
+              //   }
+              //   return `{${startTime}: true}`;
+              // });
+            }
+          });
+        };
+        console.log($scope.friendPossibleEvents)
+        console.log($scope.events);
+      // });
     }
 
   })
