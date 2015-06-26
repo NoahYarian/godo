@@ -259,7 +259,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     $scope.getPossibleEventsUser(facebookId, function () {
       console.log('new', $scope.possibleEventsUser);
       for (var friendId in $rootScope.friends) {
-        console.log($rootScope.friends[friendId]);
+        console.log(friendId);
       }
     });
     typeof callback === 'function' && callback();
