@@ -74,7 +74,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           console.log('ref2: ', ref2);
           ref2.once('value', function (dataSnapshot2) {
             console.log('dataSnapshot2: ', dataSnapshot2, 'ref: ', ref);
-            ref.child('schedule').set(dataSnapshot2);
+            ref.child('schedule').set(dataSnapshot2.val());
           }, function (err) {
             console.log('second once err:', err);
           });
