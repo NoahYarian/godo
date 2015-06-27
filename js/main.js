@@ -67,11 +67,11 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       console.log($rootScope.friends);
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
       ref.once('value', function (dataSnapshot) {
-        console.log('dataSnapshot.exists(\'basicInfo\'): ', dataSnapshot.exists('basicInfo'));
-        if (!dataSnapshot.exists('basicInfo')) {
+        console.log('dataSnapshot.child(\'basicInfo\').exists(): ', dataSnapshot.child('basicInfo').exists());
+        if (!dataSnapshot.child('basicInfo').exists()) {
           console.log('basicInfo does not exist');
           ref.child('basicInfo').set($scope.loginInfo);
-          console.log('dataSnapshot.exists(\'basicInfo\'): ', dataSnapshot.exists('basicInfo'));
+          console.log('dataSnapshot.child(\'basicInfo\').exists(): ', dataSnapshot.child('basicInfo').exists());
         }
       });
       ref.child('friends').set($rootScope.friends);
