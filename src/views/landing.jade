@@ -21,6 +21,7 @@
       //- img(src= 'http://www.kilnandco.com/gallery/var/albums/facebook-login-button.png?m=1375582078')
 
       button(ng-click="login()") Log in with FB
+      button(ng-click="loginFake()") Log in as fakedata
       .container(ng-controller="EventCtrl")
         button.btn.btn-primary(ng-click="getAvailability('fakedata')") getAvailability('fakedata')
         button.btn.btn-primary(ng-click="getBlocks('fakedata')") getBlocks('fakedata')

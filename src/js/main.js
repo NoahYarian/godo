@@ -57,6 +57,10 @@ var app = angular
         $scope.getMyInfo();
       });
     }
+    $scope.loginFake = function() {
+      $rootScope.loggedInUser = "fakedata";
+      location.href = "/#/loggedin";
+    }
     $scope.getMyInfo = function() {
       $rootScope.friends = {};
       $facebook.api("/me")
@@ -157,90 +161,116 @@ var app = angular
     }
   })
 
-  .controller("ScheduleCtrl", function($rootScope, $scope, $firebaseObject) {
+  .controller("ScheduleCtrl", function($rootScope, $firebaseObject) {
     var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}/schedule`);
     var syncObject = $firebaseObject(ref);
-    syncObject.$bindTo($scope, "data");
+    syncObject.$bindTo($rootScope, "userSchedule");
   })
 
   .controller('EventCtrl', function($scope, $rootScope, $firebase, $firebaseObject, $http) {
     $scope.possibleEventsUser = {};
 
-    $scope.getAvailability = function(facebookId, callback) {
-      $scope.freeHalfHours = [];
-      $.get(`https://goanddo.firebaseio.com/users/${facebookId}/schedule.json`, function(data) {
-        var dayObjArr = [];
-        dayObjArr.push(data.mon, data.tue, data.wed, data.thu, data.fri, data.sat, data.sun);
-        // console.log("dayObjArr: ", dayObjArr);
-        dayObjArr.forEach(function(day, i) {
-          $scope.freeHalfHours[i] = [];
-          for (var halfHour in day) {
-            if (day[halfHour]) {
-              $scope.freeHalfHours[i].push(halfHour);
-            }
-          }
-        });
-      })
-      .done(function() {
-        // console.log("$scope.freeHalfHours: ", $scope.freeHalfHours);
-        typeof callback === 'function' && callback();
-      });
-    };
+    // $scope.getAvailability = function(facebookId, callback) {
+    //   $scope.freeHalfHours = [];
+    //   $.get(`https://goanddo.firebaseio.com/users/${facebookId}/schedule.json`, function(data) {
+    //     var dayObjArr = [];
+    //     dayObjArr.push(data.mon, data.tue, data.wed, data.thu, data.fri, data.sat, data.sun);
+    //     // console.log("dayObjArr: ", dayObjArr);
+    //     dayObjArr.forEach(function(day, i) {
+    //       $scope.freeHalfHours[i] = [];
+    //       for (var halfHour in day) {
+    //         if (day[halfHour]) {
+    //           $scope.freeHalfHours[i].push(halfHour);
+    //         }
+    //       }
+    //     });
+    //   })
+    //   .done(function() {
+    //     // console.log("$scope.freeHalfHours: ", $scope.freeHalfHours);
+    //     typeof callback === 'function' && callback();
+    //   });
+    // };
 
-    $scope.isNextHalfHour = function(halfHour1, halfHour2) {
-      if (!halfHour1 || !halfHour2) {
-        // console.log("nope, undefined arg", "1: ", halfHour1, "2: ", halfHour2);
-        return false;
-      }
-      var half1Arr = halfHour1.split('');
-      var half2Arr = halfHour2.split('');
-      // console.log(Number(half1Arr.slice(1,3).join('')));
-      // console.log(Number(half2Arr.slice(1,3).join('')));
-      if (half1Arr[3] === "0" && half2Arr[3] === "3") {
-        if (Number(half1Arr.slice(1,3).join('')) === Number(half2Arr.slice(1,3).join(''))) {
-          // console.log("yep", halfHour1, halfHour2);
-          return true;
-        } else {
-          // console.log("nope", halfHour1, halfHour2);
-          return false;
-        }
-      } else if (half1Arr[3] === "3" && half2Arr[3] === "0") {
-        if (Number(half1Arr.slice(1,3).join('')) + 1 === Number(half2Arr.slice(1,3).join(''))) {
-          // console.log("yep", halfHour1, halfHour2);
-          return true;
-        } else {
-          // console.log("nope", halfHour1, halfHour2);
-          return false;
-        }
+    // $scope.isNextHalfHour = function(halfHour1, halfHour2) {
+    //   if (!halfHour1 || !halfHour2) {
+    //     // console.log("nope, undefined arg", "1: ", halfHour1, "2: ", halfHour2);
+    //     return false;
+    //   }
+    //   var half1Arr = halfHour1.split('');
+    //   var half2Arr = halfHour2.split('');
+    //   // console.log(Number(half1Arr.slice(1,3).join('')));
+    //   // console.log(Number(half2Arr.slice(1,3).join('')));
+    //   if (half1Arr[3] === "0" && half2Arr[3] === "3") {
+    //     if (Number(half1Arr.slice(1,3).join('')) === Number(half2Arr.slice(1,3).join(''))) {
+    //       // console.log("yep", halfHour1, halfHour2);
+    //       return true;
+    //     } else {
+    //       // console.log("nope", halfHour1, halfHour2);
+    //       return false;
+    //     }
+    //   } else if (half1Arr[3] === "3" && half2Arr[3] === "0") {
+    //     if (Number(half1Arr.slice(1,3).join('')) + 1 === Number(half2Arr.slice(1,3).join(''))) {
+    //       // console.log("yep", halfHour1, halfHour2);
+    //       return true;
+    //     } else {
+    //       // console.log("nope", halfHour1, halfHour2);
+    //       return false;
+    //     }
+    //   } else {
+    //     // console.log("nope", halfHour1, halfHour2);
+    //     return false;
+    //   }
+    // };
+
+    $scope.getNextHalfHour = function (halfHour) {
+      var timeArr = halfHour.split('');
+      var nextHalfHour = ["0"];
+      var nextHour;
+      var doneArr;
+      var hour = timeArr.slice(0, 2).join('');
+      var nextHourNoZero = (Number(hour) + 1).toString();
+
+      if (nextHourNoZero.length === 1) {
+        nextHour = nextHourNoZero.split('');
+        nextHour.unshift("0");
       } else {
-        // console.log("nope", halfHour1, halfHour2);
-        return false;
+        nextHour = nextHourNoZero.split('');
       }
-    };
+
+      if (timeArr[2] === "3") {
+        nextHalfHour.unshift("0");
+        doneArr = nextHour.concat(nextHalfHour);
+      } else {
+        nextHalfHour.unshift("3");
+        doneArr = hour.split('').concat(nextHalfHour);
+      }
+      return doneArr.join('');
+    }
 
     // TODO: Fix this shit for days with multiple time blocks
     $scope.getBlocks = function(facebookId, callback) {
-      $scope.getAvailability(facebookId, function () {
+      // $scope.getAvailability(facebookId, function () {
         $scope.timeBlocks = [];
         var k;
-        $scope.freeHalfHours.forEach(function(day, i) {
+        var thisHalfHour;
+        $.each($rootScope.userSchedule, function(dayIndex, halfHoursObj) {
           // console.log(i, day);
-          $scope.timeBlocks[i] = {};
-          day.forEach(function(halfHour, j) {
-            k = 0;
-            $scope.timeBlocks[i][halfHour] = 0.5;
-            // console.log("day[j] ", day[j]);
-            // console.log("day[j+1] ", day[j+1]);
-            while (k < day.length + 1 - j) {
-              if ($scope.isNextHalfHour(day[j+k], day[j+k+1])) {
-                $scope.timeBlocks[i][halfHour] += 0.5;
+          $scope.timeBlocks[dayIndex] = {};
+          $.each(halfHoursObj, function(halfHour, bool) {
+            if (halfHour) {
+              $scope.timeBlocks[dayIndex][halfHour] = 0.5;
+              thisHalfHour = halfHour;
+              while (nextHalfHourIsFree(thisHalfHour)) {
+                $scope.timeBlocks[dayIndex][halfHour] += 0.5;
+                thisHalfHour = getNextHalfHour(thisHalfHour);
               }
-              k++;
+            } else {
+              $scope.timeBlocks[dayIndex][halfHour] = 0;
             }
           });
         });
-        // console.log("timeBlocks", $scope.timeBlocks);
-      });
+        console.log("timeBlocks", $scope.timeBlocks);
+      // });
       typeof callback === 'function' && callback();
     };
 
@@ -403,7 +433,11 @@ var app = angular
         $.each(day, function(interest, startTimesArr) {
           console.log("interest: ", interest, "startTimesArr: ", startTimesArr);
           startTimesArr.forEach(function(startTime) {
-            ref.child(`${interest}/${i}/${startTime}/${facebookId}`).set("true");
+            if (startTime) {
+              ref.child(`${interest}/${i}/${startTime}/${facebookId}`).set(true);
+            } else {
+              ref.child(`${interest}/${i}/${startTime}/${facebookId}`).remove();
+            }
           });
         });
       });
