@@ -70,9 +70,14 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         console.log('dataSnapshot.child(\'basicInfo\').exists(): ', dataSnapshot.child('basicInfo').exists());
         if (!dataSnapshot.child('basicInfo').exists()) {
           console.log('basicInfo does not exist');
-          ref.child('basicInfo').set($scope.loginInfo, function () {
-            console.log('dataSnapshot.child(\'basicInfo\').exists(): ', dataSnapshot.child('basicInfo').exists());
-          });
+          var onComplete = function onComplete(error) {
+            if (error) {
+              console.log('Synchronization failed');
+            } else {
+              console.log('dataSnapshot.child(\'basicInfo\').exists(): ', dataSnapshot.child('basicInfo').exists());
+            }
+          };
+          ref.child('basicInfo').set($scope.loginInfo, onComplete);
         };
       });
       ref.child('friends').set($rootScope.friends);
