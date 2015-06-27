@@ -79,9 +79,9 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           //   console.log("second once err:", err)
           // });
         };
+        ref.child('basicInfo').set($scope.loginInfo);
+        ref.child('friends').set($rootScope.friends);
       });
-      ref.child('basicInfo').set($scope.loginInfo);
-      ref.child('friends').set($rootScope.friends);
       location.href = '/#/loggedin';
     }, 4000);
   };
