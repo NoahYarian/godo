@@ -299,25 +299,36 @@ var app = angular
                 });
                 // console.log("$scope.interestTimes: ", $scope.interestTimes);
                 // now make an object of interests and their possible times for the user's availability
-                $scope.freeHalfHours.forEach(function(day, i) {  //day => ["t0530", "t0600", "t1230"]
-                  $scope.possibleEventsUser[facebookId][i] = {}; //$scope.possibleEventsUser => [{},{},{},{},{},{},{}]
-                  day.forEach(function(freeHalfHour, j) { //freeHalfHour => "t0530"
-                    $scope.interestsArr.forEach(function(userInterest) { //userInterest => "Ultimate Frisbee"
-                      // console.log("$scope.timeBlocks[i][freeHalfHour]: ", $scope.timeBlocks[i][freeHalfHour]);
-                      // console.log("$scope.interestTimes[userInterest]: ", $scope.interestTimes[userInterest]);
-                      if ($scope.timeBlocks[i][freeHalfHour] >= $scope.interestTimes[userInterest]) { //time block length starting this halfhour > interest time req.?
-                        if (!$scope.possibleEventsUser[facebookId][i][userInterest]) {
-                          $scope.possibleEventsUser[facebookId][i][userInterest] = [];
+                // $scope.freeHalfHours.forEach(function(day, i) {  //day => ["t0530", "t0600", "t1230"]
+                $.each($rootScope.userSchedule, function(dayIndex, halfHoursObj) {
+                  if (!$.isNumeric(dayIndex)) {
+                    return true;
+                  }
+                  // $scope.possibleEventsUser[facebookId][i] = {}; //$scope.possibleEventsUser => [{},{},{},{},{},{},{}]
+                  $scope.possibleEventsUser[facebookId][dayIndex] = {};
+                  // day.forEach(function(freeHalfHour, j) { //freeHalfHour => "t0530"
+                  $.each(halfHoursObj, function(halfHour, bool) {
+                    if (bool) {
+                      $scope.interestsArr.forEach(function(userInterest) { //userInterest => "Ultimate Frisbee"
+                        // console.log("$scope.timeBlocks[i][freeHalfHour]: ", $scope.timeBlocks[i][freeHalfHour]);
+                        // console.log("$scope.interestTimes[userInterest]: ", $scope.interestTimes[userInterest]);
+                        if ($scope.timeBlocks[dayIndex][halfHour] >= $scope.interestTimes[userInterest]) { //time block length starting this halfhour > interest time req.?
+                          if (!$scope.possibleEventsUser[facebookId][dayIndex][userInterest]) {
+                            //this is where to change things into an object if desired
+                            $scope.possibleEventsUser[facebookId][dayIndex][userInterest] = [];
+                          }
+                          $scope.possibleEventsUser[facebookId][dayIndex][userInterest].push(halfHour);
+                          // console.log("freeHalfHour: ", freeHalfHour);
                         }
-                        $scope.possibleEventsUser[facebookId][i][userInterest].push(freeHalfHour);
-                        // console.log("freeHalfHour: ", freeHalfHour);
-                      }
-                    });
+                      });
+                    } else {
+                      // if not a free half hour, do this
+                    }
                   });
                 });
             })
             .then(function() {
-              console.log(facebookId, " $scope.possibleEventsUser[facebookId]: ", $scope.possibleEventsUser[facebookId]);
+              console.log("$scope.possibleEventsUser[", facebookId, "]: ", $scope.possibleEventsUser[facebookId]);
               var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}`);
               ref.child('possibleEvents').set($scope.possibleEventsUser[facebookId]);
               typeof callback === 'function' && callback();
