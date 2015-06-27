@@ -70,9 +70,10 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         console.log('dataSnapshot.child(\'basicInfo\').exists(): ', dataSnapshot.child('basicInfo').exists());
         if (!dataSnapshot.child('basicInfo').exists()) {
           console.log('basicInfo does not exist');
-          ref.child('basicInfo').set($scope.loginInfo);
-          console.log('dataSnapshot.child(\'basicInfo\').exists(): ', dataSnapshot.child('basicInfo').exists());
-        }
+          ref.child('basicInfo').set($scope.loginInfo, function () {
+            console.log('dataSnapshot.child(\'basicInfo\').exists(): ', dataSnapshot.child('basicInfo').exists());
+          });
+        };
       });
       ref.child('friends').set($rootScope.friends);
       location.href = '/#/loggedin';
