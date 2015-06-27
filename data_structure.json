@@ -1,5 +1,103 @@
+//for all userIDs in users
+//if there are enough people for an interest at a certain time
+//put their IDs in an object within that time within that day within that interest
+
+{
+  "Ping-pong": {
+    "0" : {
+      "0000" : {
+        "fakedata": "true",
+        "fakedata2": "true",
+        "fakedata3": "true",
+        "fakedata4": "true",
+        "fakedata5": "true"
+      },
+      "0030" : {
+        "fakedata": "true",
+        "fakedata2": "true",
+        "fakedata3": "true",
+        "fakedata4": "true",
+        "fakedata5": "true"
+      },
+      "0100" : {
+        "fakedata": "true",
+        "fakedata2": "true",
+        "fakedata3": "true",
+        "fakedata4": "true",
+        "fakedata5": "true"
+      },
+      "0130" : {
+        "fakedata": "true",
+        "fakedata2": "true",
+        "fakedata3": "true",
+        "fakedata4": "true",
+        "fakedata5": "true"
+      }
+    }
+  }
+}
+
+Event Object
+------------
+
+{
+  "-Jz45Ifmd2j-4oOkf": {
+    "interest": "Bocce",
+    "day": "Thursday",
+    "time": "1600",
+    "confirmsNeededForGo": "2",
+    "declinesNeededForCancel": "4",
+    "invited": {
+      "fakedata": "true",
+      "fakedata2": "true",
+      "fakedata3": "true",
+      "fakedata4": "true",
+      "fakedata5": "true"
+    },
+    "confirmed": {
+      "fakedata": "false",
+      "fakedata2": "false",
+      "fakedata3": "false",
+      "fakedata4": "false",
+      "fakedata5": "false"
+    },
+    "messages": {
+      "-J9497asdfa84": {
+        "fakedata4": "Where is this going to be?"
+      },
+      "-J48nn4n45fn6": {
+        "fakedata3": "Good question..."
+      }
+    }
+  }
+}
 
 
+Event Object v1
+-----------------
+
+{
+  "interest": "Disc Golf",
+  "time": {
+    "start": "Tue Jun 23 2015 16:30:00 GMT-0500 (CDT)",
+    "end": "Tue Jun 23 2015 18:30:00 GMT-0500 (CDT)"
+  },
+  "invitees": {
+    "01": "Caleb Gregory",
+    "02": "Matt Fili",
+    "03": "Greg Dick",
+    "04": "Brien Pafford",
+    "05": "Noah Yarian"
+  },
+  "confirmed": {
+    "01": "Noah Yarian",
+    "02": "Brien Pafford"
+  },
+  "declined": {
+    "01": "Matt Fili",
+  },
+  "status": "scheduled"
+}
 
 
 
@@ -378,31 +476,7 @@ User object
   }
 }
 
-Event Object
-------------
 
-{
-  "interest": "Disc Golf",
-  "time": {
-    "start": "Tue Jun 23 2015 16:30:00 GMT-0500 (CDT)",
-    "end": "Tue Jun 23 2015 18:30:00 GMT-0500 (CDT)"
-  },
-  "invitees": {
-    "01": "Caleb Gregory",
-    "02": "Matt Fili",
-    "03": "Greg Dick",
-    "04": "Brien Pafford",
-    "05": "Noah Yarian"
-  },
-  "confirmed": {
-    "01": "Noah Yarian",
-    "02": "Brien Pafford"
-  },
-  "declined": {
-    "01": "Matt Fili",
-  },
-  "status": "scheduled"
-}
 
 Interest Object
 ---------------
