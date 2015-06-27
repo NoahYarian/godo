@@ -66,7 +66,9 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       console.log($rootScope.loggedInUser);
       console.log($rootScope.friends);
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
-      console.log('ref.child(\'basicInfo\'):', ref.child('basicInfo'));
+      ref.once('value', function (dataSnapshot) {
+        console.log('dataSnapshot.exists(): ', dataSnapshot.exists());
+      });
       ref.child('basicInfo').set($scope.loginInfo);
       ref.child('friends').set($rootScope.friends);
       location.href = '/#/loggedin';
