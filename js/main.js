@@ -69,7 +69,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       ref.once('value', function (dataSnapshot) {
         if (!dataSnapshot.child('basicInfo').exists()) {
           //New user tasks here
-          console.log('MCFLY?!?!');
+          console.log('MCFLY?');
           // var ref2 = new Firebase(`https://goanddo.firebaseio.com/scheduleBoiler`);
           // console.log("ref2: ", ref2);
           // ref2.once('value', function(dataSnapshot2) {
@@ -79,8 +79,6 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           //   console.log("second once err:", err)
           // });
         };
-      }, function (err) {
-        console.log('first once err:', err);
       });
       ref.child('basicInfo').set($scope.loginInfo);
       ref.child('friends').set($rootScope.friends);
