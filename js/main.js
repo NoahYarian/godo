@@ -67,21 +67,15 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       console.log($rootScope.friends);
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
       ref.once('value', function (dataSnapshot) {
-        console.log('dataSnapshot.child(\'basicInfo\').exists(): ', dataSnapshot.child('basicInfo').exists());
         if (!dataSnapshot.child('basicInfo').exists()) {
-          console.log('basicInfo does not exist');
-          var onComplete = function onComplete(error) {
-            if (error) {
-              console.log('Synchronization failed');
-            } else {
-              ref.once('value', function (dataSnapshot) {
-                console.log('dataSnapshot.child(\'basicInfo\').exists(): ', dataSnapshot.child('basicInfo').exists());
-              });
-            }
-          };
-          ref.child('basicInfo').set($scope.loginInfo, onComplete);
+          //New user tasks here
+          var ref2 = new Firebase('https://goanddo.firebaseio.com/scheduleBoiler');
+          ref2.once('value', function (dataSnapshot2) {
+            ref.child('schedule').set(dataSnapshot2);
+          });
         };
       });
+      ref.child('basicInfo').set($scope.loginInfo);
       ref.child('friends').set($rootScope.friends);
       location.href = '/#/loggedin';
     }, 4000);
