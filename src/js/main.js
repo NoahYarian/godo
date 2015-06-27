@@ -253,16 +253,20 @@ var app = angular
         $scope.timeBlocks = [];
         var k;
         var thisHalfHour;
+        console.log("$rootScope.userSchedule: ", $rootScope.userSchedule);
         $.each($rootScope.userSchedule, function(dayIndex, halfHoursObj) {
-          // console.log(i, day);
+          if (!$.isNumeric(dayIndex)) {
+            return true;
+          }
           $scope.timeBlocks[dayIndex] = {};
+          console.log("halfHoursObj: ", halfHoursObj);
           $.each(halfHoursObj, function(halfHour, bool) {
-            if (halfHour) {
+            if (bool) {
               $scope.timeBlocks[dayIndex][halfHour] = 0.5;
               thisHalfHour = halfHour;
-              while (nextHalfHourIsFree(thisHalfHour)) {
+              while ($rootScope.userSchedule[dayIndex][$scope.getNextHalfHour(thisHalfHour)]) {
                 $scope.timeBlocks[dayIndex][halfHour] += 0.5;
-                thisHalfHour = getNextHalfHour(thisHalfHour);
+                thisHalfHour = $scope.getNextHalfHour(thisHalfHour);
               }
             } else {
               $scope.timeBlocks[dayIndex][halfHour] = 0;
