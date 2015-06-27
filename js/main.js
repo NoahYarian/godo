@@ -71,6 +71,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           //New user tasks here
           var ref2 = new Firebase('https://goanddo.firebaseio.com/scheduleBoiler');
           ref2.once('value', function (dataSnapshot2) {
+            console.log('dataSnapshot2: ', dataSnapshot2, 'ref: ', ref);
             ref.child('schedule').set(dataSnapshot2);
           });
         };
