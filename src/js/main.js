@@ -308,22 +308,17 @@ var app = angular
                   $scope.possibleEventsUser[facebookId][dayIndex] = {};
                   // day.forEach(function(freeHalfHour, j) { //freeHalfHour => "t0530"
                   $.each(halfHoursObj, function(halfHour, bool) {
-                    if (bool) {
-                      $scope.interestsArr.forEach(function(userInterest) { //userInterest => "Ultimate Frisbee"
-                        // console.log("$scope.timeBlocks[i][freeHalfHour]: ", $scope.timeBlocks[i][freeHalfHour]);
-                        // console.log("$scope.interestTimes[userInterest]: ", $scope.interestTimes[userInterest]);
-                        if ($scope.timeBlocks[dayIndex][halfHour] >= $scope.interestTimes[userInterest]) { //time block length starting this halfhour > interest time req.?
-                          if (!$scope.possibleEventsUser[facebookId][dayIndex][userInterest]) {
-                            //this is where to change things into an object if desired
-                            $scope.possibleEventsUser[facebookId][dayIndex][userInterest] = [];
-                          }
-                          $scope.possibleEventsUser[facebookId][dayIndex][userInterest].push(halfHour);
-                          // console.log("freeHalfHour: ", freeHalfHour);
-                        }
-                      });
-                    } else {
-                      // if not a free half hour, do this
-                    }
+                    $scope.interestsArr.forEach(function(userInterest) { //userInterest => "Ultimate Frisbee"
+                      if (!$scope.possibleEventsUser[facebookId][dayIndex][userInterest]) {
+                        $scope.possibleEventsUser[facebookId][dayIndex][userInterest] = {};
+                      }
+                      if (bool && $scope.timeBlocks[dayIndex][halfHour] >= $scope.interestTimes[userInterest]) { //time block length starting this halfhour > interest time req.?
+                        $scope.possibleEventsUser[facebookId][dayIndex][userInterest][halfHour] = true;
+                      } else {
+                      // if not a free half hour or not enough time, do this
+                      $scope.possibleEventsUser[facebookId][dayIndex][userInterest][halfHour] = false;
+                      }
+                    });
                   });
                 });
             })
@@ -337,6 +332,7 @@ var app = angular
       });
     };
 
+    //probably needs fixing, but I might not use it
     $scope.getFriendPossibleEvents = function (facebookId, callback) {
       $scope.friendPossibleEvents = {};
       $rootScope.friends = {fakedata2: true, fakedata3: true, fakedata4: true, fakedata5: true};
@@ -359,7 +355,7 @@ var app = angular
       });
     }
 
-    //TODO: maybe restructure data so startTimes are objects instead of members of an array?
+    //A function that finds what events are shared in common by a person and ALL of their friends.... not what I need!
     $scope.makeEvents = function (facebookId) {
       $scope.events = $scope.possibleEventsUser[facebookId];
       // console.log($scope.friendPossibleEvents);
@@ -390,7 +386,7 @@ var app = angular
       // console.log($scope.friendPossibleEvents)
       console.log("$scope.events: ", $scope.events);
     }
-    //WAIT. what did I just write?! That was a function that found what events are shared in common by a person and ALL of their friends....
+
 
     // $scope.getAllPossibleEvents = function() {
     //   $scope.allPossibleEvents = {};
@@ -445,10 +441,11 @@ var app = angular
       var ref = new Firebase(`https://goanddo.firebaseio.com/availability`);
       $scope.possibleEventsUser[facebookId].forEach(function(day, i) {
         console.log("i:", i, "day:", day);
-        $.each(day, function(interest, startTimesArr) {
-          console.log("interest: ", interest, "startTimesArr: ", startTimesArr);
-          startTimesArr.forEach(function(startTime) {
-            if (startTime) {
+        $.each(day, function(interest, startTimesObj) {
+          console.log("interest: ", interest, "startTimesObj: ", startTimesObj);
+          // startTimesArr.forEach(function(startTime) {
+          $.each(startTimesObj, function(startTime, bool) {
+            if (bool) {
               ref.child(`${interest}/${i}/${startTime}/${facebookId}`).set(true);
             } else {
               ref.child(`${interest}/${i}/${startTime}/${facebookId}`).remove();

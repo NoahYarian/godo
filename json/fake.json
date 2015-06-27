@@ -1,0 +1,91 @@
+{
+  "basicInfo" : {
+    "email" : "noah.yarian@gmail.com",
+    "first_name" : "Noah",
+    "gender" : "male",
+    "id" : "fakedata",
+    "last_name" : "Yarian",
+    "link" : "https://www.facebook.com/app_scoped_user_id/10103264160478133/",
+    "locale" : "en_US",
+    "name" : "Noah Yarian",
+    "timezone" : -5,
+    "updated_time" : "2015-06-06T11:16:47+0000",
+    "verified" : true
+  },
+  "friends" : {
+    "fakedata2" : true,
+    "fakedata3" : true,
+    "fakedata4" : true,
+    "fakedata5" : true
+  },
+  "interests" : {
+    "Bocce" : true,
+    "Chillin" : true,
+    "Crying" : false,
+    "Disc Golf" : true,
+    "Going to the playground" : false,
+    "Ping-pong" : true,
+    "Playing with children" : false,
+    "Posing nude in public" : false,
+    "Time travel ;)" : false,
+    "Ultimate Frisbee" : true,
+    "Water Polo" : false,
+    "finishing Caleb's sentences" : false
+  },
+  "schedule" : {
+    "mon" : {
+      "t0430" : true,
+      "t0500" : true,
+      "t0530" : true,
+      "t0600" : true,
+      "t0630" : true,
+      "t0700" : true,
+      "t0730" : true
+    },
+    "wed" : {
+      "t0430" : true,
+      "t0500" : true,
+      "t0530" : true,
+      "t0600" : true,
+      "t0630" : true,
+      "t0700" : true,
+      "t0730" : true
+    },
+    "thu" : {
+      "t0430" : true,
+      "t0500" : true,
+      "t0530" : true,
+      "t0600" : true,
+      "t0630" : true,
+      "t0700" : true,
+      "t0730" : true
+    },
+    "fri" : {
+      "t0430" : true,
+      "t0500" : true,
+      "t0530" : true,
+      "t0600" : true,
+      "t0630" : true,
+      "t0700" : true,
+      "t0730" : true
+    },
+    "sat" : {
+      "t0430" : true,
+      "t0500" : true,
+      "t0530" : true,
+      "t0600" : true,
+      "t0630" : true,
+      "t0700" : true,
+      "t0730" : true
+    },
+    "sun" : {
+      "t0430" : true,
+      "t0500" : true,
+      "t0530" : true,
+      "t0600" : true,
+      "t0630" : true,
+      "t0700" : true,
+      "t0730" : true
+    }
+  }
+}
