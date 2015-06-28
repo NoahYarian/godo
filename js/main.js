@@ -72,7 +72,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     setTimeout(function () {
       var facebookId = $rootScope.loggedInUser;
       console.log($rootScope[facebookId].me);
-      console.log($rootScope[facebookId].loggedInUser);
+      console.log($rootScope.loggedInUser);
       console.log($rootScope[facebookId].friends);
       var ref = new Firebase('https://goanddo.firebaseio.com/users/' + $rootScope.loggedInUser);
       ref.once('value', function (dataSnapshot) {
@@ -152,7 +152,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   var facebookId = $rootScope.loggedInUser;
   var ref = new Firebase('https://goanddo.firebaseio.com/users/' + facebookId + '/schedule');
   var syncObject = $firebaseObject(ref);
-  syncObject.$bindTo($rootScope, 'schedule');
+  syncObject.$bindTo($rootScope, 'userSchedule');
 }).controller('EventCtrl', function ($scope, $rootScope, $firebase, $firebaseObject, $http) {
   $scope.possibleEventsUser = {};
 
