@@ -59,45 +59,49 @@ var app = angular
     }
     $scope.loginAs = function(facebookId) {
       $rootScope.loggedInUser = facebookId;
+      $rootScope[facebookId] = {};
       location.href = "/#/loggedin";
     }
     $scope.getMyInfo = function() {
-      $rootScope.friends = {};
       $facebook.api("/me")
         .then(function(response) {
           $rootScope.loggedInUser = response.id;
-          $scope.loginInfo = response;
+          var facebookId = $rootScope.loggedInUser;
+          $rootScope[facebookId] = {};
+          $rootScope[facebookId].me = response;
         });
       setTimeout(function() {
         $facebook.api("/me/friends")
           .then(function(response) {
-            var id;
+            var facebookId = $rootScope.loggedInUser;
+            var friendId;
+            $rootScope[facebookId].friends = {};
             response.data.forEach(function(friend) {
-              id = friend.id;
-              $rootScope.friends[id] = true;
+              friendId = friend.id;
+              $rootScope[facebookId].friends[friendId] = true;
             });
           });
       }, 2000);
       setTimeout(function() {
-        console.log($scope.loginInfo);
+        var facebookId = $rootScope.loggedInUser;
+        console.log($rootScope[facebookId].me);
         console.log($rootScope.loggedInUser);
-        console.log($rootScope.friends);
+        console.log($rootScope[facebookId].friends);
         var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}`);
         ref.once('value', function(dataSnapshot) {
-          if (!dataSnapshot.child('basicInfo').exists()) {
+          if (!dataSnapshot.child('me').exists()) {
             //New user tasks here
-            console.log("MCFLY?");
             var ref2 = new Firebase(`https://goanddo.firebaseio.com/scheduleBoiler`);
-            console.log("ref2: ", ref2);
+            // console.log("ref2: ", ref2);
             ref2.once('value', function(dataSnapshot2) {
-              console.log("dataSnapshot2: ", dataSnapshot2, "ref: ", ref);
+              // console.log("dataSnapshot2: ", dataSnapshot2, "ref: ", ref);
               ref.child('schedule').set(dataSnapshot2.val());
             }, function (err) {
               console.log("second once err:", err)
             });
           };
-          ref.child('basicInfo').set($scope.loginInfo);
-          ref.child('friends').set($rootScope.friends);
+          ref.child('me').set($rootScope[facebookId].me);
+          ref.child('friends').set($rootScope[facebookId].friends);
         }, function (err) {
           console.log("first once err:", err)
         });
@@ -162,13 +166,15 @@ var app = angular
   })
 
   .controller("ScheduleCtrl", function($rootScope, $firebaseObject) {
-    var ref = new Firebase(`https://goanddo.firebaseio.com/users/${$rootScope.loggedInUser}/schedule`);
+    var facebookId = $rootScope.loggedInUser;
+    var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}/schedule`);
     var syncObject = $firebaseObject(ref);
     syncObject.$bindTo($rootScope, "userSchedule");
   })
 
   .controller('EventCtrl', function($scope, $rootScope, $firebase, $firebaseObject, $http) {
-    $scope.possibleEventsUser = {};
+    var facebookId = $rootScope.loggedInUser;
+    $rootScope[facebookId].possibleEventsUser = {};
 
     // $scope.getAvailability = function(facebookId, callback) {
     //   $scope.freeHalfHours = [];
@@ -248,34 +254,45 @@ var app = angular
     }
 
     // the ref at the top might not be needed if this is only happening once the person is logged in
-    $scope.getBlocks = function(facebookId, callback) {
-      var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}/schedule`);
+    $scope.getBlocks = function(fbId, callback) {
+      var ref = new Firebase(`https://goanddo.firebaseio.com/users/${fbId}/schedule`);
       ref.once('value', function(dataSnapshot) {
-        $rootScope.userSchedule = dataSnapshot.val()
-        $scope.timeBlocks = [];
+        $rootScope[fbId].schedule = dataSnapshot.val()
+        $rootScope[fbId].timeBlocks = [];
         var k;
         var thisHalfHour;
-        console.log(facebookId, "$rootScope.userSchedule: ", $rootScope.userSchedule);
-        $.each($rootScope.userSchedule, function(dayIndex, halfHoursObj) {
-          if (!$.isNumeric(dayIndex)) {
-            return true;
-          }
-          $scope.timeBlocks[dayIndex] = {};
-          console.log("halfHoursObj: ", halfHoursObj);
+        // console.log(fbId, "$rootScope[fbId].schedule: ", $rootScope[fbId].schedule);
+        $.each($rootScope[fbId].schedule, function(dayIndex, halfHoursObj) {
+          // if (!$.isNumeric(dayIndex)) {
+          //   return true;
+          // }
+          // console.log("dayIndex: ", dayIndex);
+          // console.log("halfHoursObj: ", halfHoursObj);
+          // console.log("fbId: ", fbId);
+          // console.log(`before dayindex = {} $rootScope[${fbId}].timeBlocks: ${$rootScope[fbId].timeBlocks}`);
+          $rootScope[fbId].timeBlocks[dayIndex] = {};
+          // console.log(`dayindex = {} $rootScope[${fbId}].timeBlocks: ${$rootScope[fbId].timeBlocks}`);
           $.each(halfHoursObj, function(halfHour, bool) {
             if (bool) {
-              $scope.timeBlocks[dayIndex][halfHour] = 0.5;
+              $rootScope[fbId].timeBlocks[dayIndex][halfHour] = 0.5;
+              // console.log(`0.5 $rootScope[${fbId}].timeBlocks[${dayIndex}][${halfHour}]: ${$rootScope[fbId].timeBlocks[dayIndex][halfHour]}`);
+              // console.log(`0.5 $rootScope[${fbId}].timeBlocks[${dayIndex}]: ${$rootScope[fbId].timeBlocks[dayIndex]}`);
               thisHalfHour = halfHour;
-              while ($rootScope.userSchedule[dayIndex][$scope.getNextHalfHour(thisHalfHour)]) {
-                $scope.timeBlocks[dayIndex][halfHour] += 0.5;
+              // console.log("while", $rootScope[fbId].schedule[dayIndex][$scope.getNextHalfHour(thisHalfHour)]);
+              while ($rootScope[fbId].schedule[dayIndex][$scope.getNextHalfHour(thisHalfHour)]) {
+                $rootScope[fbId].timeBlocks[dayIndex][halfHour] += 0.5;
                 thisHalfHour = $scope.getNextHalfHour(thisHalfHour);
               }
             } else {
-              $scope.timeBlocks[dayIndex][halfHour] = 0;
+              $rootScope[fbId].timeBlocks[dayIndex][halfHour] = 0;
             }
+            // console.log(`$rootScope[${fbId}].timeBlocks[${dayIndex}][${halfHour}]: ${$rootScope[fbId].timeBlocks[dayIndex][halfHour]}`);
           });
+          // console.log(`$rootScope[${fbId}].timeBlocks[${dayIndex}]: ${$rootScope[fbId].timeBlocks[dayIndex]}`);
         });
-        console.log(facebookId, "timeBlocks", $scope.timeBlocks);
+        // console.log(`$rootScope[${fbId}].timeBlocks: ${$rootScope[fbId].timeBlocks}`);
+        // console.log(`$rootScope[${fbId}]: ${$rootScope[fbId]}`);
+        console.log("$rootScope: ", $rootScope); //Ohhhhhh....
         typeof callback === 'function' && callback();
       });
     };
@@ -302,7 +319,7 @@ var app = angular
               $scope.interestTimes[interestName] = interestObj.time;
             });
             console.log("$scope.interestTimes: ", $scope.interestTimes);
-            $.each($rootScope.userSchedule, function(dayIndex, halfHoursObj) {
+            $.each($rootScope.userSchedule[facebookId], function(dayIndex, halfHoursObj) {
               if (!$.isNumeric(dayIndex)) {
                 return true;
               }
