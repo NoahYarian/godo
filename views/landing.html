@@ -17,6 +17,11 @@
       <h1>Go and Do</h1>
       <p class="lead">More social, less media.</p>
       <button ng-click="login()">Log in with FB</button>
+      <button ng-click="loginAs('fakedata')">Log in as fakedata</button>
+      <button ng-click="loginAs('fakedata2')">Log in as fakedata2</button>
+      <button ng-click="loginAs('fakedata3')">Log in as fakedata3</button>
+      <button ng-click="loginAs('fakedata4')">Log in as fakedata4</button>
+      <button ng-click="loginAs('fakedata5')">Log in as fakedata5</button>
       <div ng-controller="EventCtrl" class="container">
         <button ng-click="getAvailability('fakedata')" class="btn btn-primary">getAvailability('fakedata')</button>
         <button ng-click="getBlocks('fakedata')" class="btn btn-primary">getBlocks('fakedata')</button>
@@ -27,9 +32,13 @@
         <button ng-click="getPossibleEventsUser('fakedata5')" class="btn btn-info">getPossibleEventsUser('fakedata5')</button>
         <button ng-click="getFriendPossibleEvents('fakedata')" class="btn btn-primary">getFriendPossibleEvents('fakedata')</button>
         <button ng-click="makeEvents('fakedata')" class="btn btn-primary">makeEvents('fakedata')</button>
-        <button ng-click="getAllPossibleEvents()" class="btn btn-primary">getAllPossibleEvents()</button>
-        <button ng-click="userAvailToFirebase('fakedata')" class="btn btn-primary">userAvailToFirebase('fakedata')</button>
+        <button ng-click="userAvailToFirebase('fakedata')" class="btn btn-danger">userAvailToFirebase('fakedata')</button>
+        <button ng-click="userAvailToFirebase('fakedata2')" class="btn btn-danger">userAvailToFirebase('fakedata2')</button>
+        <button ng-click="userAvailToFirebase('fakedata3')" class="btn btn-danger">userAvailToFirebase('fakedata3')</button>
+        <button ng-click="userAvailToFirebase('fakedata4')" class="btn btn-danger">userAvailToFirebase('fakedata4')</button>
+        <button ng-click="userAvailToFirebase('fakedata5')" class="btn btn-danger">userAvailToFirebase('fakedata5')</button>
         <button ng-click="allUserAvailToFirebase()" class="btn btn-primary">allUserAvailToFirebase()</button>
+        <button ng-click="getPossibleEventsAll()" class="btn btn-primary">getPossibleEventsAll()</button>
       </div>
     </div>
   </div>
