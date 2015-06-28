@@ -154,7 +154,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   var syncObject = $firebaseObject(ref);
   syncObject.$bindTo($rootScope, 'userSchedule');
 }).controller('EventCtrl', function ($scope, $rootScope, $firebase, $firebaseObject, $http) {
-  $scope.possibleEventsUser = {};
+  var facebookId = $rootScope.loggedInUser;
+  $rootScope[facebookId].possibleEventsUser = {};
 
   // $scope.getAvailability = function(facebookId, callback) {
   //   $scope.freeHalfHours = [];
@@ -234,34 +235,34 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   };
 
   // the ref at the top might not be needed if this is only happening once the person is logged in
-  $scope.getBlocks = function (facebookId, callback) {
-    var ref = new Firebase('https://goanddo.firebaseio.com/users/' + facebookId + '/schedule');
+  $scope.getBlocks = function (fbId, callback) {
+    var ref = new Firebase('https://goanddo.firebaseio.com/users/' + fbId + '/schedule');
     ref.once('value', function (dataSnapshot) {
-      $rootScope.userSchedule[facebookId] = dataSnapshot.val();
-      $scope.timeBlocks = [];
+      $rootScope[fbId].schedule = dataSnapshot.val();
+      $rootScope[fbId].timeBlocks = [];
       var k;
       var thisHalfHour;
-      console.log(facebookId, '$rootScope.userSchedule[facebookId]: ', $rootScope.userSchedule[facebookId]);
-      $.each($rootScope.userSchedule[facebookId], function (dayIndex, halfHoursObj) {
+      console.log(fbId, '$rootScope[fbId].schedule: ', $rootScope[fbId].schedule);
+      $.each($rootScope[fbId].schedule, function (dayIndex, halfHoursObj) {
         if (!$.isNumeric(dayIndex)) {
           return true;
         }
-        $scope.timeBlocks[dayIndex] = {};
+        $rootScope[fbId].timeBlocks[dayIndex] = {};
         console.log('halfHoursObj: ', halfHoursObj);
         $.each(halfHoursObj, function (halfHour, bool) {
           if (bool) {
-            $scope.timeBlocks[dayIndex][halfHour] = 0.5;
+            $rootScope[fbId].timeBlocks[dayIndex][halfHour] = 0.5;
             thisHalfHour = halfHour;
-            while ($rootScope.userSchedule[facebookId][dayIndex][$scope.getNextHalfHour(thisHalfHour)]) {
-              $scope.timeBlocks[dayIndex][halfHour] += 0.5;
+            while ($rootScope[fbId].schedule[dayIndex][$scope.getNextHalfHour(thisHalfHour)]) {
+              $rootScope[fbId].timeBlocks[dayIndex][halfHour] += 0.5;
               thisHalfHour = $scope.getNextHalfHour(thisHalfHour);
             }
           } else {
-            $scope.timeBlocks[dayIndex][halfHour] = 0;
+            $rootScope[fbId].timeBlocks[dayIndex][halfHour] = 0;
           }
         });
       });
-      console.log(facebookId, 'timeBlocks', $scope.timeBlocks);
+      console.log('$rootScope[' + fbId + '].timeBlocks: ' + $rootScope[fbId].timeBlocks);
       typeof callback === 'function' && callback();
     });
   };
