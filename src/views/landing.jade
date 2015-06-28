@@ -21,7 +21,11 @@
       //- img(src= 'http://www.kilnandco.com/gallery/var/albums/facebook-login-button.png?m=1375582078')
 
       button(ng-click="login()") Log in with FB
-      button(ng-click="loginFake()") Log in as fakedata
+      button(ng-click="loginAs('fakedata')") Log in as fakedata
+      button(ng-click="loginAs('fakedata2')") Log in as fakedata2
+      button(ng-click="loginAs('fakedata3')") Log in as fakedata3
+      button(ng-click="loginAs('fakedata4')") Log in as fakedata4
+      button(ng-click="loginAs('fakedata5')") Log in as fakedata5
       .container(ng-controller="EventCtrl")
         button.btn.btn-primary(ng-click="getAvailability('fakedata')") getAvailability('fakedata')
         button.btn.btn-primary(ng-click="getBlocks('fakedata')") getBlocks('fakedata')
@@ -32,6 +36,10 @@
         button.btn.btn-info(ng-click="getPossibleEventsUser('fakedata5')") getPossibleEventsUser('fakedata5')
         button.btn.btn-primary(ng-click="getFriendPossibleEvents('fakedata')") getFriendPossibleEvents('fakedata')
         button.btn.btn-primary(ng-click="makeEvents('fakedata')") makeEvents('fakedata')
-        button.btn.btn-primary(ng-click="getAllPossibleEvents()") getAllPossibleEvents()
-        button.btn.btn-primary(ng-click="userAvailToFirebase('fakedata')") userAvailToFirebase('fakedata')
+        button.btn.btn-danger(ng-click="userAvailToFirebase('fakedata')") userAvailToFirebase('fakedata')
+        button.btn.btn-danger(ng-click="userAvailToFirebase('fakedata2')") userAvailToFirebase('fakedata2')
+        button.btn.btn-danger(ng-click="userAvailToFirebase('fakedata3')") userAvailToFirebase('fakedata3')
+        button.btn.btn-danger(ng-click="userAvailToFirebase('fakedata4')") userAvailToFirebase('fakedata4')
+        button.btn.btn-danger(ng-click="userAvailToFirebase('fakedata5')") userAvailToFirebase('fakedata5')
         button.btn.btn-primary(ng-click="allUserAvailToFirebase()") allUserAvailToFirebase()
+        button.btn.btn-primary(ng-click="getPossibleEventsAll()") getPossibleEventsAll()

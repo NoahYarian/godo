@@ -57,8 +57,8 @@ var app = angular
         $scope.getMyInfo();
       });
     }
-    $scope.loginFake = function() {
-      $rootScope.loggedInUser = "fakedata";
+    $scope.loginAs = function(facebookId) {
+      $rootScope.loggedInUser = facebookId;
       location.href = "/#/loggedin";
     }
     $scope.getMyInfo = function() {
@@ -247,13 +247,15 @@ var app = angular
       return doneArr.join('');
     }
 
-    // TODO: Fix this shit for days with multiple time blocks
+    // the ref at the top might not be needed if this is only happening once the person is logged in
     $scope.getBlocks = function(facebookId, callback) {
-      // $scope.getAvailability(facebookId, function () {
+      var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}/schedule`);
+      ref.once('value', function(dataSnapshot) {
+        $rootScope.userSchedule = dataSnapshot.val()
         $scope.timeBlocks = [];
         var k;
         var thisHalfHour;
-        console.log("$rootScope.userSchedule: ", $rootScope.userSchedule);
+        console.log(facebookId, "$rootScope.userSchedule: ", $rootScope.userSchedule);
         $.each($rootScope.userSchedule, function(dayIndex, halfHoursObj) {
           if (!$.isNumeric(dayIndex)) {
             return true;
@@ -273,9 +275,9 @@ var app = angular
             }
           });
         });
-        console.log("timeBlocks", $scope.timeBlocks);
-      // });
-      typeof callback === 'function' && callback();
+        console.log(facebookId, "timeBlocks", $scope.timeBlocks);
+        typeof callback === 'function' && callback();
+      });
     };
 
     $scope.getPossibleEventsUser = function(facebookId, callback) {
@@ -283,52 +285,57 @@ var app = angular
         $scope.interestsArr = [];
         $scope.interestTimes = {};
         $scope.possibleEventsUser[facebookId] = [];
-        $http.get(`https://goanddo.firebaseio.com/users/${facebookId}/interests.json`)
-          .success(function(data) {
-            $.each(data, function(interest, truth) {
-              console.log("interest: ", interest, "data[interest]: ", data[interest]);
-              if (data[interest]) {
-                $scope.interestsArr.push(interest);
-              }
+        // $http.get(`https://goanddo.firebaseio.com/users/${facebookId}/interests.json`)
+        var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}/interests`);
+        ref.once('value', function(dataSnapshot) {
+          $.each(dataSnapshot.val(), function(interest, bool) {
+            console.log(facebookId, "interest: ", interest, "bool: ", bool);
+            if (bool) {
+              $scope.interestsArr.push(interest);
+            }
+          });
+          console.log(facebookId, "interestsArr: ", $scope.interestsArr);
+          // $http.get('https://goanddo.firebaseio.com/interests.json')
+          var ref2 = new Firebase('https://goanddo.firebaseio.com/interests');
+          ref2.once('value', function(dataSnapshot2) {
+            $.each(dataSnapshot2.val(), function(interestName, interestObj) {
+              $scope.interestTimes[interestName] = interestObj.time;
             });
-            // console.log("interestsArr: ", $scope.interestsArr);
-            $http.get('https://goanddo.firebaseio.com/interests.json')
-              .success(function(data) {
-                $.each(data, function(interest, truth) {
-                  $scope.interestTimes[interest] = data[interest].time;
-                });
-                // console.log("$scope.interestTimes: ", $scope.interestTimes);
-                // now make an object of interests and their possible times for the user's availability
-                // $scope.freeHalfHours.forEach(function(day, i) {  //day => ["t0530", "t0600", "t1230"]
-                $.each($rootScope.userSchedule, function(dayIndex, halfHoursObj) {
-                  if (!$.isNumeric(dayIndex)) {
-                    return true;
+            console.log("$scope.interestTimes: ", $scope.interestTimes);
+            $.each($rootScope.userSchedule, function(dayIndex, halfHoursObj) {
+              if (!$.isNumeric(dayIndex)) {
+                return true;
+              }
+              // $scope.possibleEventsUser[facebookId][i] = {}; //$scope.possibleEventsUser => [{},{},{},{},{},{},{}]
+              $scope.possibleEventsUser[facebookId][dayIndex] = {};
+              // day.forEach(function(freeHalfHour, j) { //freeHalfHour => "t0530"
+              $.each(halfHoursObj, function(halfHour, bool) {
+                $scope.interestsArr.forEach(function(userInterest) { //userInterest => "Ultimate Frisbee"
+                  if (!$scope.possibleEventsUser[facebookId][dayIndex][userInterest]) {
+                    $scope.possibleEventsUser[facebookId][dayIndex][userInterest] = {};
                   }
-                  // $scope.possibleEventsUser[facebookId][i] = {}; //$scope.possibleEventsUser => [{},{},{},{},{},{},{}]
-                  $scope.possibleEventsUser[facebookId][dayIndex] = {};
-                  // day.forEach(function(freeHalfHour, j) { //freeHalfHour => "t0530"
-                  $.each(halfHoursObj, function(halfHour, bool) {
-                    $scope.interestsArr.forEach(function(userInterest) { //userInterest => "Ultimate Frisbee"
-                      if (!$scope.possibleEventsUser[facebookId][dayIndex][userInterest]) {
-                        $scope.possibleEventsUser[facebookId][dayIndex][userInterest] = {};
-                      }
-                      if (bool && $scope.timeBlocks[dayIndex][halfHour] >= $scope.interestTimes[userInterest]) { //time block length starting this halfhour > interest time req.?
-                        $scope.possibleEventsUser[facebookId][dayIndex][userInterest][halfHour] = true;
-                      } else {
-                      // if not a free half hour or not enough time, do this
-                      $scope.possibleEventsUser[facebookId][dayIndex][userInterest][halfHour] = false;
-                      }
-                    });
-                  });
+                  if (bool && $scope.timeBlocks[dayIndex][halfHour] >= $scope.interestTimes[userInterest]) { //time block length starting this halfhour > interest time req.?
+                    $scope.possibleEventsUser[facebookId][dayIndex][userInterest][halfHour] = true;
+                  } else {
+                  // if not a free half hour or not enough time, do this
+                  $scope.possibleEventsUser[facebookId][dayIndex][userInterest][halfHour] = false;
+                  }
                 });
-            })
-            .then(function() {
-              console.log("$scope.possibleEventsUser[", facebookId, "]: ", $scope.possibleEventsUser[facebookId]);
-              var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}`);
-              ref.child('possibleEvents').set($scope.possibleEventsUser[facebookId]);
-              typeof callback === 'function' && callback();
-            })
-        })
+              });
+            });
+            console.log("$scope.possibleEventsUser[", facebookId, "]: ", $scope.possibleEventsUser[facebookId]);
+            var ref3 = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}`);
+            var onComplete = function(error) {
+              if (error) {
+                console.log('Synchronization failed');
+              } else {
+                console.log('Synchronization succeeded, about to call ', callback);
+                typeof callback === 'function' && callback();
+              }
+            };
+            ref3.child('possibleEvents').set($scope.possibleEventsUser[facebookId], onComplete);
+          });
+        });
       });
     };
 
@@ -437,32 +444,53 @@ var app = angular
     //   });
     // }
 
-    $scope.userAvailToFirebase = function (facebookId) {
-      var ref = new Firebase(`https://goanddo.firebaseio.com/availability`);
-      $scope.possibleEventsUser[facebookId].forEach(function(day, i) {
-        console.log("i:", i, "day:", day);
-        $.each(day, function(interest, startTimesObj) {
-          console.log("interest: ", interest, "startTimesObj: ", startTimesObj);
-          // startTimesArr.forEach(function(startTime) {
-          $.each(startTimesObj, function(startTime, bool) {
-            if (bool) {
-              ref.child(`${interest}/${i}/${startTime}/${facebookId}`).set(true);
-            } else {
-              ref.child(`${interest}/${i}/${startTime}/${facebookId}`).remove();
-            }
+    $scope.userAvailToFirebase = function(facebookId) {
+      $scope.getPossibleEventsUser(facebookId, function() {
+        var ref = new Firebase(`https://goanddo.firebaseio.com/availability`);
+        console.log("$scope.possibleEventsUser[facebookId]: ", $scope.possibleEventsUser[facebookId]);
+        $scope.possibleEventsUser[facebookId].forEach(function(day, i) {
+          console.log("i:", i, "day:", day);
+          $.each(day, function(interest, startTimesObj) {
+            console.log("interest: ", interest, "startTimesObj: ", startTimesObj);
+            $.each(startTimesObj, function(startTime, bool) {
+              var onComplete = function(error) {
+                if (error) {
+                  console.log('Synchronization failed', error);
+                } else {
+                  console.log('Synchronization succeeded');
+                }
+              };
+              if (bool) {
+                ref.child(`${interest}/${i}/${startTime}/${facebookId}`).set(true, onComplete);
+              } else {
+                ref.child(`${interest}/${i}/${startTime}/${facebookId}`).remove();
+              }
+            });
           });
         });
       });
+    };
+
+    $scope.getPossibleEventsAll = function() {
+      var ref = new Firebase('https://goanddo.firebaseio.com/users');
+      ref.once('value', function(dataSnapshot) {
+        $.each(dataSnapshot.val(), function(facebookId, userObj) {
+          console.log("facebookId: ", facebookId);
+          // if (!_.startswith(facebookId, "$"))
+            $scope.getPossibleEventsUser(facebookId);
+          // }
+          });
+        });
     }
 
     $scope.allUserAvailToFirebase = function () {
-      $http.get('https://goanddo.firebaseio.com/users.json')
-        .success(function (data) {
-          $scope.users = data;
-          $.each(data, function(facebookId, userObj) {
-            $scope.userAvailToFirebase(facebookId);
-          });
+      var ref = new Firebase('https://goanddo.firebaseio.com/users');
+      ref.once('value', function(dataSnapshot) {
+        $.each(dataSnapshot.val(), function(facebookId, userObj) {
+          console.log("facebookId: ", facebookId);
+          $scope.userAvailToFirebase(facebookId);
         });
+      });
     }
 
 
