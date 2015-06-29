@@ -165,12 +165,18 @@ var app = angular
     }
   })
 
-  .controller("ScheduleCtrl", function($rootScope, $firebaseObject) {
+  .controller("ScheduleCtrl", function($scope, $rootScope, $firebaseObject) {
     var facebookId = $rootScope.loggedInUser;
     console.log("scheduleCtrl ", facebookId);
     var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}/schedule`);
     var syncObject = $firebaseObject(ref);
-    syncObject.$bindTo($rootScope, "userSchedule");
+    syncObject.$bindTo($scope, "userSchedule");
+
+    $scope.copyToRootScope = function() {
+      $rootScope[facebookId].schedule = $scope.userSchedule;
+      console.log("copied $scope.userSchedule to $rootScope[",facebookId,"].schedule");
+      console.log("copyToRootScope() ",$rootScope);
+    }
   })
 
   // .controller("ScheduleCtrl", function($rootScope, $firebaseArray) {
@@ -262,9 +268,9 @@ var app = angular
 
     // the ref at the top might not be needed if this is only happening once the person is logged in
     $scope.getBlocks = function(fbId, callback) {
-      console.log("getting schedule ref for ", fbId);
+      console.log("getBlocks() getting schedule ref for ", fbId);
       var ref = new Firebase(`https://goanddo.firebaseio.com/users/${fbId}/schedule`);
-      console.log(ref.parent().toString());
+      // console.log(ref.parent().toString());
       ref.once('value', function(dataSnapshot) {
         $rootScope[fbId].schedule = dataSnapshot.val()
         $rootScope[fbId].timeBlocks = [];
@@ -302,6 +308,7 @@ var app = angular
         console.log(`$rootScope[${fbId}].timeBlocks: `,$rootScope[fbId].timeBlocks);
         // console.log(`$rootScope[${fbId}]: ${$rootScope[fbId]}`);
         // console.log("$rootScope: ", $rootScope); //Ohhhhhh....
+        console.log("getBlocks() ",$rootScope);
         typeof callback === 'function' && callback();
       });
     };
@@ -349,7 +356,6 @@ var app = angular
               });
             });
             console.log(`$rootScope[${fbId}].possibleEvents :`, $rootScope[fbId].possibleEvents);
-            console.log($rootScope);
             var ref3 = new Firebase(`https://goanddo.firebaseio.com/users/${fbId}`);
             var onComplete = function(error) {
               if (error) {
@@ -359,6 +365,7 @@ var app = angular
                 typeof callback === 'function' && callback();
               }
             };
+            console.log("getPossibleEvents() ",$rootScope);
             ref3.child('possibleEvents').set($rootScope[fbId].possibleEvents, onComplete);
           });
         });
@@ -366,59 +373,59 @@ var app = angular
     };
 
     //probably needs fixing, but I might not use it
-    $scope.getFriendPossibleEvents = function (facebookId, callback) {
-      $scope.friendPossibleEvents = {};
-      $rootScope.friends = {fakedata2: true, fakedata3: true, fakedata4: true, fakedata5: true};
-      $rootScope.friends[facebookId] = true;
-      // console.log($rootScope.friends);
-      $.each($rootScope.friends, function (friendId, truth) {
-        // console.log(friendId);
-          $.get(`https://goanddo.firebaseio.com/users/${friendId}/possibleEvents.json`, function(data) {
-            $scope.friendPossibleEvents[friendId] = data;
-            // $scope.friendPossibleEvents.push(data);
-          })
-          .done(function() {
-            console.log("$scope.friendPossibleEvents for", facebookId, ": ", $scope.friendPossibleEvents);
-            if (Object.keys($scope.friendPossibleEvents).length === Object.keys($rootScope.friends).length) {
-              var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}`);
-              ref.child('friendPossibleEvents').set($scope.friendPossibleEvents);
-            }
-            typeof callback === 'function' && callback();
-          });
-      });
-    }
+    // $scope.getFriendPossibleEvents = function (facebookId, callback) {
+    //   $scope.friendPossibleEvents = {};
+    //   $rootScope.friends = {fakedata2: true, fakedata3: true, fakedata4: true, fakedata5: true};
+    //   $rootScope.friends[facebookId] = true;
+    //   // console.log($rootScope.friends);
+    //   $.each($rootScope.friends, function (friendId, truth) {
+    //     // console.log(friendId);
+    //       $.get(`https://goanddo.firebaseio.com/users/${friendId}/possibleEvents.json`, function(data) {
+    //         $scope.friendPossibleEvents[friendId] = data;
+    //         // $scope.friendPossibleEvents.push(data);
+    //       })
+    //       .done(function() {
+    //         console.log("$scope.friendPossibleEvents for", facebookId, ": ", $scope.friendPossibleEvents);
+    //         if (Object.keys($scope.friendPossibleEvents).length === Object.keys($rootScope.friends).length) {
+    //           var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}`);
+    //           ref.child('friendPossibleEvents').set($scope.friendPossibleEvents);
+    //         }
+    //         typeof callback === 'function' && callback();
+    //       });
+    //   });
+    // }
 
     //A function that finds what events are shared in common by a person and ALL of their friends.... not what I need!
-    $scope.makeEvents = function (facebookId) {
-      $scope.events = $scope.possibleEventsUser[facebookId];
-      // console.log($scope.friendPossibleEvents);
-      for (var friend in $scope.friendPossibleEvents) {
-        // console.log("$scope.friendPossibleEvents[",friend,"]: ", $scope.friendPossibleEvents[friend]);
-        $scope.friendPossibleEvents[friend].forEach(function(day, i) {
-          // console.log($scope.events);
-          // console.log("friend: ", friend, "day index: ", i, "day: ", day);
-          if (day) {
-            for (var interest in day) {
-              // console.log(friend, i, interest, day[interest]);
-              day[interest].forEach(function(startTime) {
-                for (var friend2 in $scope.friendPossibleEvents) {
-                  // console.log(friend, friend2, i, startTime, interest);
-                  // console.log("$scope.friendPossibleEvents[friend2][i]: ", $scope.friendPossibleEvents[friend2][i]);
-                  if ($scope.events[i][interest] &&
-                      (!$scope.friendPossibleEvents[friend2][i] ||
-                      !$scope.friendPossibleEvents[friend2][i][interest] ||
-                      $scope.friendPossibleEvents[friend2][i][interest].indexOf(startTime) === -1)) {
-                    $scope.events[i][interest].splice($scope.events[i][interest].indexOf(startTime), 1);
-                  }
-                }
-              });
-            }
-          }
-        });
-      };
-      // console.log($scope.friendPossibleEvents)
-      console.log("$scope.events: ", $scope.events);
-    }
+    // $scope.makeEvents = function (facebookId) {
+    //   $scope.events = $scope.possibleEventsUser[facebookId];
+    //   // console.log($scope.friendPossibleEvents);
+    //   for (var friend in $scope.friendPossibleEvents) {
+    //     // console.log("$scope.friendPossibleEvents[",friend,"]: ", $scope.friendPossibleEvents[friend]);
+    //     $scope.friendPossibleEvents[friend].forEach(function(day, i) {
+    //       // console.log($scope.events);
+    //       // console.log("friend: ", friend, "day index: ", i, "day: ", day);
+    //       if (day) {
+    //         for (var interest in day) {
+    //           // console.log(friend, i, interest, day[interest]);
+    //           day[interest].forEach(function(startTime) {
+    //             for (var friend2 in $scope.friendPossibleEvents) {
+    //               // console.log(friend, friend2, i, startTime, interest);
+    //               // console.log("$scope.friendPossibleEvents[friend2][i]: ", $scope.friendPossibleEvents[friend2][i]);
+    //               if ($scope.events[i][interest] &&
+    //                   (!$scope.friendPossibleEvents[friend2][i] ||
+    //                   !$scope.friendPossibleEvents[friend2][i][interest] ||
+    //                   $scope.friendPossibleEvents[friend2][i][interest].indexOf(startTime) === -1)) {
+    //                 $scope.events[i][interest].splice($scope.events[i][interest].indexOf(startTime), 1);
+    //               }
+    //             }
+    //           });
+    //         }
+    //       }
+    //     });
+    //   };
+    //   // console.log($scope.friendPossibleEvents)
+    //   console.log("$scope.events: ", $scope.events);
+    // }
 
 
     // $scope.getAllPossibleEvents = function() {
@@ -470,11 +477,11 @@ var app = angular
     //   });
     // }
 
-    $scope.userAvailToFirebase = function(facebookId) {
-      $scope.getPossibleEvents(facebookId, function() {
+    $scope.userAvailToFirebase = function(fbId) {
+      $scope.getPossibleEvents(fbId, function() {
         var ref = new Firebase(`https://goanddo.firebaseio.com/availability`);
-        console.log("$scope.possibleEventsUser[facebookId]: ", $scope.possibleEventsUser[facebookId]);
-        $scope.possibleEventsUser[facebookId].forEach(function(day, i) {
+        console.log("$rootScope[",fbId,"].possibleEvents: ", $rootScope[fbId].possibleEvents);
+        $rootScope[fbId].possibleEvents.forEach(function(day, i) {
           console.log("i:", i, "day:", day);
           $.each(day, function(interest, startTimesObj) {
             console.log("interest: ", interest, "startTimesObj: ", startTimesObj);
@@ -487,14 +494,15 @@ var app = angular
                 }
               };
               if (bool) {
-                ref.child(`${interest}/${i}/${startTime}/${facebookId}`).set(true, onComplete);
+                ref.child(`${interest}/${i}/${startTime}/${fbId}`).set(true, onComplete);
               } else {
-                ref.child(`${interest}/${i}/${startTime}/${facebookId}`).remove();
+                ref.child(`${interest}/${i}/${startTime}/${fbId}`).remove();
               }
             });
           });
         });
       });
+      console.log("userAvailToFirebase(",fbId,") ",$rootScope);
     };
 
     $scope.getPossibleEventsAll = function() {
@@ -511,17 +519,18 @@ var app = angular
           }
         });
       });
-      console.log("$rootScope: ", $rootScope);
+      console.log("getPossibleEventsAll() ",$rootScope);
     }
 
     $scope.allUserAvailToFirebase = function () {
       var ref = new Firebase('https://goanddo.firebaseio.com/users');
       ref.once('value', function(dataSnapshot) {
-        $.each(dataSnapshot.val(), function(facebookId, userObj) {
-          console.log("facebookId: ", facebookId);
-          $scope.userAvailToFirebase(facebookId);
+        $.each(dataSnapshot.val(), function(fbId, userObj) {
+          console.log("fbId: ", fbId);
+          $scope.userAvailToFirebase(fbId);
         });
       });
+      console.log("allUserAvailToFirebase() ",$rootScope);
     }
 
 
