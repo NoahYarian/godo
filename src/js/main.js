@@ -272,7 +272,7 @@ var app = angular
       var ref = new Firebase(`https://goanddo.firebaseio.com/users/${fbId}/schedule`);
       // console.log(ref.parent().toString());
       ref.once('value', function(dataSnapshot) {
-        $rootScope[fbId].schedule = dataSnapshot.val()
+        $rootScope[fbId].schedule = dataSnapshot.val();
         $rootScope[fbId].timeBlocks = [];
         var k;
         var thisHalfHour;
@@ -505,22 +505,22 @@ var app = angular
       console.log("userAvailToFirebase(",fbId,") ",$rootScope);
     };
 
-    $scope.getPossibleEventsAll = function() {
-      var ref = new Firebase('https://goanddo.firebaseio.com/users');
-      ref.once('value', function(dataSnapshot) {
-        var t = 0;
-        $.each(dataSnapshot.val(), function(fbId, userObj) {
-          if (fbId !== "10103264160478133") {  // limit to test accts
-            setTimeout(function() {
-              console.log("fbId: ", fbId);
-              $scope.getPossibleEvents(fbId);
-            }, t);
-            t += 2000;
-          }
-        });
-      });
-      console.log("getPossibleEventsAll() ",$rootScope);
-    }
+    // $scope.getPossibleEventsAll = function() {
+    //   var ref = new Firebase('https://goanddo.firebaseio.com/users');
+    //   ref.once('value', function(dataSnapshot) {
+    //     var t = 0;
+    //     $.each(dataSnapshot.val(), function(fbId, userObj) {
+    //       if (fbId !== "10103264160478133") {  // limit to test accts
+    //         setTimeout(function() {
+    //           console.log("fbId: ", fbId);
+    //           $scope.getPossibleEvents(fbId);
+    //         }, t);
+    //         t += 2000;
+    //       }
+    //     });
+    //   });
+    //   console.log("getPossibleEventsAll() ",$rootScope);
+    // }
 
     $scope.allUserAvailToFirebase = function () {
       var ref = new Firebase('https://goanddo.firebaseio.com/users');
@@ -554,6 +554,38 @@ var app = angular
     //   });
     // }
 
+    $scope.makeEventsIfEnoughPeople = function() {
+      var refAvail = new Firebase('https://goanddo.firebaseio.com/availability');
+      refAvail.once('value', function(dataSnapshotAvail) {
+        $scope.avail = dataSnapshotAvail.val();
+        var refInterests = new Firebase('https://goanddo.firebaseio.com/interests');
+        refInterests.once('value', function(dataSnapshotInterests) {
+        $scope.interests = dataSnapshotInterests.val();
+        $scope.possibleEventsWithEnoughPeople = {};
+          $.each($scope.avail, function(interestName, weekObj) {
+            if (!$scope.possibleEventsWithEnoughPeople[interestName]) {
+              $scope.possibleEventsWithEnoughPeople[interestName] = {};
+            }
+            $.each(weekObj, function(dayIndex, dayObj) {
+              if (!$scope.possibleEventsWithEnoughPeople[interestName][dayIndex]) {
+                $scope.possibleEventsWithEnoughPeople[interestName][dayIndex] = {};
+              }
+              $.each(dayObj, function(halfHour, userListObj) {
+                if (!$scope.possibleEventsWithEnoughPeople[interestName][dayIndex]) {
+                  $scope.possibleEventsWithEnoughPeople[interestName][dayIndex] = {};
+                }
+                if (Object.keys(userListObj).length >= $scope.interests[interestName].minPeople) {
+                  $scope.possibleEventsWithEnoughPeople[interestName][dayIndex][halfHour] = true;
+                } else {
+                  $scope.possibleEventsWithEnoughPeople[interestName][dayIndex][halfHour] = false;
+                }
+              });
+            });
+          });
+        });
+      });
+
+    }
 
 
   })
