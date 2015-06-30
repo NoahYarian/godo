@@ -1,42 +1,65 @@
-.container(ng-controller="InvitesCtrl")
-  h1 Your Invites
-
-  table
-    thead
-      tr
-        th Interest
-        th Day
-        th Time
-        th # Invited
-        th # Confirmed
-        th # Declined
-        th Confirm / Decline
-        th Show Messages
-    tbody
-      tr(ng-repeat="(halfHour, inviteObj) in invites")
+nav.navbar.navbar-inverse.navbar-fixed-top
+  .container
+    .navbar-header
+      button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(href='/#/') Go and Do
+    #navbar.collapse.navbar-collapse
+      ul.nav.navbar-nav.navbar-right
+        li
+          a(href='/#/invites') Invites
+        li.active
+          a(href='/#/profile') Profile
+        li
+          a(href='/#/happenings') Happenings
+        //- li(ng-controller='FaceCtrl')
+        //-   a(href='' ng-click='logout()') Log out
+.container
+  .someDiv(ng-controller="InvitesCtrl as main")
+    h1 Your Invites
+    button.btn.btn-info(ng-click="main.queryCalendarForUserInvites('fakedata5')") main.queryCalendarForUserInvites('fakedata2')
+    table
+      thead
         tr
-          td {{inviteObj.interest}}
-          td {{inviteObj.day}}
-          td {{inviteObj.time}}
-          td {{Object.keys(inviteObj.invited).length}}
-          td {{Object.keys(inviteObj.confirmed).length}}
-          td {{Object.keys(inviteObj.declined).length}}
-          td
-            a(href="#" ng-click="confirm(inviteObj)") Confirm /
-            a(href="#" ng-click="decline(inviteObj)") Decline
-          td
-            a(href="#" ng-click="showMessages = !showMessages") ({{Object.keys(inviteObj.messages).length}})
-            a(href="#" ng-click="showNewMessageForm") Send Message
-        tr(ng-show="showMessages")
-          ul
-            li(ng-repeat="(messageIndex, message) in inviteObj.messages")
-              p {{message.sender}}
-              p {{message.time}}
-              p {{message.body}}
-            li
-              a(href="#" ng-click="showMessages = !showMessages") Hide
-        tr(ng-show="showNewMessageForm")
-          form
-            input(type="text" ng-model="inviteObj.newMessage")
-          button(ng-click="sendMessage(inviteObj.newMessage)") Post
-          button(ng-click="showNewMessageForm = !showNewMessageForm") Cancel
+          th Interest
+          th Day
+          th Time
+          th # Invited
+          th # Needed
+          th # Confirmed
+          th # Declined
+          th Confirm / Decline
+          th Show Messages
+      tbody
+        tr
+          tr(ng-repeat="invite in main.invites")
+            td {{invite.interest}}
+            td {{invite.day}}
+            td {{invite.time}}
+            //- td {{invite.invited}}
+              //- td Needed #
+              //- td Confirmed #
+              //- td Declined #
+              //-   td
+              //-     a(href="#" ng-click="confirm(halfHoursObj)") Confirm /
+              //-     a(href="#" ng-click="decline(halfHoursObj)") Decline
+              //-   td
+              //-     a(href="#" ng-click="showMessages = !showMessages") ({{Object.keys(inviteObj.messages).length}})
+              //-     a(href="#" ng-click="showNewMessageForm") Send Message
+              //- tr(ng-show="showMessages")
+              //-   ul
+              //-     li(ng-repeat="(messageIndex, message) in inviteObj.messages")
+              //-       p {{message.sender}}
+              //-       p {{message.time}}
+              //-       p {{message.body}}
+              //-     li
+              //-       a(href="#" ng-click="showMessages = !showMessages") Hide
+              //- tr(ng-show="showNewMessageForm")
+              //-   form
+              //-     input(type="text" ng-model="inviteObj.newMessage")
+              //-   button(ng-click="sendMessage(inviteObj.newMessage)") Post
+              //-   button(ng-click="showNewMessageForm = !showNewMessageForm") Cancel
+

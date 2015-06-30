@@ -46,6 +46,9 @@ var app = angular
       .when('/loggedin', {
         templateUrl: 'views/loggedin.html'
       })
+      .when('/invites', {
+        templateUrl: 'views/invites.html'
+      })
       .when('/logout', {
         templateUrl: 'views/landing.html'
       });
@@ -342,15 +345,14 @@ var app = angular
               }
               $rootScope[fbId].possibleEvents[dayIndex] = {};
               $.each(halfHoursObj, function(halfHour, bool) {
-                $rootScope[fbId].interestsArr.forEach(function(userInterest) {
-                  if (!$rootScope[fbId].possibleEvents[dayIndex][userInterest]) {
-                    $rootScope[fbId].possibleEvents[dayIndex][userInterest] = {};
-                  }
+                $rootScope[fbId].possibleEvents[dayIndex][halfHour] = {};
+                $.each($rootScope[fbId].interestsArr, function(i, userInterest) {
+                  $rootScope[fbId].possibleEvents[dayIndex][halfHour][userInterest] = {};
                   if (bool && $rootScope[fbId].timeBlocks[dayIndex][halfHour] >= $rootScope.interestTimes[userInterest]) { //time block length starting this halfhour > interest time req.?
-                    $rootScope[fbId].possibleEvents[dayIndex][userInterest][halfHour] = true;
+                    $rootScope[fbId].possibleEvents[dayIndex][halfHour][userInterest] = true;
                   } else {
                   // if not a free half hour or not enough time, do this
-                  $rootScope[fbId].possibleEvents[dayIndex][userInterest][halfHour] = false;
+                  $rootScope[fbId].possibleEvents[dayIndex][halfHour][userInterest] = false;
                   }
                 });
               });
@@ -480,23 +482,20 @@ var app = angular
     $scope.userAvailToFirebase = function(fbId) {
       $scope.getPossibleEvents(fbId, function() {
         var ref = new Firebase(`https://goanddo.firebaseio.com/availability`);
-        console.log("$rootScope[",fbId,"].possibleEvents: ", $rootScope[fbId].possibleEvents);
-        $rootScope[fbId].possibleEvents.forEach(function(day, i) {
-          console.log("i:", i, "day:", day);
-          $.each(day, function(interest, startTimesObj) {
-            console.log("interest: ", interest, "startTimesObj: ", startTimesObj);
-            $.each(startTimesObj, function(startTime, bool) {
+        $.each($rootScope[fbId].possibleEvents, function(dayIndex, dayObj) {
+          $.each(dayObj, function(halfHour, halfHourObj) {
+            $.each(halfHourObj, function(interest, bool) {
               var onComplete = function(error) {
                 if (error) {
-                  console.log('Synchronization failed', error);
+                  console.log('userAvailToFirebase() Synchronization failed', error);
                 } else {
-                  console.log('Synchronization succeeded');
+                  console.log('userAvailToFirebase() Synchronization succeeded');
                 }
               };
               if (bool) {
-                ref.child(`${interest}/${i}/${startTime}/${fbId}`).set(true, onComplete);
+                ref.child(`${dayIndex}/${halfHour}/${interest}/${fbId}`).set(true, onComplete);
               } else {
-                ref.child(`${interest}/${i}/${startTime}/${fbId}`).remove();
+                ref.child(`${dayIndex}/${halfHour}/${interest}/${fbId}`).remove();
               }
             });
           });
@@ -554,50 +553,51 @@ var app = angular
     //   });
     // }
 
-    $scope.makeEventsIfEnoughPeople = function() {
+    $scope.makeCalendar = function() {
       var refAvail = new Firebase('https://goanddo.firebaseio.com/availability');
       refAvail.once('value', function(dataSnapshotAvail) {
         $scope.avail = dataSnapshotAvail.val();
         var refInterests = new Firebase('https://goanddo.firebaseio.com/interests');
         refInterests.once('value', function(dataSnapshotInterests) {
         $scope.interests = dataSnapshotInterests.val();
-        $scope.possibleEventsWithEnoughPeople = {};
-          $.each($scope.avail, function(interestName, weekObj) {
-            if (!$scope.possibleEventsWithEnoughPeople[interestName]) {
-              $scope.possibleEventsWithEnoughPeople[interestName] = {};
-            }
-            $.each(weekObj, function(dayIndex, dayObj) {
-              if (!$scope.possibleEventsWithEnoughPeople[interestName][dayIndex]) {
-                $scope.possibleEventsWithEnoughPeople[interestName][dayIndex] = {};
-              }
-              $.each(dayObj, function(halfHour, userListObj) {
-                if (!$scope.possibleEventsWithEnoughPeople[interestName][dayIndex]) {
-                  $scope.possibleEventsWithEnoughPeople[interestName][dayIndex] = {};
-                }
-                if (Object.keys(userListObj).length >= $scope.interests[interestName].minPeople) {
-                  $scope.possibleEventsWithEnoughPeople[interestName][dayIndex][halfHour] = true;
-                // } else {
-                //   $scope.possibleEventsWithEnoughPeople[interestName][dayIndex][halfHour] = false;
+        $scope.calendar = {};
+          $.each($scope.avail, function(dayIndex, dayObj) {
+            $scope.calendar[dayIndex] = {};
+            $.each(dayObj, function(halfHour, halfHourObj) {
+              $scope.calendar[dayIndex][halfHour] = {};
+              $.each(halfHourObj, function(interest, interestObj) {
+                  $scope.calendar[dayIndex][halfHour][interest] = {};
+                if (Object.keys(interestObj).length >= $scope.interests[interest].minPeople) {
+                  $scope.calendar[dayIndex][halfHour][interest].invited = {};
+                  $.each(interestObj, function(facebookId, truth) {
+                    $scope.calendar[dayIndex][halfHour][interest].invited[facebookId] = true;
+                  });
+                  $scope.calendar[dayIndex][halfHour][interest].minPeople = $scope.interests[interest].minPeople;
+                  $scope.calendar[dayIndex][halfHour][interest].maxPeople = $scope.interests[interest].maxPeople;
                 }
               });
             });
           });
-          var refPossibleEvents = new Firebase('https://goanddo.firebaseio.com/possibleEvents');
+          var refPossibleEvents = new Firebase('https://goanddo.firebaseio.com/calendar');
           var onComplete = function(error) {
             if (error) {
-              console.log('makeEventsIfEnoughPeople() Synchronization failed', error);
+              console.log('makeCalendar() Synchronization failed', error);
             } else {
-              console.log('makeEventsIfEnoughPeople() Synchronization succeeded');
+              console.log('makeCalendar() Synchronization succeeded');
             }
           };
-          refPossibleEvents.set($scope.possibleEventsWithEnoughPeople, onComplete);
+          refPossibleEvents.set($scope.calendar, onComplete);
         });
       });
 
     }
 
+    $scope.getRandNum = function(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
     $scope.getInvites = function(fbId) {
-      // var refPossibleEvents = new Firebase('https://goanddo.firebaseio.com/possibleEvents');
+      // var refPossibleEvents = new Firebase('https://goanddo.firebaseio.com/allPossibleEvents');
       // refPossibleEvents.once('value', function(dataSnapshotPossibleEvents) {
       //   $scope.possibleEvents = dataSnapshotPossibleEvents.val();
         var refUserPossibleEvents = new Firebase(`https://goanddo.firebaseio.com/users/${fbId}/possibleEvents`);
@@ -607,19 +607,38 @@ var app = angular
           }
           $rootScope[fbId].possibleEvents = dataSnapshotUserPossibleEvents.val();
           if (!$rootScope[fbId].invites) {
-            $rootScope[fbId].invites = {};
+            $rootScope[fbId].invites = [];
           }
           $.each($rootScope[fbId].possibleEvents, function(dayIndex, interestsObj) {
+            // if (!$rootScope[fbId].invites[dayIndex]) {
+            //   $rootScope[fbId].invites[dayIndex] = {};
+            //   $rootScope[fbId].invites[dayIndex].name = dayIndex;
+            // }
             $.each(interestsObj, function(interestName, halfHoursObj) {
-              if (!$rootScope[fbId].invites[interestName]) {
-                $rootScope[fbId].invites[interestName] = {};
-              }
-              if (!$rootScope[fbId].invites[interestName][dayIndex]) {
-                $rootScope[fbId].invites[interestName][dayIndex] = {};
-              }
+              // if (!$rootScope[fbId].invites[dayIndex][interestName]) {
+              //   $rootScope[fbId].invites[dayIndex][interestName] = {};
+              //   $rootScope[fbId].invites[dayIndex][interestName].name = interestName;
+              // }
               $.each(halfHoursObj, function(halfHour, bool) {
-                if (bool && $scope.possibleEventsWithEnoughPeople[interestName][dayIndex][halfHour]) {
-                  $rootScope[fbId].invites[interestName][dayIndex][halfHour] = true;
+                if (bool && $scope.calendar[interestName][dayIndex][halfHour]) {
+                  console.log(interestName, dayIndex, halfHour, fbId);
+                  // $rootScope[fbId].invites[dayIndex][interestName][halfHour] = {};
+                  // $rootScope[fbId].invites[dayIndex][interestName][halfHour].name = halfHour;
+                  // $.each($scope.calendar[interestName][dayIndex][halfHour], function(facebookId, truth) {
+                    // $rootScope[fbId].invites[dayIndex][interestName][halfHour][facebookId] = true;
+                    // $rootScope[fbId].invites[dayIndex][interestName][halfHour][facebookId].name = facebookId;
+                    // invited.push(facebookId);
+                  // });
+                  $rootScope[fbId].invites.push({
+                    day: $scope.getDay(dayIndex),
+                    interest: interestName,
+                    time: $scope.getTime(halfHour),
+                    // invited: Object.keys(halfHour.invited).length,
+                    // confirmed: Object.keys(halfHour.confirmed).length,
+                    // declined: Object.keys(halfHour.declined).length,
+                    minPeople: halfHour.minPeople,
+                    maxPeople: halfHour.maxPeople
+                  });
                 }
               });
             });
@@ -636,6 +655,130 @@ var app = angular
         });
       // });
     }
+
+    $scope.getAllInvites = function() {
+      var ref = new Firebase('https://goanddo.firebaseio.com/users');
+      ref.once('value', function(dataSnapshot) {
+        $.each(dataSnapshot.val(), function(fbId, userObj) {
+          console.log("fbId: ", fbId);
+          $scope.getInvites(fbId);
+        });
+      });
+    }
+
+    $scope.getDay = function(dayIndex) {
+      switch (dayIndex) {
+        case 0:
+          return "Monday";
+        case 1:
+          return "Tuesday";
+        case 2:
+          return "Wednesday";
+        case 3:
+          return "Thursday";
+        case 4:
+          return "Friday";
+        case 5:
+          return "Saturday";
+        case 6:
+          return "Sunday";
+      }
+    }
+
+    $scope.getTime = function(halfHour) {
+      var hour = Number(halfHour.split('').slice(0,2).join(''));
+      var minute = Number(halfHour.split('').slice(2,4).join(''));
+      var suffix;
+      var time = [];
+
+      if (hour > 11) {
+        suffix = " PM";
+      } else {
+        suffix = " AM";
+      }
+
+      if (hour > 12) {
+        hour -= 12;
+      }
+
+      if (hour === 0) {
+        hour = 12;
+      }
+
+      if (minute === 0) {
+        minute = "00";
+      }
+
+      time.push(hour, ":", minute, suffix);
+      return time.join('');
+    }
+
+  })
+
+  .controller('InvitesCtrl', function($scope, $rootScope, $firebase, $firebaseObject) {
+    var vm = this;
+    var facebookId = $rootScope.loggedInUser;
+
+    // vm.fetchInvites = function(fbId) {
+    //   var refInvites = new Firebase(`https://goanddo.firebaseio.com/users/${fbId}/invites`);
+    //   refInvites.once('value', function(dataSnapshotInvites) {
+    //     vm.invites = dataSnapshotInvites.val();
+    //   });
+    // }
+
+    // var refInvites = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}/invites`);
+    // var syncObject = $firebaseObject(refInvites);
+    // syncObject.$bindTo($scope, "data");
+
+    vm.queryCalendarForUserInvites = function (fbId) {
+
+      vm.invites = [];
+      var ref = new Firebase("https://goanddo.firebaseio.com/calendar");
+      ref.once("value", function(calSnap) {
+        calSnap.forEach(function(daySnap) {
+          daySnap.forEach(function(halfHourSnap) {
+            halfHourSnap.forEach(function(interestSnap) {
+              if (interestSnap.child("invited").hasChild(fbId)) {
+                var userStatus = "notConfirmed";
+                if (interestSnap.child("confirmed").hasChild(fbId)) {
+                  userStatus = "confirmed";
+                }
+                if (interestSnap.child("declined").hasChild(fbId)) {
+                  userStatus = "declined";
+                }
+                if (interestSnap.child("confirmed").numChildren() === interestSnap.child('maxPeople').val()) {
+                  ref.child(`${daySnap.key()}/${halfHourSnap.key()}/${interestSnap.key()}/status`).set("full");
+                } else if (interestSnap.child("confirmed").numChildren() >= interestSnap.child('minPeople').val()) {
+                  ref.child(`${daySnap.key()}/${halfHourSnap.key()}/${interestSnap.key()}/status`).set("confirmed");
+                } else if (interestSnap.child("invited").numChildren() >= interestSnap.child('minPeople').val()) {
+                  ref.child(`${daySnap.key()}/${halfHourSnap.key()}/${interestSnap.key()}/status`).set("needsConf");
+                } else if (interestSnap.child("invited").numChildren() < 2) {
+                  ref.child(`${daySnap.key()}/${halfHourSnap.key()}/${interestSnap.key()}/status`).set("needsInterest");
+                } else if (interestSnap.child("invited").numChildren() === 0) {
+                  ref.child(`${daySnap.key()}/${halfHourSnap.key()}/${interestSnap.key()}/status`).set("empty");
+                }
+                vm.invites.push({
+                  interest: interestSnap.key(),
+                  day: daySnap.key(),
+                  time: halfHourSnap.key(),
+                  status: interestSnap.child('status').val(),
+                  invited: interestSnap.child('invited').val(),
+                  confirmed: interestSnap.child('confirmed').val(),
+                  declined: interestSnap.child('declined').val(),
+                  minPeople: interestSnap.child('minPeople').val(),
+                  maxPeople: interestSnap.child('maxPeople').val(),
+                  messages: interestSnap.child('messages').val(),
+                  userStatus: userStatus
+                });
+              }
+            });
+          });
+        });
+      });
+
+    }
+
+
 
   })
 
