@@ -576,17 +576,66 @@ var app = angular
                 }
                 if (Object.keys(userListObj).length >= $scope.interests[interestName].minPeople) {
                   $scope.possibleEventsWithEnoughPeople[interestName][dayIndex][halfHour] = true;
-                } else {
-                  $scope.possibleEventsWithEnoughPeople[interestName][dayIndex][halfHour] = false;
+                // } else {
+                //   $scope.possibleEventsWithEnoughPeople[interestName][dayIndex][halfHour] = false;
                 }
               });
             });
           });
+          var refPossibleEvents = new Firebase('https://goanddo.firebaseio.com/possibleEvents');
+          var onComplete = function(error) {
+            if (error) {
+              console.log('makeEventsIfEnoughPeople() Synchronization failed', error);
+            } else {
+              console.log('makeEventsIfEnoughPeople() Synchronization succeeded');
+            }
+          };
+          refPossibleEvents.set($scope.possibleEventsWithEnoughPeople, onComplete);
         });
       });
 
     }
 
+    $scope.getInvites = function(fbId) {
+      // var refPossibleEvents = new Firebase('https://goanddo.firebaseio.com/possibleEvents');
+      // refPossibleEvents.once('value', function(dataSnapshotPossibleEvents) {
+      //   $scope.possibleEvents = dataSnapshotPossibleEvents.val();
+        var refUserPossibleEvents = new Firebase(`https://goanddo.firebaseio.com/users/${fbId}/possibleEvents`);
+        refUserPossibleEvents.once('value', function(dataSnapshotUserPossibleEvents) {
+          if (!$rootScope[fbId]) {
+            $rootScope[fbId] = {};
+          }
+          $rootScope[fbId].possibleEvents = dataSnapshotUserPossibleEvents.val();
+          if (!$rootScope[fbId].invites) {
+            $rootScope[fbId].invites = {};
+          }
+          $.each($rootScope[fbId].possibleEvents, function(dayIndex, interestsObj) {
+            $.each(interestsObj, function(interestName, halfHoursObj) {
+              if (!$rootScope[fbId].invites[interestName]) {
+                $rootScope[fbId].invites[interestName] = {};
+              }
+              if (!$rootScope[fbId].invites[interestName][dayIndex]) {
+                $rootScope[fbId].invites[interestName][dayIndex] = {};
+              }
+              $.each(halfHoursObj, function(halfHour, bool) {
+                if (bool && $scope.possibleEventsWithEnoughPeople[interestName][dayIndex][halfHour]) {
+                  $rootScope[fbId].invites[interestName][dayIndex][halfHour] = true;
+                }
+              });
+            });
+          });
+          var refInvites = new Firebase(`https://goanddo.firebaseio.com/users/${fbId}/invites`);
+          var onComplete = function(error) {
+            if (error) {
+              console.log('getInvites() Synchronization failed', error);
+            } else {
+              console.log('getInvites() Synchronization succeeded');
+            }
+          };
+          refInvites.set($rootScope[fbId].invites, onComplete);
+        });
+      // });
+    }
 
   })
 
