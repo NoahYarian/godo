@@ -1,0 +1,67 @@
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">Go and Do</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="/#/invites">Invites</a></li>
+        <li><a href="/#/loggedIn">Profile</a></li>
+        <li><a href="/#/happenings">Happenings</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div ng-controller="EventCtrl" ng-init="loggedInUser &amp;&amp; updateCalendarAndGetInvites(loggedInUser)" class="someDiv">
+    <h1>Your Invites</h1>
+    <table class="table-hover">
+      <thead>
+        <tr>
+          <th>Interest</th>
+          <th>Day</th>
+          <th>Time</th>
+          <th># Confirmed</th>
+          <th># Needed</th>
+          <th># Invited</th>
+          <th># Declined</th>
+          <th>Minimum</th>
+          <th>Maximum</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <tr ng-repeat="invite in invites">
+            <td>{{invite.interest}}</td>
+            <td>{{invite.day}}</td>
+            <td>{{invite.time}}</td>
+            <td>{{invite.confirmedNum}}</td>
+            <td>{{invite.neededNum}}</td>
+            <td>{{invite.invitedNum}}</td>
+            <td>{{invite.declinedNum}}</td>
+            <td>{{invite.minPeople}}</td>
+            <td>{{invite.maxPeople}}</td>
+            <td class="button-td">
+              <div ng-hide="hasConfirmed || hasDeclined">
+                <button ng-click="confirm($index); hasConfirmed = true;" class="btn btn-success">Confirm</button>
+                <button ng-click="decline($index); hasDeclined = true;" class="btn btn-danger">Decline</button>
+              </div>
+              <div ng-show="hasConfirmed">
+                <button ng-click="unConfirm($index); hasConfirmed = false;" class="btn btn-danger">Un-confirm</button>
+              </div>
+              <div ng-show="hasDeclined">
+                <button ng-click="unDecline($index); hasDeclined = false" class="btn btn-info">Un-decline</button>
+              </div>
+              <div>
+                <button type="button" ng-class="{'btn-primary': invite.messageNum &gt; 0}" aria-label="Messages" class="btn btn-default email-button"><span aria-hidden="true" class="glyphicon glyphicon-envelope"></span></button>
+              </div>
+            </td>
+          </tr>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

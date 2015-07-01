@@ -23,22 +23,18 @@
       <button ng-click="loginAs('fakedata4')">Log in as fakedata4</button>
       <button ng-click="loginAs('fakedata5')">Log in as fakedata5</button>
       <div ng-controller="EventCtrl" class="container">
-        <button ng-click="getAvailability('fakedata')" class="btn btn-primary">getAvailability('fakedata')</button>
         <button ng-click="getBlocks('fakedata')" class="btn btn-primary">getBlocks('fakedata')</button>
-        <button ng-click="getPossibleEventsUser('fakedata')" class="btn btn-info">getPossibleEventsUser('fakedata')</button>
-        <button ng-click="getPossibleEventsUser('fakedata2')" class="btn btn-info">getPossibleEventsUser('fakedata2')</button>
-        <button ng-click="getPossibleEventsUser('fakedata3')" class="btn btn-info">getPossibleEventsUser('fakedata3')</button>
-        <button ng-click="getPossibleEventsUser('fakedata4')" class="btn btn-info">getPossibleEventsUser('fakedata4')</button>
-        <button ng-click="getPossibleEventsUser('fakedata5')" class="btn btn-info">getPossibleEventsUser('fakedata5')</button>
-        <button ng-click="getFriendPossibleEvents('fakedata')" class="btn btn-primary">getFriendPossibleEvents('fakedata')</button>
-        <button ng-click="makeEvents('fakedata')" class="btn btn-primary">makeEvents('fakedata')</button>
+        <button ng-click="getPossibleEvents('fakedata')" class="btn btn-info">getPossibleEvents('fakedata')</button>
         <button ng-click="userAvailToFirebase('fakedata')" class="btn btn-danger">userAvailToFirebase('fakedata')</button>
-        <button ng-click="userAvailToFirebase('fakedata2')" class="btn btn-danger">userAvailToFirebase('fakedata2')</button>
-        <button ng-click="userAvailToFirebase('fakedata3')" class="btn btn-danger">userAvailToFirebase('fakedata3')</button>
-        <button ng-click="userAvailToFirebase('fakedata4')" class="btn btn-danger">userAvailToFirebase('fakedata4')</button>
-        <button ng-click="userAvailToFirebase('fakedata5')" class="btn btn-danger">userAvailToFirebase('fakedata5')</button>
+        <button ng-click="userAvailToCalendar('fakedata5')" class="btn btn-danger">userAvailToCalendar('fakedata5')</button>
+        <button ng-click="updateCalendarAndGetInvites('fakedata3')" class="btn btn-info">updateCalendarAndGetInvites('fakedata3');</button>
         <button ng-click="allUserAvailToFirebase()" class="btn btn-primary">allUserAvailToFirebase()</button>
-        <button ng-click="getPossibleEventsAll()" class="btn btn-primary">getPossibleEventsAll()</button>
+        <button ng-click="makeCalendar()" class="btn btn-primary">makeCalendar()</button>
+        <button ng-click="getInvites('fakedata')" class="btn btn-primary">getInvites('fakedata')</button>
+        <button ng-click="getInvites('fakedata3')" class="btn btn-primary">getInvites('fakedata3')</button>
+        <button ng-click="getInvites('fakedata5')" class="btn btn-primary">getInvites('fakedata5')</button>
+        <button ng-click="getAllInvites()" class="btn btn-primary">getAllInvites()</button>
+        <button ng-click="userAvailToCalendar('fakedata3')" class="btn btn-primary">userAvailToCalendar('fakedata3')</button>
       </div>
     </div>
   </div>
