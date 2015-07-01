@@ -35,8 +35,29 @@ tr > th {
   background: #888;
 }
 
-tbody {
+table {
   background: #DDD;
+}
+
+.email-button {
+  font-size: 2.3em;
+  padding: 0px 7px;
+  line-height: 0.8;
+  p {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    margin-right: 6px;
+    margin-left: -29px;
+    font-size: 0.75em;
+    position: relative;
+    top: -2px;
+    color: red;
+  }
+}
+
+.button-td div {
+  display: inline-block;
 }
 
 ////////////////////

@@ -43,8 +43,8 @@ var app = angular
       .when('/profile', {
         templateUrl: 'views/profile.html'
       })
-      .when('/loggedin', {
-        templateUrl: 'views/loggedin.html'
+      .when('/loggedIn', {
+        templateUrl: 'views/loggedIn.html'
       })
       .when('/invites', {
         templateUrl: 'views/invites.html'
@@ -63,7 +63,7 @@ var app = angular
     $scope.loginAs = function(facebookId) {
       $rootScope.loggedInUser = facebookId;
       $rootScope[facebookId] = {};
-      location.href = "/#/loggedin";
+      location.href = "/#/loggedIn";
     }
     $scope.getMyInfo = function() {
       $facebook.api("/me")
@@ -108,7 +108,7 @@ var app = angular
         }, function (err) {
           console.log("first once err:", err)
         });
-        location.href = "/#/loggedin";
+        location.href = "/#/loggedIn";
       }, 4000);
     }
 
@@ -138,7 +138,7 @@ var app = angular
   //         console.log("Authenticated successfully with payload:", authData);
   //         $rootScope.loggedInUser = authData.uid;
   //         console.log($rootScope.loggedInUser);
-  //         location.href = "/#/loggedin";
+  //         location.href = "/#/loggedIn";
   //       }
   //     }/*, {scope: 'user_friends'}*/);
   //   }
@@ -193,17 +193,19 @@ var app = angular
   //   syncObject.$bindTo($rootScope, "userSchedule");
   // })
 
-  .controller('EventCtrl', function($scope, $rootScope, $firebase, $location) {
+  .controller('EventCtrl', function($scope, $rootScope, $firebase, $location, $timeout) {
     var facebookId = $rootScope.loggedInUser;
 
-    $rootScope.$on("$locationChangeStart", function(angularEvent, newUrl, oldUrl) {
-      if (_.endsWith(oldUrl, "loggedin")) {
-        console.log("leaving loggedin page...");
-        $scope.$apply(function() {
-          $scope.updateCalendarAndGetInvites($rootScope.loggedInUser);
-        });
-      }
-    });
+    // $rootScope.$on("$routeChangeSuccess", function(angularEvent, current, previous) {
+    //   if (current.loadedTemplateUrl === "views/invites.html") {
+    //     console.log("routing to Invites page...");
+    //     $scope.$apply(function() {
+    //       $timeout(function() {
+    //         $scope.updateCalendarAndGetInvites($rootScope.loggedInUser);
+    //       }, 1000);
+    //     });
+    //   }
+    // });
 
     // the ref at the top might not be needed if this is only happening once the person is logged in
     $scope.getBlocks = function(fbId, callback) {
@@ -401,6 +403,7 @@ var app = angular
                       minPeople: minPeople,
                       maxPeople: maxPeople,
                       messages: interestSnap.child('messages').val(),
+                      messageNum: interestSnap.child('messages').numChildren(),
                       userStatus: userStatus
                     });
                   });
