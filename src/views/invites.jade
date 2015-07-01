@@ -18,29 +18,36 @@ nav.navbar.navbar-inverse.navbar-fixed-top
         //- li(ng-controller='FaceCtrl')
         //-   a(href='' ng-click='logout()') Log out
 .container
-  .someDiv(ng-controller="InvitesCtrl as main")
+  .someDiv(ng-controller="EventCtrl")
     h1 Your Invites
-    button.btn.btn-info(ng-click="main.queryCalendarForUserInvites('fakedata5')") main.queryCalendarForUserInvites('fakedata2')
-    table
+    button.btn.btn-info(ng-click="updateCalendarAndGetInvites(loggedInUser)") updateCalendarAndGetInvites(loggedInUser);
+    table.table-hover
       thead
         tr
           th Interest
           th Day
           th Time
-          th # Invited
-          th # Needed
           th # Confirmed
+          th # Needed
+          th # Invited
           th # Declined
+          th Minimum
+          th Maximum
           th Confirm / Decline
           th Show Messages
       tbody
         tr
-          tr(ng-repeat="invite in main.invites")
+          tr(ng-repeat="invite in invites")
             td {{invite.interest}}
             td {{invite.day}}
             td {{invite.time}}
-            //- td {{invite.invited}}
-              //- td Needed #
+            td {{invite.confirmedNum}}
+            td {{invite.neededNum}}
+            td {{invite.invitedNum}}
+            td {{invite.declinedNum}}
+            td {{invite.minPeople}}
+            td {{invite.maxPeople}}
+//- td Needed #
               //- td Confirmed #
               //- td Declined #
               //-   td

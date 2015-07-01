@@ -26,6 +26,19 @@ li {
   display: inline-block;
 }
 
+td, th {
+  padding: 7px;
+  text-align: center;
+}
+
+tr > th {
+  background: #888;
+}
+
+tbody {
+  background: #DDD;
+}
+
 ////////////////////
 // Toggle buttons //
 ////////////////////
