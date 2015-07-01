@@ -35,8 +35,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     templateUrl: 'views/happenings.html'
   }).when('/profile', {
     templateUrl: 'views/profile.html'
-  }).when('/loggedIn', {
-    templateUrl: 'views/loggedIn.html'
+  }).when('/loggedin', {
+    templateUrl: 'views/loggedin.html'
   }).when('/invites', {
     templateUrl: 'views/invites.html'
   }).when('/logout', {
@@ -51,7 +51,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   $scope.loginAs = function (facebookId) {
     $rootScope.loggedInUser = facebookId;
     $rootScope[facebookId] = {};
-    location.href = '/#/loggedIn';
+    location.href = '/#/loggedin';
   };
   $scope.getMyInfo = function () {
     $facebook.api('/me').then(function (response) {
@@ -95,7 +95,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       }, function (err) {
         console.log('first once err:', err);
       });
-      location.href = '/#/loggedIn';
+      location.href = '/#/loggedin';
     }, 4000);
   };
 
