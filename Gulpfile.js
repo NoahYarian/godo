@@ -8,12 +8,15 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('bower', function () {
+  var css = $.mainBowerFiles('**/*.css');
+  css.unshift('./bower_components/jquery-ui/themes/flick/jquery-ui.css', './bower_components/jquery-ui/themes/flick/theme.css');
+
   gulp
     .src($.mainBowerFiles('**/*.js'))
     .pipe($.concat('build.js'))
     .pipe(gulp.dest('public/lib'));
   gulp
-    .src($.mainBowerFiles('**/*.css'))
+    .src(css)
     .pipe($.concat('build.css'))
     .pipe(gulp.dest('public/lib'));
 });
@@ -89,6 +92,8 @@ gulp.task('copy', function () {
     .pipe(gulp.dest('public'));
   gulp.src('src/images/*')
     .pipe(gulp.dest('public/images'));
+  gulp.src('jQueryUI_images/*')
+    .pipe(gulp.dest('public/lib/images'));
 });
 
 gulp.task('open', function () {

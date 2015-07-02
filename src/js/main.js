@@ -43,8 +43,8 @@ var app = angular
       .when('/profile', {
         templateUrl: 'views/profile.html'
       })
-      .when('/loggedIn', {
-        templateUrl: 'views/loggedIn.html'
+      .when('/loggedin', {
+        templateUrl: 'views/loggedin.html'
       })
       .when('/invites', {
         templateUrl: 'views/invites.html'
@@ -63,7 +63,7 @@ var app = angular
     $scope.loginAs = function(facebookId) {
       $rootScope.loggedInUser = facebookId;
       $rootScope[facebookId] = {};
-      location.href = "/#/loggedIn";
+      location.href = "/#/loggedin";
     }
     $scope.getMyInfo = function() {
       $facebook.api("/me")
@@ -81,7 +81,7 @@ var app = angular
             $rootScope[facebookId].friends = {};
             response.data.forEach(function(friend) {
               friendId = friend.id;
-              $rootScope[facebookId].friends[friendId] = true;
+              $rootScope[facebookId].friends[friendId] = friend.name;
             });
           });
       }, 2000);
@@ -108,7 +108,7 @@ var app = angular
         }, function (err) {
           console.log("first once err:", err)
         });
-        location.href = "/#/loggedIn";
+        location.href = "/#/loggedin";
       }, 4000);
     }
 
@@ -158,14 +158,61 @@ var app = angular
     var syncObjectUser = $firebaseObject(refUser);
     syncObjectUser.$bindTo($scope, "dataUser");
 
-    $scope.addOne = function (item) {
-      $scope.data[item] = true;
-      $scope.name = '';
-    }
-
     $scope.pickInterest = function(item) {
       $scope.dataUser[item] = !$scope.dataUser[item];
     }
+
+    $scope.onModalLoad = function () {
+      $('#modal').modal('show');
+      $('#modal').on('hidden.bs.modal', function (e) {
+        $scope.$apply(function() {
+          $scope.newInterest = {
+            minPeople: 2,
+            maxPeople: 2,
+            time: 0.5
+          }
+        });
+      });
+    }
+
+    $scope.addInterest = function(newInterest) {
+      var name = newInterest.name;
+      delete newInterest.name;
+      $scope.data[name] = newInterest;
+      $scope.dataUser[name] = true;
+      $('#modal').modal('hide');
+    }
+
+    $scope.newInterest = {
+      minPeople: 2,
+      maxPeople: 2,
+      time: 0.5
+    }
+
+
+    // set up an array to hold the months
+    var costLevels = ["Free!", "$", "$$", "$$$"];
+
+    $(".slider")
+
+        // activate the slider with options
+        .slider({
+            min: 0,
+            max: costLevels.length-1,
+            value: 0
+        })
+
+        // add pips with the labels set to "months"
+        .slider("pips", {
+            rest: "label",
+            labels: costLevels
+        })
+
+        // and whenever the slider changes, lets echo out the month
+        .on("slidechange", function(e,ui) {
+            $("#labels-months-output").text( "You selected " + costLevels[ui.value] + " (" + ui.value + ")");
+        });
+
   })
 
   .controller("ScheduleCtrl", function($scope, $rootScope, $firebaseObject) {
@@ -380,33 +427,44 @@ var app = angular
                     status = "confirmed";
                   } else if (invitedNum >= minPeople) {
                     status = "needsConf";
+                  } else if (invitedNum === 1) {
+                    status = "allAlone";
                   } else if (invitedNum < minPeople) {
                     status = "needsInterest";
-                  } else if (invitedNum === 0) {
-                    status = "empty";
+
                   }
                   ref.child(`${day}/${halfHour}/${interest}/status`).set(status);
 
-                  $scope.$apply(function() {
-                    $scope.invites.push({
-                      interest: interest,
-                      day: $scope.getDay(day),
-                      time: $scope.getTime(halfHour),
-                      status: status,
-                      invited: interestSnap.child('invited').val(),
-                      invitedNum: invitedNum,
-                      confirmed: interestSnap.child('confirmed').val(),
-                      confirmedNum: confirmedNum,
-                      declined: interestSnap.child('declined').val(),
-                      declinedNum: declinedNum,
-                      neededNum: minPeople - confirmedNum,
-                      minPeople: minPeople,
-                      maxPeople: maxPeople,
-                      messages: interestSnap.child('messages').val(),
-                      messageNum: interestSnap.child('messages').numChildren(),
-                      userStatus: userStatus
+                  if (status !== "allAlone") {
+                    $scope.$apply(function() {
+                      $scope.invites.push({
+                        interest: interest,
+                        day: $scope.getDay(day),
+                        time: $scope.getTime(halfHour),
+                        status: status,
+                        invited: interestSnap.child('invited').val(),
+                        invitedNum: invitedNum,
+                        invitedFriends: "invitedFriends",
+                        invitedFriendsNum: "invitedFriendsNum",
+                        confirmed: interestSnap.child('confirmed').val(),
+                        confirmedNum: confirmedNum,
+                        confirmedFriends: "confirmedFriends",
+                        confirmedFriendsNum: "confirmedFriendsNum",
+                        declined: interestSnap.child('declined').val(),
+                        declinedNum: declinedNum,
+                        declinedFriends: "declinedFriends",
+                        declinedFriendsNum: "declinedFriendsNum",
+                        neededNum: minPeople - confirmedNum,
+                        minPeople: minPeople,
+                        maxPeople: maxPeople,
+                        friends: "friendsObj",
+                        friendsNum: "friendsNum",
+                        messages: interestSnap.child('messages').val(),
+                        messageNum: interestSnap.child('messages').numChildren(),
+                        userStatus: userStatus
+                      });
                     });
-                  });
+                  }
                 }
               });
             });

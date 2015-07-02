@@ -12,9 +12,9 @@ nav.navbar.navbar-inverse.navbar-fixed-top
         li
           a(href='/#/invites') Invites
         li.active
-          a(href='/#/loggedIn') Profile
-        li
-          a(href='/#/happenings') Happenings
+          a(href='/#/loggedin') Profile
+        //- li
+        //-   a(href='/#/happenings') Happenings
         li(ng-controller='FaceCtrl')
           a(href='' ng-click='logout()') Log out
 .container
@@ -22,11 +22,37 @@ nav.navbar.navbar-inverse.navbar-fixed-top
     ul
       li(ng-repeat="(key, value) in data")
         button.btn(ng-click="pickInterest(key)", ng-class="{'btn-success': dataUser[key], 'btn-primary': !dataUser[key]}") {{key}}
-    form(name="addInterest", novalidate)
+    form(name="addInterestForm")
       .form-group
         label.control-label Add Interest
-        input.form-control(name="intName" type="text" placeholder='e.g. "Ultimate Frisbee"' ng-model="name" required)
-        button.btn.btn-primary(ng-click="addOne(name)") Add
+        input.form-control(name="intName" type="text" placeholder='e.g. "Ultimate Frisbee"' ng-model="newInterest.name" required)
+        button.btn.btn-primary(ng-click="onModalLoad()") Add
+    .modal.fade#modal
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(data-dismiss="modal")
+              span &times;
+            h1 Add Interest
+          .modal-body
+            form(name="addInterestInfoForm", novalidate)
+              .form-group
+                label.control-label Interest Name:
+                input.form-control(type="text" name="interestName" ng-model="newInterest.name")
+              .form-group
+                label.control-label Minimum # of People:
+                input.form-control(type="number" name="minPeople" min="2" ng-model="newInterest.minPeople")
+              .form-group
+                label.control-label Maximum # of People:
+                input.form-control(type="number" name="maxPeople" min="2" ng-model="newInterest.maxPeople")
+              .form-group
+                label.control-label Time Required (hours):
+                input.form-control(type="number" name="interestTime" min=".5" step=".5" ng-model="newInterest.time")
+              .form-group
+                .slider
+          .modal-footer
+            button.btn.btn-danger(data-dismiss="modal") Cancel
+            button.btn.btn-primary(ng-click="addInterest(newInterest)") Submit
 
   .schedule(ng-controller="ScheduleCtrl")
     table

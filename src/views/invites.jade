@@ -12,11 +12,11 @@ nav.navbar.navbar-inverse.navbar-fixed-top
         li.active
           a(href='/#/invites') Invites
         li
-          a(href='/#/loggedIn') Profile
-        li
-          a(href='/#/happenings') Happenings
-        //- li(ng-controller='FaceCtrl')
-        //-   a(href='' ng-click='logout()') Log out
+          a(href='/#/loggedin') Profile
+        //- li
+        //-   a(href='/#/happenings') Happenings
+        li(ng-controller='FaceCtrl')
+          a(href='' ng-click='logout()') Log out
 .container
   .someDiv(ng-controller="EventCtrl" ng-init="loggedInUser && updateCalendarAndGetInvites(loggedInUser)")
     h1 Your Invites
@@ -37,7 +37,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top
           th
       tbody
         tr
-          tr(ng-repeat="invite in invites")
+          tr(ng-repeat="invite in invites" ng-class="{'row-confirmed': hasConfirmed && invite.neededNum === 2}")
             td {{invite.interest}}
             td {{invite.day}}
             td {{invite.time}}
@@ -49,10 +49,10 @@ nav.navbar.navbar-inverse.navbar-fixed-top
             td {{invite.maxPeople}}
             td.button-td
               div(ng-hide="hasConfirmed || hasDeclined")
-                button.btn.btn-success(ng-click="confirm($index); hasConfirmed = true;") Confirm
-                button.btn.btn-danger(ng-click="decline($index); hasDeclined = true;") Decline
+                button.btn.btn-success(ng-click="confirm($index); hasConfirmed = true") Confirm
+                button.btn.btn-danger(ng-click="decline($index); hasDeclined = true") Decline
               div(ng-show="hasConfirmed")
-                button.btn.btn-danger(ng-click="unConfirm($index); hasConfirmed = false;") Un-confirm
+                button.btn.btn-danger(ng-click="unConfirm($index); hasConfirmed = false") Un-confirm
               div(ng-show="hasDeclined")
                 button.btn.btn-info(ng-click="unDecline($index); hasDeclined = false") Un-decline
               div
