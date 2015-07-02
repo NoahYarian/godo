@@ -60,8 +60,43 @@ table {
   display: inline-block;
 }
 
-.row-confirmed {
-  background: gold;
+.invite-confirmed {
+  font-weight: bold;
+}
+
+// .row-full {
+//   background: red;
+// }
+
+// .row-confirmed {
+//   background: gold;
+// }
+
+// .row-needsConf {
+//   background: green;
+// }
+
+// .row-needsInterest {
+//   background: #888;
+// }
+
+// .row-tooManyDeclines {
+//   background: white;
+// }
+
+.timeTable {
+  div {
+    background: white;
+    height: 15px;
+    width: 50px;
+  }
+  td, th {
+    padding: 0;
+    font-size: .75em;
+  }
+  .timeTable-highlight{
+    background: #f90;
+  }
 }
 
 .modal-header h1 {

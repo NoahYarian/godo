@@ -49,6 +49,9 @@ var app = angular
       .when('/invites', {
         templateUrl: 'views/invites.html'
       })
+      .when('/time', {
+        templateUrl: 'views/timeselect.html'
+      })
       .when('/logout', {
         templateUrl: 'views/landing.html'
       });
@@ -411,6 +414,7 @@ var app = angular
                   var invitedNum = interestSnap.child("invited").numChildren();
                   var confirmedNum = interestSnap.child("confirmed").numChildren();
                   var declinedNum = interestSnap.child("declined").numChildren();
+                  var neededNum = minPeople - confirmedNum >= 0 ? minPeople - confirmedNum : 0;
                   var maxPeople = $scope.interestInfo[interest].maxPeople;
                   var minPeople = $scope.interestInfo[interest].minPeople;
                   ref.child(`${day}/${halfHour}/${interest}/maxPeople`).set(maxPeople);
@@ -430,6 +434,9 @@ var app = angular
                     status = "confirmed";
                   } else if (invitedNum >= minPeople) {
                     status = "needsConf";
+                    if (invitedNum - declinedNum < minPeople) {
+                      status = "tooManyDeclines";
+                    }
                   } else if (invitedNum === 1) {
                     status = "allAlone";
                   } else if (invitedNum < minPeople) {
@@ -438,7 +445,7 @@ var app = angular
 
                   ref.child(`${day}/${halfHour}/${interest}/status`).set(status);
 
-                  if (status !== "allAlone") {
+                  if (status !== "allAlone" && status !== "needsInterest") {
                     $scope.$apply(function() {
                       $scope.invites.push({
                         interest: interest,
@@ -459,7 +466,7 @@ var app = angular
                         declinedNum: declinedNum,
                         declinedFriends: "declinedFriends",
                         declinedFriendsNum: "declinedFriendsNum",
-                        neededNum: minPeople - confirmedNum,
+                        neededNum: neededNum,
                         minPeople: minPeople,
                         maxPeople: maxPeople,
                         friends: "friendsObj",
@@ -478,24 +485,60 @@ var app = angular
       });
     }
 
-    $scope.confirm = function(invite) {
+    $scope.confirm = function(invite, inviteIndex) {
       var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/confirmed`);
       ref.child(facebookId).set($rootScope[facebookId].me.name);
+      if (invite.neededNum === 1) {
+        $scope.invites[inviteIndex].status = "confirmed";
+      } else if (invite.confirmedNum + 1 === invite.maxPeople) {
+        $scope.invites[inviteIndex].status = "full";
+      }
+      if (invite.confirmedNum < invite.minPeople) {
+        $scope.invites[inviteIndex].neededNum--;
+      }
+      $scope.invites[inviteIndex].confirmedNum++;
     }
 
-    $scope.decline = function(invite) {
+    $scope.decline = function(invite, inviteIndex) {
       var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/declined`);
       ref.child(facebookId).set($rootScope[facebookId].me.name);
+      if (invite.invitedNum - invite.declinedNum <= invite.minPeople) {
+        $scope.invites[inviteIndex].status = "tooManyDeclines";
+      }
+      $scope.invites[inviteIndex].declinedNum++;
     }
 
-    $scope.unConfirm = function(invite) {
+    $scope.unConfirm = function(invite, inviteIndex) {
       var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/confirmed`);
       ref.child(facebookId).remove();
+      if (invite.confirmedNum === invite.minPeople) {
+        $scope.invites[inviteIndex].status = "needsConf";
+      } else if (invite.confirmedNum === invite.maxPeople) {
+        $scope.invites[inviteIndex].status = "confirmed";
+      }
+      if (invite.confirmedNum <= invite.minPeople) {
+        $scope.invites[inviteIndex].neededNum++;
+      }
+      $scope.invites[inviteIndex].confirmedNum--;
     }
 
-    $scope.unDecline = function(invite) {
+    $scope.unDecline = function(invite, inviteIndex) {
       var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/declined`);
       ref.child(facebookId).remove();
+      if (invite.invitedNum - invite.declinedNum === invite.minPeople - 1) {
+        $scope.invites[inviteIndex].status = "needsConf";
+      }
+      $scope.invites[inviteIndex].declinedNum--;
+    }
+
+    $scope.filterInvites = function(invite, i, invites) {
+      if (invite.status === "tooManyDeclines") {
+        if (invite.userStatus !== "declined") {
+          return false;
+        }
+        return true;
+      }
+      return true;
     }
 
     $scope.getDay = function(dayIndex) {
@@ -569,6 +612,35 @@ var app = angular
       }
       return doneArr.join('');
     }
+
+  })
+
+  .controller('TimeCtrl', function() {
+
+    $(function () {
+      var isMouseDown = false,
+        isHighlighted;
+      $(".timeTable td")
+        .mousedown(function () {
+          isMouseDown = true;
+          $(this).children().toggleClass("timeTable-highlight");
+          isHighlighted = $(this).children().hasClass("timeTable-highlight");
+          return false; // prevent text selection
+        })
+        .mouseover(function () {
+          if (isMouseDown) {
+            $(this).children().toggleClass("timeTable-highlight", isHighlighted);
+          }
+        })
+        .bind("selectstart", function () {
+          return false;
+        })
+
+      $(document)
+        .mouseup(function () {
+          isMouseDown = false;
+        });
+    });
 
   })
     // $scope.getAvailability = function(facebookId, callback) {
