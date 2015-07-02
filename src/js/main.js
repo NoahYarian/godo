@@ -62,7 +62,7 @@ var app = angular
     }
     $scope.loginAs = function(facebookId) {
       $rootScope.loggedInUser = facebookId;
-      $rootScope[facebookId] = {};
+      $rootScope[facebookId] = {me: {name: facebookId}};
       location.href = "/#/loggedin";
     }
     $scope.getMyInfo = function() {
@@ -158,8 +158,8 @@ var app = angular
     var syncObjectUser = $firebaseObject(refUser);
     syncObjectUser.$bindTo($scope, "dataUser");
 
-    $scope.pickInterest = function(item) {
-      $scope.dataUser[item] = !$scope.dataUser[item];
+    $scope.pickInterest = function(interestName) {
+      $scope.dataUser[interestName] = !$scope.dataUser[interestName];
     }
 
     $scope.onModalLoad = function () {
@@ -191,27 +191,27 @@ var app = angular
 
 
     // set up an array to hold the months
-    var costLevels = ["Free!", "$", "$$", "$$$"];
+    // var costLevels = ["Free!", "$", "$$", "$$$"];
 
-    $(".slider")
+    // $(".slider")
 
-        // activate the slider with options
-        .slider({
-            min: 0,
-            max: costLevels.length-1,
-            value: 0
-        })
+    //     // activate the slider with options
+    //     .slider({
+    //         min: 0,
+    //         max: costLevels.length-1,
+    //         value: 0
+    //     })
 
-        // add pips with the labels set to "months"
-        .slider("pips", {
-            rest: "label",
-            labels: costLevels
-        })
+    //     // add pips with the labels set to "months"
+    //     .slider("pips", {
+    //         rest: "label",
+    //         labels: costLevels
+    //     })
 
-        // and whenever the slider changes, lets echo out the month
-        .on("slidechange", function(e,ui) {
-            $("#labels-months-output").text( "You selected " + costLevels[ui.value] + " (" + ui.value + ")");
-        });
+    //     // and whenever the slider changes, lets echo out the month
+    //     .on("slidechange", function(e,ui) {
+    //         $("#labels-months-output").text( "You selected " + costLevels[ui.value] + " (" + ui.value + ")");
+    //     });
 
   })
 
@@ -402,7 +402,9 @@ var app = angular
           calSnap.forEach(function(daySnap) {
             daySnap.forEach(function(halfHourSnap) {
               halfHourSnap.forEach(function(interestSnap) {
-                if (interestSnap.child("invited").hasChild(fbId)) {
+                if (!interestSnap.hasChild("invited")) {
+                  interestSnap.ref().remove();
+                } else if (interestSnap.child("invited").hasChild(fbId)) {
                   var day = daySnap.key();
                   var halfHour = halfHourSnap.key();
                   var interest = interestSnap.key();
@@ -413,7 +415,8 @@ var app = angular
                   var minPeople = $scope.interestInfo[interest].minPeople;
                   ref.child(`${day}/${halfHour}/${interest}/maxPeople`).set(maxPeople);
                   ref.child(`${day}/${halfHour}/${interest}/minPeople`).set(minPeople);
-                  var userStatus = "notConfirmed";
+
+                  var userStatus = "invited";
                   if (interestSnap.child("confirmed").exists() && interestSnap.child("confirmed").hasChild(fbId)) {
                     userStatus = "confirmed";
                   }
@@ -431,8 +434,8 @@ var app = angular
                     status = "allAlone";
                   } else if (invitedNum < minPeople) {
                     status = "needsInterest";
-
                   }
+
                   ref.child(`${day}/${halfHour}/${interest}/status`).set(status);
 
                   if (status !== "allAlone") {
@@ -440,7 +443,9 @@ var app = angular
                       $scope.invites.push({
                         interest: interest,
                         day: $scope.getDay(day),
+                        dayIndex: day,
                         time: $scope.getTime(halfHour),
+                        halfHour: halfHour,
                         status: status,
                         invited: interestSnap.child('invited').val(),
                         invitedNum: invitedNum,
@@ -471,6 +476,26 @@ var app = angular
           });
         });
       });
+    }
+
+    $scope.confirm = function(invite) {
+      var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/confirmed`);
+      ref.child(facebookId).set($rootScope[facebookId].me.name);
+    }
+
+    $scope.decline = function(invite) {
+      var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/declined`);
+      ref.child(facebookId).set($rootScope[facebookId].me.name);
+    }
+
+    $scope.unConfirm = function(invite) {
+      var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/confirmed`);
+      ref.child(facebookId).remove();
+    }
+
+    $scope.unDecline = function(invite) {
+      var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/declined`);
+      ref.child(facebookId).remove();
     }
 
     $scope.getDay = function(dayIndex) {

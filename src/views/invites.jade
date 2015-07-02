@@ -34,30 +34,28 @@ nav.navbar.navbar-inverse.navbar-fixed-top
           th Minimum
           th Maximum
           th
-          th
       tbody
-        tr
-          tr(ng-repeat="invite in invites" ng-class="{'row-confirmed': hasConfirmed && invite.neededNum === 2}")
-            td {{invite.interest}}
-            td {{invite.day}}
-            td {{invite.time}}
-            td {{invite.confirmedNum}}
-            td {{invite.neededNum}}
-            td {{invite.invitedNum}}
-            td {{invite.declinedNum}}
-            td {{invite.minPeople}}
-            td {{invite.maxPeople}}
-            td.button-td
-              div(ng-hide="hasConfirmed || hasDeclined")
-                button.btn.btn-success(ng-click="confirm($index); hasConfirmed = true") Confirm
-                button.btn.btn-danger(ng-click="decline($index); hasDeclined = true") Decline
-              div(ng-show="hasConfirmed")
-                button.btn.btn-danger(ng-click="unConfirm($index); hasConfirmed = false") Un-confirm
-              div(ng-show="hasDeclined")
-                button.btn.btn-info(ng-click="unDecline($index); hasDeclined = false") Un-decline
-              div
-                button(type="button" class="btn btn-default email-button" ng-class="{'btn-primary': invite.messageNum > 0}" aria-label="Messages")
-                  span.glyphicon.glyphicon-envelope(aria-hidden="true")
+        tr(ng-repeat="invite in invites" ng-class="{'row-confirmed': hasConfirmed && invite.neededNum === 0}")
+          td {{invite.interest}}
+          td {{invite.day}}
+          td {{invite.time}}
+          td {{invite.confirmedNum}}
+          td {{invite.neededNum}}
+          td {{invite.invitedNum}}
+          td {{invite.declinedNum}}
+          td {{invite.minPeople}}
+          td {{invite.maxPeople}}
+          td.button-td
+            div(ng-hide="invite.userStatus === 'confirmed' || invite.userStatus === 'declined'")
+              button.btn.btn-success(ng-click="confirm(invite); invite.userStatus = 'confirmed'") Confirm
+              button.btn.btn-danger(ng-click="decline(invite); invite.userStatus = 'declined'") Decline
+            div(ng-show="invite.userStatus === 'confirmed'")
+              button.btn.btn-danger(ng-click="unConfirm(invite); invite.userStatus = 'invited'") Un-confirm
+            div(ng-show="invite.userStatus === 'declined'")
+              button.btn.btn-info(ng-click="unDecline(invite); invite.userStatus = 'invited'") Un-decline
+            div
+              button(type="button" class="btn btn-default email-button" ng-class="{'btn-primary': invite.messageNum > 0}" aria-label="Messages")
+                span.glyphicon.glyphicon-envelope(aria-hidden="true")
 //- td Needed #
               //- td Confirmed #
               //- td Declined #

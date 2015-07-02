@@ -1,22 +1,16 @@
 {
   "interests" : {
     "Bocce" : {
-      "earliest" : "0600",
-      "latest" : "1900",
       "maxPeople" : 8,
       "minPeople" : 2,
       "time" : 1
     },
     "Disc Golf" : {
-      "earliest" : "0600",
-      "latest" : "1900",
       "maxPeople" : 5,
       "minPeople" : 2,
       "time" : 1.5
     },
     "Ultimate Frisbee" : {
-      "earliest" : "0600",
-      "latest" : "1900",
       "maxPeople" : 20,
       "minPeople" : 10,
       "time" : 2
@@ -763,9 +757,9 @@
       },
       "schedule" : [ {
         "0000" : true,
-        "0030" : false,
-        "0100" : false,
-        "0130" : false,
+        "0030" : true,
+        "0100" : true,
+        "0130" : true,
         "0200" : false,
         "0230" : false,
         "0300" : false,
@@ -1505,10 +1499,10 @@
         "0000" : true,
         "0030" : true,
         "0100" : true,
-        "0130" : false,
-        "0200" : false,
-        "0230" : false,
-        "0300" : false,
+        "0130" : true,
+        "0200" : true,
+        "0230" : true,
+        "0300" : true,
         "0330" : false,
         "0400" : false,
         "0430" : false,
@@ -1876,7 +1870,7 @@
         "0030" : true,
         "0100" : true,
         "0130" : true,
-        "0200" : false,
+        "0200" : true,
         "0230" : false,
         "0300" : false,
         "0330" : false,
