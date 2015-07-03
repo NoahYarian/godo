@@ -69,6 +69,10 @@ var app = angular
     $scope.loginAs = function(facebookId) {
       $rootScope.loggedInUser = facebookId;
       $rootScope[facebookId] = {me: {name: facebookId}};
+      var ref = new Firebase(`https://goanddo.firebaseio.com/users/${facebookId}/friends`);
+      ref.once('value', function(dataSnapshot) {
+        $rootScope[facebookId].friends = dataSnapshot.val();
+      });
       location.href = "/#/loggedin";
     }
     $scope.getMyInfo = function() {
@@ -403,9 +407,9 @@ var app = angular
 
     $scope.updateCalendarAndGetInvites = function (fbId) {
       $scope.userAvailToCalendar(fbId, function() {
-        $scope.invites = [];
         var ref = new Firebase("https://goanddo.firebaseio.com/calendar");
         ref.once("value", function(calSnap) {
+        $scope.invites = [];
           calSnap.forEach(function(daySnap) {
             daySnap.forEach(function(halfHourSnap) {
               halfHourSnap.forEach(function(interestSnap) {
@@ -449,6 +453,49 @@ var app = angular
 
                   ref.child(`${day}/${halfHour}/${interest}/status`).set(status);
 
+                  var invitedPersonId;
+                  var invitedFriendsNum = 0;
+                  var invitedFriends = ["<ul class='popover-ul'>"];
+                  interestSnap.child("invited").forEach(function(invitedPersonSnap) {
+                    invitedPersonId = invitedPersonSnap.key();
+                    if ($rootScope[fbId].friends[invitedPersonId]) {
+                      invitedFriendsNum++;
+                      invitedFriends.push("<li>", $rootScope[fbId].friends[invitedPersonId], "</li>");
+                      // invitedFriends.push("<br>");
+                    }
+                  });
+                  invitedFriends.pop("</ul>");
+
+                  var confirmedPersonId;
+                  var confirmedFriendsNum = 0;
+                  var confirmedFriends = ["<ul class='popover-ul'>"];
+                  interestSnap.child("confirmed").forEach(function(confirmedPersonSnap) {
+                    confirmedPersonId = confirmedPersonSnap.key();
+                    if ($rootScope[fbId].friends[confirmedPersonId]) {
+                      confirmedFriendsNum++;
+                      confirmedFriends.push("<li>", $rootScope[fbId].friends[confirmedPersonId], "</li>");
+                      // confirmedFriends.push("<br>");
+                    }
+                  });
+                  confirmedFriends.push("</ul>");
+
+                  var declinedPersonId;
+                  var declinedFriendsNum = 0;
+                  var declinedFriends = ["<ul class='popover-ul'>"];
+                  interestSnap.child("declined").forEach(function(declinedPersonSnap) {
+                    declinedPersonId = declinedPersonSnap.key();
+                    if ($rootScope[fbId].friends[declinedPersonId]) {
+                      declinedFriendsNum++;
+                      declinedFriends.push("<li>", $rootScope[fbId].friends[declinedPersonId], "</li>");
+                      // declinedFriends.push("<br>")
+                    }
+                  });
+                  declinedFriends.push("</ul>")
+
+                  $(function () {
+                    $('[data-toggle="popover"]').popover()
+                  });
+
                   if (status !== "allAlone" && status !== "needsInterest") {
                     $scope.$apply(function() {
                       $scope.invites.push({
@@ -460,21 +507,19 @@ var app = angular
                         status: status,
                         invited: interestSnap.child('invited').val(),
                         invitedNum: invitedNum,
-                        invitedFriends: "invitedFriends",
-                        invitedFriendsNum: "invitedFriendsNum",
+                        invitedFriends: invitedFriends.join(''),
+                        invitedFriendsNum: invitedFriendsNum,
                         confirmed: interestSnap.child('confirmed').val(),
                         confirmedNum: confirmedNum,
-                        confirmedFriends: "confirmedFriends",
-                        confirmedFriendsNum: "confirmedFriendsNum",
+                        confirmedFriends: confirmedFriends.join(''),
+                        confirmedFriendsNum: confirmedFriendsNum,
                         declined: interestSnap.child('declined').val(),
                         declinedNum: declinedNum,
-                        declinedFriends: "declinedFriends",
-                        declinedFriendsNum: "declinedFriendsNum",
+                        declinedFriends: declinedFriends.join(''),
+                        declinedFriendsNum: declinedFriendsNum,
                         neededNum: neededNum,
                         minPeople: minPeople,
                         maxPeople: maxPeople,
-                        friends: "friendsObj",
-                        friendsNum: "friendsNum",
                         messages: interestSnap.child('messages').val(),
                         messageNum: interestSnap.child('messages').numChildren(),
                         userStatus: userStatus
@@ -552,12 +597,14 @@ var app = angular
         timestamp: Date(),
         text: invite.newMessage
       }
-      var messageUid = ref.push(messageObj);
-      // if (!$scope.invites[inviteIndex].messages) {
-      //   $scope.invites[inviteIndex].messages = {};
-      // } else {
-      //   $scope.invites[inviteIndex].messages[messageUid] = messageObj;
-      // }
+      var inviteString = `${invite.dayIndex}_${invite.halfHour}_${invite.interest}`;
+      var messageUidRef = ref.push(messageObj);
+      var messageUid = messageUidRef.key().split('').slice(-19).join('');
+      if (!$scope.messages[inviteString]) {
+        $scope.messages[inviteString] = {};
+      }
+      $scope.messages[inviteString][messageUid] = messageObj;
+
       $scope.invites[inviteIndex].newMessage = '';
     }
 

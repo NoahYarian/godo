@@ -44,6 +44,10 @@ gulp.task('sass:dev', function () {
     .src('src/_styles/main.scss')
     .pipe($.sass()
       .on('error', $.sass.logError))
+    // .pipe($.autoprefixer({
+    //   browsers: ['> 1%'],
+    //   cascade: true
+    // }))
     .pipe(gulp.dest('public/css'));
 });
 

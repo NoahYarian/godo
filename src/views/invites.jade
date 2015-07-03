@@ -41,9 +41,12 @@ nav.navbar.navbar-inverse.navbar-fixed-top
           td {{invite.day}}
           td {{invite.time}}
           td {{invite.confirmedNum}}
+            a(href="" ng-if="invite.confirmedFriendsNum > 0" ng-click="$('.confirmedFriends-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" class="confirmedFriends-{{inviteIndex}}" data-content="{{invite.confirmedFriends}}" title="Confirmed Friends" data-html=true) ({{invite.confirmedFriendsNum}})
           td {{invite.neededNum}}
           td {{invite.invitedNum}}
+            a(href="" ng-if="invite.invitedFriendsNum > 0" ng-click="$('.invitedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" class="invitedFriends-{{inviteIndex}}" data-content="{{invite.invitedFriends}}" title="Invited Friends" data-html=true) ({{invite.invitedFriendsNum}})
           td {{invite.declinedNum}}
+            a(href="" ng-if="invite.declinedFriendsNum > 0" ng-click="$('.declinedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" class="declinedFriends-{{inviteIndex}}" data-content="{{invite.declinedFriends}}" title="Declined Friends" data-html=true) ({{invite.declinedFriendsNum}})
           td {{invite.minPeople}}
           td {{invite.maxPeople}}
           td.button-td
