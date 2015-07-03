@@ -33,15 +33,10 @@ nav.navbar.navbar-inverse.navbar-fixed-top
           th # Declined
           th Minimum
           th Maximum
-          th
-          th
-      tbody
-        tr(ng-repeat="invite in invites | filter: filterInvites" ng-class="{'invite-confirmed': invite.userStatus === 'confirmed',\
-                                                    'bg-danger': invite.status === 'full',\
-                                                    'bg-success': invite.status === 'confirmed',\
-                                                    'bg-info': invite.status === 'needsConf',\
-                                                    'bg-warning': invite.status === 'needsInterest',\
-                                                    'bg-warning': invite.status === 'tooManyDeclines'}")
+          th RSVP
+          th Messages
+      tbody(ng-repeat="invite in invites | filter: filterInvites" ng-init="inviteIndex = $index" ng-class="{'invite-confirmed': invite.userStatus === 'confirmed', 'bg-danger': invite.status === 'full', 'bg-success': invite.status === 'confirmed', 'bg-info': invite.status === 'needsConf', 'bg-warning': invite.status === 'needsInterest', 'bg-warning': invite.status === 'tooManyDeclines'}")
+        tr
           td {{invite.interest}}
           td {{invite.day}}
           td {{invite.time}}
@@ -53,30 +48,29 @@ nav.navbar.navbar-inverse.navbar-fixed-top
           td {{invite.maxPeople}}
           td.button-td
             div(ng-hide="invite.userStatus === 'confirmed' || invite.userStatus === 'declined'")
-              button.btn.btn-success(ng-click="confirm(invite, $index); invite.userStatus = 'confirmed'" ng-disabled="invite.status === 'full'") Confirm
-              button.btn.btn-danger(ng-click="decline(invite, $index); invite.userStatus = 'declined'" ng-disabled="invite.status === 'full'") Decline
+              button.btn.btn-success(ng-click="confirm(invite, inviteIndex); invite.userStatus = 'confirmed'" ng-disabled="invite.status === 'full'") Confirm
+              button.btn.btn-danger(ng-click="decline(invite, inviteIndex); invite.userStatus = 'declined'" ng-disabled="invite.status === 'full'") Decline
             div(ng-show="invite.userStatus === 'confirmed'")
-              button.btn.btn-danger(ng-click="unConfirm(invite, $index); invite.userStatus = 'invited'") Un-confirm
+              button.btn.btn-danger(ng-click="unConfirm(invite, inviteIndex); invite.userStatus = 'invited'") Un-confirm
             div(ng-show="invite.userStatus === 'declined'")
-              button.btn.btn-info(ng-click="unDecline(invite, $index); invite.userStatus = 'invited'") Un-decline
+              button.btn.btn-info(ng-click="unDecline(invite, inviteIndex); invite.userStatus = 'invited'") Un-decline
           td
             div
-              button.btn.btn-default.email-button(ng-class="{'btn-primary': invite.messageNum > 0}" aria-label="Messages")
+              button.btn.btn-default.email-button(ng-click="invite.showMessages = !invite.showMessages; watchMessages(invite, inviteIndex)" ng-class="{true: 'btn-primary'}[hasMessages(invite)]" aria-label="Messages")
                 span.glyphicon.glyphicon-envelope(aria-hidden="true")
-
-              //-     a(href="#" ng-click="showMessages = !showMessages") ({{Object.keys(inviteObj.messages).length}})
-              //-     a(href="#" ng-click="showNewMessageForm") Send Message
-              //- tr(ng-show="showMessages")
-              //-   ul
-              //-     li(ng-repeat="(messageIndex, message) in inviteObj.messages")
-              //-       p {{message.sender}}
-              //-       p {{message.time}}
-              //-       p {{message.body}}
-              //-     li
-              //-       a(href="#" ng-click="showMessages = !showMessages") Hide
-              //- tr(ng-show="showNewMessageForm")
-              //-   form
-              //-     input(type="text" ng-model="inviteObj.newMessage")
-              //-   button(ng-click="sendMessage(inviteObj.newMessage)") Post
-              //-   button(ng-click="showNewMessageForm = !showNewMessageForm") Cancel
+        tr(ng-show="invite.showMessages")
+          td.messages-td(colspan="11")
+            div
+              ul
+                li(ng-repeat="(messageUid, message) in invite.messages")
+                  div {{message.userName}}
+                  div {{message.timestamp}}
+                  div {{message.text}}
+                  div
+                    button.btn.btn-danger(ng-show="message.userName === loggedInUser" ng-click="deleteMessage(invite, inviteIndex, messageUid)")
+                      span &times;
+            div
+              input(type="text" ng-model="invite.newMessage")
+              button(ng-click="postMessage(invite, inviteIndex)") Post
+              button(ng-click="invite.newMessage = ''") Cancel
 

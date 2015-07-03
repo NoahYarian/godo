@@ -8,7 +8,7 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('bower', function () {
-  var css = $.mainBowerFiles('**/*.css');
+  // var css = $.mainBowerFiles('**/*.css');
   // css.unshift('./bower_components/jquery-ui/themes/flick/jquery-ui.css', './bower_components/jquery-ui/themes/flick/theme.css');
 
   gulp
@@ -16,7 +16,7 @@ gulp.task('bower', function () {
     .pipe($.concat('build.js'))
     .pipe(gulp.dest('public/lib'));
   gulp
-    .src(css)
+    .src($.mainBowerFiles('**/*.css'))
     .pipe($.concat('build.css'))
     .pipe(gulp.dest('public/lib'));
 });

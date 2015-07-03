@@ -52,6 +52,9 @@ var app = angular
       .when('/time', {
         templateUrl: 'views/timeselect.html'
       })
+      .when('/calendar', {
+        templateUrl: 'views/calendar.html'
+      })
       .when('/logout', {
         templateUrl: 'views/landing.html'
       });
@@ -243,9 +246,9 @@ var app = angular
   //   syncObject.$bindTo($rootScope, "userSchedule");
   // })
 
-  .controller('EventCtrl', function($scope, $rootScope, $firebase, $location, $timeout) {
+  .controller('EventCtrl', function($scope, $rootScope, $firebaseObject, $location, $timeout) {
     var facebookId = $rootScope.loggedInUser;
-
+    $scope.messages = {};
     // $rootScope.$on("$routeChangeSuccess", function(angularEvent, current, previous) {
     //   if (current.loadedTemplateUrl === "views/invites.html") {
     //     console.log("routing to Invites page...");
@@ -323,6 +326,7 @@ var app = angular
           var ref2 = new Firebase('https://goanddo.firebaseio.com/interests');
           ref2.once('value', function(dataSnapshot2) {
             $scope.interestInfo = dataSnapshot2.val();
+            $rootScope.interestInfo = dataSnapshot2.val();
             // $rootScope.interestTimes = {};
             // $.each(dataSnapshot2.val(), function(interestName, interestObj) {
             //   $rootScope.interestTimes[interestName] = interestObj.time;
@@ -414,9 +418,9 @@ var app = angular
                   var invitedNum = interestSnap.child("invited").numChildren();
                   var confirmedNum = interestSnap.child("confirmed").numChildren();
                   var declinedNum = interestSnap.child("declined").numChildren();
-                  var neededNum = minPeople - confirmedNum >= 0 ? minPeople - confirmedNum : 0;
                   var maxPeople = $scope.interestInfo[interest].maxPeople;
                   var minPeople = $scope.interestInfo[interest].minPeople;
+                  var neededNum = minPeople - confirmedNum >= 0 ? minPeople - confirmedNum : 0;
                   ref.child(`${day}/${halfHour}/${interest}/maxPeople`).set(maxPeople);
                   ref.child(`${day}/${halfHour}/${interest}/minPeople`).set(minPeople);
 
@@ -536,9 +540,62 @@ var app = angular
         if (invite.userStatus !== "declined") {
           return false;
         }
-        return true;
       }
       return true;
+    }
+
+    $scope.postMessage = function(invite, inviteIndex) {
+      var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/messages`);
+      var messageObj = {
+        userName: $rootScope[facebookId].me.name,
+        userId: facebookId,
+        timestamp: Date(),
+        text: invite.newMessage
+      }
+      var messageUid = ref.push(messageObj);
+      // if (!$scope.invites[inviteIndex].messages) {
+      //   $scope.invites[inviteIndex].messages = {};
+      // } else {
+      //   $scope.invites[inviteIndex].messages[messageUid] = messageObj;
+      // }
+      $scope.invites[inviteIndex].newMessage = '';
+    }
+
+    $scope.deleteMessage = function(invite, inviteIndex, messageUid) {
+      delete $scope.invites[inviteIndex].messages[messageUid];
+      var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/messages`);
+      ref.child(messageUid).remove();
+    }
+
+    $scope.watchMessages = function(invite, inviteIndex) {
+      var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/messages`);
+      // ref.on('value', function(dataSnapshot) {
+      //   // $scope.$apply(function() {
+      //     $scope.invites[inviteIndex].messages = dataSnapshot.val();
+      //   // });
+      // }, function(error) {
+      //   console.error(error);
+      // });
+      $scope.invites[inviteIndex].messages = $firebaseObject(ref);
+
+    }
+
+    $scope.hasMessages = function(invite) {
+      if (!invite.messages) {
+        return false;
+      }
+      var hasFireKeys = false;
+      for (var key in invite.messages) {
+        if (_.startsWith(key, "$")) {
+          hasFireKeys = true;
+        }
+      }
+      if ((!hasFireKeys && Object.keys(invite.messages).length > 0) ||
+          (hasFireKeys && Object.keys(invite.messages).length > 3 && invite.messages.$value !== null)) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     $scope.getDay = function(dayIndex) {
@@ -643,6 +700,24 @@ var app = angular
     });
 
   })
+
+  .controller('CalendarCtrl', function($firebaseObject, $rootScope, $scope) {
+    var facebookId = $rootScope.loggedInUser;
+    var ref = new Firebase("http://goanddo.firebaseio.com/calendar");
+    var calSyncObj = $firebaseObject(ref);
+    calSyncObj.$bindTo($scope, "data")
+    $scope.filterCal = function(dayNum, halfHourNum, interestName) {
+      console.log(dayNum, halfHourNum, interestName);
+      if ($rootScope[facebookId].timeBlocks[dayNum][halfHourNum] < $rootScope.interestInfo[interestName].time) {
+        return false;
+      }
+      return true;
+    }
+  })
+
+  //($scope.data[dayNum][halfHourNum][interestName].status === "tooManyDeclines" && $scope.data[dayNum][halfHourNum][interestName].userStatus !== "declined") ||
+          //(!$rootScope[facebookId].interests[interestName])
+
     // $scope.getAvailability = function(facebookId, callback) {
     //   $scope.freeHalfHours = [];
     //   $.get(`https://goanddo.firebaseio.com/users/${facebookId}/schedule.json`, function(data) {
