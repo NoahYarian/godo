@@ -32,7 +32,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   $routeProvider.when('/', {
     controller: 'FaceCtrl',
     templateUrl: function templateUrl(routeParams) {
-      if ($rootScope.loggedInUser) {
+      if (loggedInUser) {
         return 'views/landing.html';
       } else {
         return 'views/loggedIn.html';
