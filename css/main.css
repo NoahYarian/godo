@@ -4,6 +4,9 @@ html {
 body {
   padding-top: 50px; }
 
+body.plugin {
+  text-align: center; }
+
 .landing {
   padding: 0px 15px;
   text-align: center; }
