@@ -96,6 +96,8 @@ gulp.task('copy', function () {
     .pipe(gulp.dest('public'));
   gulp.src('src/images/*')
     .pipe(gulp.dest('public/images'));
+  gulp.src('src/fonts/**/*')
+    .pipe(gulp.dest('public/fonts'));
   // gulp.src('jQueryUI_images/*')
   //   .pipe(gulp.dest('public/lib/images'));
 });

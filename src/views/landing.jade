@@ -7,45 +7,56 @@
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href='/#/') Go and Do
+        a.navbar-brand(href='/#/')
+          object.canoe-icon(type="image/svg+xml" data="images/canoe.svg")
       #navbar.collapse.navbar-collapse
         ul.nav.navbar-nav.navbar-right
           li
-            a(ng-click="login()") Log In
+            a(href="" ng-click="login()") Log In
   .container
-    .starter-template
-      h1 Go and Do
-      p.lead
-        | More social, less media.
-      //- fb:login-button(show-faces="true" max-rows="1" size="large")
-      //- img(src= 'http://www.kilnandco.com/gallery/var/albums/facebook-login-button.png?m=1375582078')
-      div
-        button(ng-click="login()") Log in with FB
-      br
-      br
-      br
-      br
-      br
-      br
-      div
+    .landing
+      .title
+        h1
+          span Go
+          span &
+          span Do
+        h2 More social, less media.
+      //- div.fb-login-button(data-max-rows="5" data-size="xlarge" data-show-faces="true" data-auto-logout-link="true")
+      a.btn.btn-block.btn-social.btn-lg.btn-facebook(href="" ng-click="login()") Sign in with Facebook
+       i.fa.fa-facebook
+    //- .landing-footer
+    //-   .benefits
+    //-     .benefit
+    //-       h3.benefit-title Easy to use
+    //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
+    //-     .benefit
+    //-       h3.benefit-title Easy to use
+    //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
+    //-    .benefit
+    //-       h3.benefit-title Easy to use
+    //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
+    //-    .benefit
+    //-       h3.benefit-title Easy to use
+    //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
+      //- div
         button(ng-click="loginAs('fakedata')") Log in as fakedata
         button(ng-click="loginAs('fakedata2')") Log in as fakedata2
         button(ng-click="loginAs('fakedata3')") Log in as fakedata3
         button(ng-click="loginAs('fakedata4')") Log in as fakedata4
         button(ng-click="loginAs('fakedata5')") Log in as fakedata5
-      .container(ng-controller="EventCtrl")
+      //- .container(ng-controller="EventCtrl")
         //- button.btn.btn-primary(ng-click="getAvailability('fakedata')") getAvailability('fakedata')
-        button.btn.btn-primary(ng-click="getBlocks('fakedata3')") getBlocks('fakedata3')
+        //- button.btn.btn-primary(ng-click="getBlocks('fakedata3')") getBlocks('fakedata3')
         //- button.btn.btn-info(ng-click="getPossibleEvents('fakedata')") getPossibleEvents('fakedata')
         //- //- button.btn.btn-info(ng-click="getPossibleEvents('fakedata2')") getPossibleEvents('fakedata2')
-        button.btn.btn-info(ng-click="getPossibleEvents('fakedata3')") getPossibleEvents('fakedata3')
+        //- button.btn.btn-info(ng-click="getPossibleEvents('fakedata3')") getPossibleEvents('fakedata3')
         //- //- button.btn.btn-info(ng-click="getPossibleEvents('fakedata4')") getPossibleEvents('fakedata4')
         //- //- button.btn.btn-info(ng-click="getPossibleEvents('fakedata5')") getPossibleEvents('fakedata5')
         //- //- button.btn.btn-primary(ng-click="getFriendPossibleEvents('fakedata')") getFriendPossibleEvents('fakedata')
         //- //- button.btn.btn-primary(ng-click="makeEvents('fakedata')") makeEvents('fakedata')
         //- button.btn.btn-danger(ng-click="userAvailToFirebase('fakedata')") userAvailToFirebase('fakedata')
         //- button.btn.btn-danger(ng-click="userAvailToCalendar('fakedata5')") userAvailToCalendar('fakedata5')
-        button.btn.btn-info(ng-click="updateCalendarAndGetInvites('fakedata3')") updateCalendarAndGetInvites('fakedata3');
+        //- button.btn.btn-info(ng-click="updateCalendarAndGetInvites('fakedata3')") updateCalendarAndGetInvites('fakedata3');
 
 
         //- //- button.btn.btn-danger(ng-click="userAvailToFirebase('fakedata2')") userAvailToFirebase('fakedata2')

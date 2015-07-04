@@ -1,21 +1,81 @@
-// TODO: figure out how to make this image cover the page well no matter the height of the window. Min-height is dumb.
-.container-cover {
-  background: linear-gradient(to top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 100%),
-              center/cover no-repeat url('../images/group-biking-sillouette-optimized.jpg');
-  min-height: 650px;
+
+@font-face {
+    font-family: Gapstown;
+    src: url(../fonts/gapstown-r.ttf);
+}
+
+@font-face {
+    font-family: Gapstown;
+    src: url(../fonts/gapstown-b.ttf);
+    font-weight: bold;
+}
+
+html {
+  background: /* linear-gradient(to top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 100%) 70% / cover no-repeat fixed, */
+              url('../images/Group-Hike.jpg') 70% / cover no-repeat fixed #222222;
+  // min-height: 650px;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+.canoe-icon {
+  height: 35px;
+  margin-top: -6px;
+  pointer-events: none;
 }
 
 body {
   padding-top: 50px;
+  background: transparent;
 }
 
-.starter-template {
-  padding: 40px 15px;
+body.plugin {
   text-align: center;
 }
 
+.landing {
+  padding: 0px 15px;
+  text-align: center;
+  margin: 0 auto;
+  width: 400px;
+}
+
+.title {
+  margin: 45% 0 0;
+  // background: #222;
+  // border: 1px solid black;
+}
+
+a.btn.btn-block.btn-social.btn-lg.btn-facebook {
+  width: 258px;
+  margin: 0px auto;
+}
+
 h1 {
+  span:nth-child(2) {
+    margin: 0 32px;
+  }
   color: white;
+  font-family: 'Gapstown';
+  font-weight: bold;
+  font-size: 8em;
+  margin: 0;
+}
+
+h2 {
+  font-family: 'Gapstown';
+  margin-top: -15px;
+  color: white;
+  font-size: 40px;
+}
+
+.navbar-brand {
+  color: white;
+  font-family: 'Gapstown';
+  font-size: 2.5em;
 }
 
 .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {
@@ -113,6 +173,11 @@ a[class*="Friends-"] {
 .modal-header h1 {
   color: black;
 }
+
+label {
+  margin-bottom: 0px;
+}
+
 ////////////////////
 // Toggle buttons //
 ////////////////////
@@ -180,6 +245,4 @@ a[class*="Friends-"] {
   }
 }
 
-label {
-  margin-bottom: 0px;
-}
+
