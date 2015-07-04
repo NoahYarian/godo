@@ -1,30 +1,62 @@
+@font-face {
+  font-family: Gapstown;
+  src: url(../fonts/gapstown-r.ttf); }
+
+@font-face {
+  font-family: Gapstown;
+  src: url(../fonts/gapstown-b.ttf);
+  font-weight: bold; }
+
 html {
-  background: #222222 url("../images/group-biking-sillouette-optimized.jpg") no-repeat center center fixed; }
+  background: url("../images/Group-Hike.jpg") 70%/cover no-repeat fixed #222222; }
+
+html, body {
+  height: 100%;
+  width: 100%; }
+
+.canoe-icon {
+  height: 35px;
+  margin-top: -6px;
+  pointer-events: none; }
 
 body {
-  padding-top: 50px; }
+  padding-top: 50px;
+  background: transparent; }
 
 body.plugin {
   text-align: center; }
 
 .landing {
   padding: 0px 15px;
-  text-align: center; }
+  text-align: center;
+  margin: 0 auto;
+  width: 400px; }
+
+.title {
+  margin: 45% 0 0; }
+
+a.btn.btn-block.btn-social.btn-lg.btn-facebook {
+  width: 258px;
+  margin: 0px auto; }
 
 h1 {
   color: white;
-  font-family: 'Covered By Your Grace', cursive;
-  font-size: 8em; }
+  font-family: 'Gapstown';
+  font-weight: bold;
+  font-size: 8em;
+  margin: 0; }
   h1 span:nth-child(2) {
     margin: 0 32px; }
 
 h2 {
-  font-family: 'Walter Turncoat', cursive;
-  margin-top: -15px; }
+  font-family: 'Gapstown';
+  margin-top: -15px;
+  color: white;
+  font-size: 40px; }
 
 .navbar-brand {
   color: white;
-  font-family: 'Covered By Your Grace', cursive;
+  font-family: 'Gapstown';
   font-size: 2.5em; }
 
 .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {

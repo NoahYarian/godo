@@ -3,23 +3,22 @@
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
-        <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">Go & Do</a>
+        <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">
+          <object type="image/svg+xml" data="images/canoe.svg" class="canoe-icon"></object></a>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li><a ng-click="login()">Log In</a></li>
+          <li><a href="" ng-click="login()">Log In</a></li>
         </ul>
       </div>
     </div>
   </nav>
   <div class="container">
     <div class="landing">
-      <h1><span>Go</span><span>&</span><span>Do</span></h1>
-      <h2>More social, less media.</h2>
-      <div data-max-rows="5" data-size="xlarge" data-show-faces="true" data-auto-logout-link="true" class="fb-login-button"></div>
-      <div>
-        <button ng-click="login()">Log in with FB</button>
-      </div>
+      <div class="title">
+        <h1><span>Go</span><span>&</span><span>Do</span></h1>
+        <h2>More social, less media.</h2>
+      </div><a href="" ng-click="login()" class="btn btn-block btn-social btn-lg btn-facebook">Sign in with Facebook<i class="fa fa-facebook"></i></a>
     </div>
   </div>
 </div>

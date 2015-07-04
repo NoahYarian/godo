@@ -1,0 +1,18 @@
+Gapstown AH
+
+A handwriting font with informal but not too irregular characters, for those who are kind of tired of the standard hand printing fonts supplied by Creative Suites and commercial operating systems, the ones you see everywhere. These are fairly unknown faces and a good alternative.
+
+Gapstown comes in two weights, standard and bold, and in two variants: Gapstown and Gapstown Small. The latter has wider letterspacing for smaller print sizes. Test for yourself which ones to use at what size. All four are free fonts, for non-commercial as well as for commercial use. You may install them or share them, but offering for download on web sites is permitted under the following conditions only:
+
+1. You may offer the font only in form of a ZIP file containing only the font software and this readme file. 
+2. You are not allowed to distribute the font software without this text file.
+3. You may not redistribute modified or converted copies of the font software (see above).
+4. You may not add advertising messages in text or graphics form to the zip file.
+5. You are not allowed to create a self-extracting executable file containing the font software or require the user to run or install a download manager or other software to get the download.
+7. You may not charge money for the download. 
+
+Version 1.11 has a few corrections and added Turkish charset.
+
+April 2013
+Andreas Höfeld
+fontgrube.de 
