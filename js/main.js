@@ -31,7 +31,13 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 }).config(function ($routeProvider) {
   $routeProvider.when('/', {
     controller: 'FaceCtrl',
-    templateUrl: $scope.getUrlBasedOnLogin /*'views/landing.html'*/
+    templateUrl: function templateUrl(routeParams) {
+      if ($rootScope.loggedInUser) {
+        return 'views/landing.html';
+      } else {
+        return 'views/loggedIn.html';
+      }
+    }
   }).when('/happenings', {
     templateUrl: 'views/happenings.html'
   }).when('/profile', {
