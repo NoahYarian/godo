@@ -30,7 +30,8 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   })();
 }).config(function ($routeProvider) {
   $routeProvider.when('/', {
-    templateUrl: 'views/landing.html'
+    controller: 'FaceCtrl',
+    templateUrl: $scope.getUrlBasedOnLogin /*'views/landing.html'*/
   }).when('/happenings', {
     templateUrl: 'views/happenings.html'
   }).when('/profile', {
@@ -110,6 +111,14 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     $facebook.logout().then(function () {
       location.href = '/#/';
     });
+  };
+
+  $scope.getUrlBasedOnLogin = function (routeParams) {
+    if ($rootScope.loggedInUser) {
+      return 'views/landing.html';
+    } else {
+      return 'views/loggedIn.html';
+    }
   };
 })
 
