@@ -2,7 +2,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">Go and Do</a>
+      <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">Go & Do</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right">
@@ -16,7 +16,7 @@
 <div class="container">
   <div ng-controller="EventCtrl" ng-init="loggedInUser &amp;&amp; updateCalendarAndGetInvites(loggedInUser)" class="someDiv">
     <h1>Your Invites</h1>
-    <table class="table-hover">
+    <table class="table">
       <thead>
         <tr>
           <th>Interest</th>
@@ -28,38 +28,59 @@
           <th># Declined</th>
           <th>Minimum</th>
           <th>Maximum</th>
-          <th></th>
-          <th></th>
+          <th>RSVP</th>
+          <th>Messages</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody ng-repeat="invite in invites | filter: filterInvites" ng-init="inviteIndex = $index" ng-class="{'invite-confirmed': invite.userStatus === 'confirmed', 'bg-danger': invite.status === 'full', 'bg-success': invite.status === 'confirmed', 'bg-info': invite.status === 'needsConf', 'bg-warning': invite.status === 'needsInterest', 'bg-warning': invite.status === 'tooManyDeclines'}">
         <tr>
-          <tr ng-repeat="invite in invites">
-            <td>{{invite.interest}}</td>
-            <td>{{invite.day}}</td>
-            <td>{{invite.time}}</td>
-            <td>{{invite.confirmedNum}}</td>
-            <td>{{invite.neededNum}}</td>
-            <td>{{invite.invitedNum}}</td>
-            <td>{{invite.declinedNum}}</td>
-            <td>{{invite.minPeople}}</td>
-            <td>{{invite.maxPeople}}</td>
-            <td class="button-td">
-              <div ng-hide="hasConfirmed || hasDeclined">
-                <button ng-click="confirm($index); hasConfirmed = true;" class="btn btn-success">Confirm</button>
-                <button ng-click="decline($index); hasDeclined = true;" class="btn btn-danger">Decline</button>
-              </div>
-              <div ng-show="hasConfirmed">
-                <button ng-click="unConfirm($index); hasConfirmed = false;" class="btn btn-danger">Un-confirm</button>
-              </div>
-              <div ng-show="hasDeclined">
-                <button ng-click="unDecline($index); hasDeclined = false" class="btn btn-info">Un-decline</button>
-              </div>
-              <div>
-                <button type="button" ng-class="{'btn-primary': invite.messageNum &gt; 0}" aria-label="Messages" class="btn btn-default email-button"><span aria-hidden="true" class="glyphicon glyphicon-envelope"></span></button>
-              </div>
-            </td>
-          </tr>
+          <td>{{invite.interest}}</td>
+          <td>{{invite.day}}</td>
+          <td>{{invite.time}}</td>
+          <td>{{invite.confirmedNum}}<a href="" ng-if="invite.confirmedFriendsNum &gt; 0" ng-click="$('.confirmedFriends-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" data-content="{{invite.confirmedFriends}}" title="Confirmed Friends" data-html="data-html" class="confirmedFriends-{{inviteIndex}}">({{invite.confirmedFriendsNum}})</a></td>
+          <td>{{invite.neededNum}}</td>
+          <td>{{invite.invitedNum}}<a href="" ng-if="invite.invitedFriendsNum &gt; 0" ng-click="$('.invitedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" data-content="{{invite.invitedFriends}}" title="Invited Friends" data-html="data-html" class="invitedFriends-{{inviteIndex}}">({{invite.invitedFriendsNum}})</a></td>
+          <td>{{invite.declinedNum}}<a href="" ng-if="invite.declinedFriendsNum &gt; 0" ng-click="$('.declinedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" data-content="{{invite.declinedFriends}}" title="Declined Friends" data-html="data-html" class="declinedFriends-{{inviteIndex}}">({{invite.declinedFriendsNum}})</a></td>
+          <td>{{invite.minPeople}}</td>
+          <td>{{invite.maxPeople}}</td>
+          <td class="button-td">
+            <div ng-hide="invite.userStatus === 'confirmed' || invite.userStatus === 'declined'">
+              <button ng-click="confirm(invite, inviteIndex); invite.userStatus = 'confirmed'" ng-disabled="invite.status === 'full'" class="btn btn-success">Confirm</button>
+              <button ng-click="decline(invite, inviteIndex); invite.userStatus = 'declined'" ng-disabled="invite.status === 'full'" class="btn btn-danger">Decline</button>
+            </div>
+            <div ng-show="invite.userStatus === 'confirmed'">
+              <button ng-click="unConfirm(invite, inviteIndex); invite.userStatus = 'invited'" class="btn btn-danger">Un-confirm</button>
+            </div>
+            <div ng-show="invite.userStatus === 'declined'">
+              <button ng-click="unDecline(invite, inviteIndex); invite.userStatus = 'invited'" class="btn btn-info">Un-decline</button>
+            </div>
+          </td>
+          <td>
+            <div>
+              <button ng-click="invite.showMessages = !invite.showMessages; watchMessages(invite, inviteIndex)" ng-class="{true: 'btn-primary'}[hasMessages(invite)]" aria-label="Messages" class="btn btn-default email-button"><span aria-hidden="true" class="glyphicon glyphicon-envelope"></span></button>
+            </div>
+          </td>
+        </tr>
+        <tr ng-show="invite.showMessages">
+          <td colspan="11" class="messages-td">
+            <div>
+              <ul>
+                <li ng-repeat="(messageUid, message) in invite.messages">
+                  <div>{{message.userName}}</div>
+                  <div>{{message.timestamp}}</div>
+                  <div>{{message.text}}</div>
+                  <div>
+                    <button ng-show="message.userName === loggedInUser" ng-click="deleteMessage(invite, inviteIndex, messageUid)" class="btn btn-danger"><span>&times;</span></button>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <input type="text" ng-model="invite.newMessage"/>
+              <button ng-click="postMessage(invite, inviteIndex)">Post</button>
+              <button ng-click="invite.newMessage = ''">Cancel</button>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>

@@ -3,7 +3,7 @@
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
-        <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">Go and Do</a>
+        <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">Go & Do</a>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -13,28 +13,12 @@
     </div>
   </nav>
   <div class="container">
-    <div class="starter-template">
-      <h1>Go and Do</h1>
-      <p class="lead">More social, less media.</p>
-      <button ng-click="login()">Log in with FB</button>
-      <button ng-click="loginAs('fakedata')">Log in as fakedata</button>
-      <button ng-click="loginAs('fakedata2')">Log in as fakedata2</button>
-      <button ng-click="loginAs('fakedata3')">Log in as fakedata3</button>
-      <button ng-click="loginAs('fakedata4')">Log in as fakedata4</button>
-      <button ng-click="loginAs('fakedata5')">Log in as fakedata5</button>
-      <div ng-controller="EventCtrl" class="container">
-        <button ng-click="getBlocks('fakedata')" class="btn btn-primary">getBlocks('fakedata')</button>
-        <button ng-click="getPossibleEvents('fakedata')" class="btn btn-info">getPossibleEvents('fakedata')</button>
-        <button ng-click="userAvailToFirebase('fakedata')" class="btn btn-danger">userAvailToFirebase('fakedata')</button>
-        <button ng-click="userAvailToCalendar('fakedata5')" class="btn btn-danger">userAvailToCalendar('fakedata5')</button>
-        <button ng-click="updateCalendarAndGetInvites('fakedata3')" class="btn btn-info">updateCalendarAndGetInvites('fakedata3');</button>
-        <button ng-click="allUserAvailToFirebase()" class="btn btn-primary">allUserAvailToFirebase()</button>
-        <button ng-click="makeCalendar()" class="btn btn-primary">makeCalendar()</button>
-        <button ng-click="getInvites('fakedata')" class="btn btn-primary">getInvites('fakedata')</button>
-        <button ng-click="getInvites('fakedata3')" class="btn btn-primary">getInvites('fakedata3')</button>
-        <button ng-click="getInvites('fakedata5')" class="btn btn-primary">getInvites('fakedata5')</button>
-        <button ng-click="getAllInvites()" class="btn btn-primary">getAllInvites()</button>
-        <button ng-click="userAvailToCalendar('fakedata3')" class="btn btn-primary">userAvailToCalendar('fakedata3')</button>
+    <div class="landing">
+      <h1><span>Go</span><span>&</span><span>Do</span></h1>
+      <h2>More social, less media.</h2>
+      <div data-max-rows="1" data-size="xlarge" data-show-faces="true" data-auto-logout-link="false" class="fb-login-button"></div>
+      <div>
+        <button ng-click="login()">Log in with FB</button>
       </div>
     </div>
   </div>

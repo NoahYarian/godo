@@ -2,7 +2,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">Go and Do</a>
+      <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">Go & Do</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right">
@@ -20,13 +20,49 @@
         <button ng-click="pickInterest(key)" ng-class="{'btn-success': dataUser[key], 'btn-primary': !dataUser[key]}" class="btn">{{key}}</button>
       </li>
     </ul>
-    <form name="addInterest" novalidate="novalidate">
+    <form name="addInterestForm">
       <div class="form-group">
         <label class="control-label">Add Interest</label>
-        <input name="intName" type="text" placeholder="e.g. &quot;Ultimate Frisbee&quot;" ng-model="name" required="required" class="form-control"/>
-        <button ng-click="addOne(name)" class="btn btn-primary">Add</button>
+        <input name="intName" type="text" placeholder="e.g. &quot;Ultimate Frisbee&quot;" ng-model="newInterest.name" required="required" class="form-control"/>
+        <button ng-click="onModalLoad()" class="btn btn-primary">Add</button>
       </div>
     </form>
+    <div id="modal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button data-dismiss="modal" class="close"><span>&times;</span></button>
+            <h1>Add Interest</h1>
+          </div>
+          <div class="modal-body">
+            <form name="addInterestInfoForm" novalidate="novalidate">
+              <div class="form-group">
+                <label class="control-label">Interest Name:</label>
+                <input type="text" name="interestName" ng-model="newInterest.name" class="form-control"/>
+              </div>
+              <div class="form-group">
+                <label class="control-label">Minimum # of People:</label>
+                <input type="number" name="minPeople" min="2" ng-model="newInterest.minPeople" class="form-control"/>
+              </div>
+              <div class="form-group">
+                <label class="control-label">Maximum # of People:</label>
+                <input type="number" name="maxPeople" min="2" ng-model="newInterest.maxPeople" class="form-control"/>
+              </div>
+              <div class="form-group">
+                <label class="control-label">Time Required (hours):</label>
+                <input type="number" name="interestTime" min=".5" step=".5" ng-model="newInterest.time" class="form-control"/>
+              </div>
+              <div class="form-group">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button data-dismiss="modal" class="btn btn-danger">Cancel</button>
+            <button ng-click="addInterest(newInterest)" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div ng-controller="ScheduleCtrl" class="schedule">
     <table>

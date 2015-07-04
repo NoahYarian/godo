@@ -1,0 +1,41 @@
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">Go and Do</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/#/invites">Invites</a></li>
+        <li><a href="/#/loggedin">Profile</a></li>
+        <li ng-controller="FaceCtrl"><a href="" ng-click="logout()">Log out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div ng-controller="CalendarCtrl" class="container">
+  <div ng-repeat="(dayNum, dayObj) in data" ng-init="dayIndex = $index" class="week">
+    <div ng-repeat="(halfHourNum, halfHourObj) in dayObj" ng-init="halfHourIndex = $index" class="day">
+      <div ng-repeat="(interestName, invite) in halfHourObj | filter: filterCal(dayNum, halfHourNum)" ng-init="interestIndex = $index" ng-hide="($scope.data[dayNum][halfHourNum][interestName].status === 'tooManyDeclines' &amp;&amp; $scope.data[dayNum][halfHourNum][interestName].userStatus !== 'declined') || (!$rootScope[facebookId].interests[interestName])" class="halfHour">
+        <div>
+          <p>{{interestName}}</p>
+        </div>
+        <div>
+          <p>{{invite.interest}}</p>
+        </div>
+        <div>
+          <p>on {{dayNum}}</p>
+        </div>
+        <div>
+          <p>at {{halfHour}}</p>
+        </div>
+        <div>
+          <p>at least {{invite.minPeople}} people</p>
+        </div>
+        <div>
+          <p>no more than {{invite.maxPeople}} people</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
