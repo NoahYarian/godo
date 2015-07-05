@@ -56,6 +56,10 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         // not going to #login, we should redirect now
         $location.path('/');
       }
+    } else {
+      if (next.templateUrl == 'views/landing.html') {
+        $location.path('/#/loggedIn');
+      }
     }
   });
 }).controller('FaceCtrl', function ($rootScope, $scope, $facebook) {
