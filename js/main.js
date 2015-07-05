@@ -24,7 +24,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     templateUrl: 'views/calendar.html'
   }).when('/logout', {
     templateUrl: 'views/landing.html'
-  });
+  }).otherwise('/');
 }).run(function ($rootScope) {
   // Load the facebook SDK asynchronously
   (function () {
@@ -53,25 +53,31 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     if ($rootScope.loggedInUser == null) {
       // no logged user, we should be going to #login
       if (next.templateUrl == 'views/landing.html') {} else {
-        // not going to #login, we should redirect now
-        $location.path('/');
+        $facebook.getLoginStatus().then(function (response) {
+          console.log(response);
+          if (response.status === 'connected') {
+            $rootScope.loggedInUser = response.$$state.value.authResponse.userID;
+            console.log(response.authResponse.userID);
+            $location.path('/loggedin');
+          } else {
+            console.log('not logged in');
+            $location.path('/');
+          }
+        });
       }
     }
 
-    // console.log("next: ", next, "current: ", current);
-    // if ( typeof $rootScope.loggedInUser === "undefined" || $rootScope.loggedInUser == null ) {
-    //   $facebook.getLoginStatus()
-    //     .then(function(response) {
-    //       if (typeof response.$$state !== "undefined" && response.$$state.value.status === "connected") {
-    //         $rootScope.loggedInUser = response.$$state.value.authResponse.userID;
-    //         console.log(response.$$state.value.authResponse.userID);
-    //         $location.path("/loggedin");
-    //       } else {
-    //         console.log("Not logged in. response= ", response);
-    //         $location.path("/");
-    //       }
-    //     });
-    // }
+    //       // register listener to watch route changes
+    // $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+    //   if ( $rootScope.loggedInUser == null ) {
+    //     // no logged user, we should be going to #login
+    //     if ( next.templateUrl == "views/landing.html" ) {
+    //       // already going to #login, no redirect needed
+    //     } else {
+    //       // not going to #login, we should redirect now
+    //       $location.path( "/" );
+    //     }
+    //   }
   });
 }).controller('FaceCtrl', function ($rootScope, $scope, $facebook, $location, $timeout) {
   $scope.login = function () {
@@ -144,12 +150,13 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   $scope.checkFBAuth = function () {
     $facebook.getLoginStatus().then(function (response) {
       console.log(response);
-      // if (response.$$state.value.status === "connected") {
-      //   $rootScope.loggedInUser = response.$$state.value.authResponse.userID;
-      //   console.log(response.$$state.value.authResponse.userID);
-      // } else {
-      //   console.log("not logged in");
-      // }
+      if (response.status === 'connected') {
+        $rootScope.loggedInUser = response.$$state.value.authResponse.userID;
+        console.log(response.authResponse.userID);
+        $location.path('/loggedin');
+      } else {
+        console.log('not logged in');
+      }
     });
   };
 })
