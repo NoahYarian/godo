@@ -58,7 +58,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       }
     } else {
       if (next.templateUrl == 'views/landing.html') {
-        $location.path('/#/loggedIn');
+        $location.path('/loggedIn');
       }
     }
   });
