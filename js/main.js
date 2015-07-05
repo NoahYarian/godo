@@ -95,7 +95,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
           $rootScope[facebookId].friends[friendId] = friend.name;
         });
       });
-    }, 2000);
+    }, 200);
     $timeout(function () {
       var facebookId = $rootScope.loggedInUser;
       console.log($rootScope[facebookId].me);
@@ -121,7 +121,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       });
       console.log('$rootScope.loggedInUser: ', $rootScope.loggedInUser);
       $location.path('/loggedin');
-    }, 4000);
+    }, 400);
   };
 
   $scope.logout = function () {
