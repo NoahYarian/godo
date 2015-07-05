@@ -63,7 +63,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       }
     }
   });
-}).controller('FaceCtrl', function ($rootScope, $scope, $facebook, $location) {
+}).controller('FaceCtrl', function ($rootScope, $scope, $facebook, $location, $timeout) {
   $scope.login = function () {
     $facebook.login().then(function () {
       $scope.getMyInfo();
@@ -85,7 +85,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       $rootScope[facebookId] = {};
       $rootScope[facebookId].me = response;
     });
-    setTimeout(function () {
+    $timeout(function () {
       $facebook.api('/me/friends').then(function (response) {
         var facebookId = $rootScope.loggedInUser;
         var friendId;
@@ -96,7 +96,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
         });
       });
     }, 2000);
-    setTimeout(function () {
+    $timeout(function () {
       var facebookId = $rootScope.loggedInUser;
       console.log($rootScope[facebookId].me);
       console.log($rootScope.loggedInUser);
@@ -119,6 +119,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       }, function (err) {
         console.log('first once err:', err);
       });
+      console.log('$rootScope.loggedInUser: ', $rootScope.loggedInUser);
       $location.path('/loggedin');
     }, 4000);
   };
