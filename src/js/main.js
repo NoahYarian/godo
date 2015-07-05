@@ -11,31 +11,10 @@ var app = angular
     });
   })
 
-  .run( function( $rootScope ) {
-    // Load the facebook SDK asynchronously
-    (function(){
-       // If we've already installed the SDK, we're done
-       if (document.getElementById('facebook-jssdk')) {return;}
-
-       // Get the first script element, which we'll use to find the parent node
-       var firstScriptElement = document.getElementsByTagName('script')[0];
-
-       // Create a new script element and set its id
-       var facebookJS = document.createElement('script');
-       facebookJS.id = 'facebook-jssdk';
-
-       // Set the new script's source to the source of the Facebook JS SDK
-       facebookJS.src = '//connect.facebook.net/en_US/sdk.js';
-
-       // Insert the Facebook JS SDK into the DOM
-       firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
-     }());
-  })
-
   .config(function($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/landing.html'
+        templateUrl: "views/landing.html"
       })
       .when('/happenings', {
         templateUrl: 'views/happenings.html'
@@ -57,10 +36,75 @@ var app = angular
       })
       .when('/logout', {
         templateUrl: 'views/landing.html'
-      });
+      })
+      .otherwise('/');
     })
 
-  .controller('FaceCtrl', function ($rootScope, $scope, $facebook) {
+
+  .run( function( $rootScope ) {
+    // Load the facebook SDK asynchronously
+    (function(){
+       // If we've already installed the SDK, we're done
+       if (document.getElementById('facebook-jssdk')) {return;}
+
+       // Get the first script element, which we'll use to find the parent node
+       var firstScriptElement = document.getElementsByTagName('script')[0];
+
+       // Create a new script element and set its id
+       var facebookJS = document.createElement('script');
+       facebookJS.id = 'facebook-jssdk';
+
+       // Set the new script's source to the source of the Facebook JS SDK
+       facebookJS.src = '//connect.facebook.net/en_US/sdk.js';
+
+       // Insert the Facebook JS SDK into the DOM
+       firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
+     }());
+  })
+
+  .run( function($rootScope, $location, $facebook) {
+
+    // register listener to watch route changes
+    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+      if ( $rootScope.loggedInUser == null ) {
+        // no logged user, we should be going to #login
+        if ( next.templateUrl == "views/landing.html" ) {
+          // already going to #login, no redirect needed
+        } else {
+          // $facebook.getLoginStatus()
+          //   .then(function(response) {
+          //     console.log(response);
+          //     if (response.status === "connected") {
+          //       $rootScope.loggedInUser = response.authResponse.userID;
+          //       console.log(response.authResponse.userID);
+          //       $location.path("/loggedin");
+          //     } else {
+          //       console.log("not logged in");
+                $location.path( "/" );
+            //   }
+            // });
+
+        }
+      }
+
+
+    //       // register listener to watch route changes
+    // $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+    //   if ( $rootScope.loggedInUser == null ) {
+    //     // no logged user, we should be going to #login
+    //     if ( next.templateUrl == "views/landing.html" ) {
+    //       // already going to #login, no redirect needed
+    //     } else {
+    //       // not going to #login, we should redirect now
+    //       $location.path( "/" );
+    //     }
+    //   }
+
+    });
+
+  })
+
+  .controller('FaceCtrl', function ($rootScope, $scope, $facebook, $location, $timeout) {
     $scope.login = function() {
       $facebook.login().then(function() {
         $scope.getMyInfo();
@@ -73,7 +117,7 @@ var app = angular
       ref.once('value', function(dataSnapshot) {
         $rootScope[facebookId].friends = dataSnapshot.val();
       });
-      location.href = "/#/loggedin";
+      $location.path("/loggedin");
     }
     $scope.getMyInfo = function() {
       $facebook.api("/me")
@@ -83,7 +127,7 @@ var app = angular
           $rootScope[facebookId] = {};
           $rootScope[facebookId].me = response;
         });
-      setTimeout(function() {
+      $timeout(function() {
         $facebook.api("/me/friends")
           .then(function(response) {
             var facebookId = $rootScope.loggedInUser;
@@ -94,8 +138,8 @@ var app = angular
               $rootScope[facebookId].friends[friendId] = friend.name;
             });
           });
-      }, 2000);
-      setTimeout(function() {
+      }, 200);
+      $timeout(function() {
         var facebookId = $rootScope.loggedInUser;
         console.log($rootScope[facebookId].me);
         console.log($rootScope.loggedInUser);
@@ -118,15 +162,30 @@ var app = angular
         }, function (err) {
           console.log("first once err:", err)
         });
-        location.href = "/#/loggedin";
-      }, 4000);
+        console.log("$rootScope.loggedInUser: ", $rootScope.loggedInUser);
+        $location.path("/loggedin");
+      }, 400);
     }
 
     $scope.logout = function() {
+      $rootScope.loggedInUser = null;
       $facebook.logout().then(function() {
-        location.href = '/#/';
+        $location.path('/');
       });
     }
+
+    $scope.checkFBAuth = function() {
+      $facebook.getLoginStatus()
+        .then(function(response) {
+          console.log(response);
+          if (response.status === "connected") {
+            $scope.getMyInfo();
+          } else {
+            console.log("not logged in");
+          }
+        });
+    }
+
   })
 
 

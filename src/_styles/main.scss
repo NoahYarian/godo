@@ -12,13 +12,12 @@
 
 html {
   background: /* linear-gradient(to top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 100%) 70% / cover no-repeat fixed, */
-              url('../images/Group-Hike.jpg') 70% / cover no-repeat fixed #222222;
+              url('../images/Group-Hike-opt.jpg') 70% / cover no-repeat fixed #222222;
   // min-height: 650px;
 }
 
-html, body {
-    height: 100%;
-    width: 100%;
+html, body, .container-cover, .app, .container, .landing-container {
+  height: 100%;
 }
 
 .canoe-icon {
@@ -32,8 +31,10 @@ body {
   background: transparent;
 }
 
-body.plugin {
-  text-align: center;
+.landing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .landing {
@@ -44,7 +45,7 @@ body.plugin {
 }
 
 .title {
-  margin: 45% 0 0;
+  // margin: 45% 0 0;
   // background: #222;
   // border: 1px solid black;
 }

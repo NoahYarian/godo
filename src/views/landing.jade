@@ -1,4 +1,4 @@
-.container(ng-controller="FaceCtrl")
+.container.landing-container(ng-controller="FaceCtrl")
   nav.navbar.navbar-inverse.navbar-fixed-top
     .container
       .navbar-header
@@ -12,38 +12,39 @@
       #navbar.collapse.navbar-collapse
         ul.nav.navbar-nav.navbar-right
           li
-            a(href="" ng-click="login()") Log In
-  .container
-    .landing
-      .title
-        h1
-          span Go
-          span &
-          span Do
-        h2 More social, less media.
-      //- div.fb-login-button(data-max-rows="5" data-size="xlarge" data-show-faces="true" data-auto-logout-link="true")
-      a.btn.btn-block.btn-social.btn-lg.btn-facebook(href="" ng-click="login()") Sign in with Facebook
-       i.fa.fa-facebook
-    //- .landing-footer
-    //-   .benefits
-    //-     .benefit
-    //-       h3.benefit-title Easy to use
-    //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
-    //-     .benefit
-    //-       h3.benefit-title Easy to use
-    //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
-    //-    .benefit
-    //-       h3.benefit-title Easy to use
-    //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
-    //-    .benefit
-    //-       h3.benefit-title Easy to use
-    //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
+            a(href="" ng-click="login()" ng-if="!loggedInUser") Log In
+            a(href="" ng-click="logout()" ng-if="loggedInUser") Log out
+  .landing
+    .title
+      h1
+        span Go
+        span &
+        span Do
+      h2 More social, less media.
+    //- div.fb-login-button(data-max-rows="5" data-size="xlarge" data-show-faces="true" data-auto-logout-link="true")
+    a.btn.btn-block.btn-social.btn-lg.btn-facebook(href="" ng-click="login()") Sign in with Facebook
+      i.fa.fa-facebook
+        //- .landing-footer
+        //-   .benefits
+        //-     .benefit
+        //-       h3.benefit-title Easy to use
+        //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
+        //-     .benefit
+        //-       h3.benefit-title Easy to use
+        //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
+        //-    .benefit
+        //-       h3.benefit-title Easy to use
+        //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
+        //-    .benefit
+        //-       h3.benefit-title Easy to use
+        //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
       //- div
-        button(ng-click="loginAs('fakedata')") Log in as fakedata
-        button(ng-click="loginAs('fakedata2')") Log in as fakedata2
-        button(ng-click="loginAs('fakedata3')") Log in as fakedata3
-        button(ng-click="loginAs('fakedata4')") Log in as fakedata4
-        button(ng-click="loginAs('fakedata5')") Log in as fakedata5
+      //-   button(ng-click="checkFBAuth()") checkFBAuth()
+      //-   button(ng-click="loginAs('fakedata')") Log in as fakedata
+      //-   button(ng-click="loginAs('fakedata2')") Log in as fakedata2
+      //-   button(ng-click="loginAs('fakedata3')") Log in as fakedata3
+      //-   button(ng-click="loginAs('fakedata4')") Log in as fakedata4
+      //-   button(ng-click="loginAs('fakedata5')") Log in as fakedata5
       //- .container(ng-controller="EventCtrl")
         //- button.btn.btn-primary(ng-click="getAvailability('fakedata')") getAvailability('fakedata')
         //- button.btn.btn-primary(ng-click="getBlocks('fakedata3')") getBlocks('fakedata3')
