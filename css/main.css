@@ -10,10 +10,6 @@
 html {
   background: url("../images/Group-Hike-opt.jpg") 70%/cover no-repeat fixed #222222; }
 
-html, body {
-  height: 100%;
-  width: 100%; }
-
 .canoe-icon {
   height: 35px;
   margin-top: -6px;
@@ -23,17 +19,14 @@ body {
   padding-top: 50px;
   background: transparent; }
 
-body.plugin {
-  text-align: center; }
-
 .landing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0px 15px;
   text-align: center;
   margin: 0 auto;
   width: 400px; }
-
-.title {
-  margin: 45% 0 0; }
 
 a.btn.btn-block.btn-social.btn-lg.btn-facebook {
   width: 258px;
