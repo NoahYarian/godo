@@ -119,6 +119,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   };
 
   $scope.logout = function () {
+    $rootScope.loggedInUser = null;
     $facebook.logout().then(function () {
       location.href = '/#/';
     });
