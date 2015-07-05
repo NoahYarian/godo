@@ -53,12 +53,12 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     console.log('next: ', next, 'current: ', current);
     if (typeof $rootScope.loggedInUser === 'undefined' || $rootScope.loggedInUser == null) {
       $facebook.getLoginStatus().then(function (response) {
-        if (response.$$state.value.status === 'connected') {
+        if (response.$$state.value.status && response.$$state.value.status === 'connected') {
           $rootScope.loggedInUser = response.$$state.value.authResponse.userID;
           console.log(response.$$state.value.authResponse.userID);
           $location.path('/loggedin');
         } else {
-          console.log('not logged in');
+          console.log('Not logged in. response= ', response);
           $location.path('/');
         }
       });
@@ -134,7 +134,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 
   $scope.checkFBAuth = function () {
     $facebook.getLoginStatus().then(function (response) {
-      if (reponse.$$state.value.status === 'connected') {
+      if (response.$$state.value.status === 'connected') {
         $rootScope.loggedInUser = response.$$state.value.authResponse.userID;
         console.log(response.$$state.value.authResponse.userID);
       } else {
