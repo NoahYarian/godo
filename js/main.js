@@ -55,11 +55,11 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       // no logged user, we should be going to #login
       if (next.templateUrl == 'views/landing.html') {} else {
         // not going to #login, we should redirect now
-        $location.path('/#/');
+        $location.path('/');
       }
     } else {
       if (next.templateUrl == 'views/landing.html') {
-        $location.path('/#/loggedin');
+        $location.path('/loggedin');
       }
     }
   });
@@ -76,7 +76,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     ref.once('value', function (dataSnapshot) {
       $rootScope[facebookId].friends = dataSnapshot.val();
     });
-    $location.path('/#/loggedin');
+    $location.path('/loggedin');
   };
   $scope.getMyInfo = function () {
     $facebook.api('/me').then(function (response) {
@@ -119,14 +119,14 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       }, function (err) {
         console.log('first once err:', err);
       });
-      $location.path('/#/loggedin');
+      $location.path('/loggedin');
     }, 4000);
   };
 
   $scope.logout = function () {
     $rootScope.loggedInUser = null;
     $facebook.logout().then(function () {
-      $location.path('/#/');
+      $location.path('/');
     });
   }
 
