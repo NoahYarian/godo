@@ -53,7 +53,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     console.log('next: ', next, 'current: ', current);
     if (typeof $rootScope.loggedInUser === 'undefined' || $rootScope.loggedInUser == null) {
       $facebook.getLoginStatus().then(function (response) {
-        if (response && response.$$state.value.status === 'connected') {
+        if (typeof response !== 'undefined' && response.$$state.value.status === 'connected') {
           $rootScope.loggedInUser = response.$$state.value.authResponse.userID;
           console.log(response.$$state.value.authResponse.userID);
           $location.path('/loggedin');
