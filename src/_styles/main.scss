@@ -10,7 +10,7 @@
     font-weight: bold;
 }
 
-html {
+.landing-container-cover {
   background: /* linear-gradient(to top, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0) 100%) 70% / cover no-repeat fixed, */
               url('../images/Group-Hike-opt.jpg') 70% / cover no-repeat fixed #222222;
   // min-height: 650px;
@@ -28,7 +28,7 @@ html, body, .container-cover, .app, .container, .landing-container {
 
 body {
   padding-top: 50px;
-  background: transparent;
+  background: #444;
 }
 
 .landing-container {
@@ -64,13 +64,15 @@ h1 {
   font-weight: bold;
   font-size: 8em;
   margin: 0;
+  margin-bottom: -15px;
 }
 
 h2 {
   font-family: 'Gapstown';
-  margin-top: -15px;
+  margin-top: -7px;
   color: white;
   font-size: 40px;
+  text-align: center;
 }
 
 .navbar-brand {
@@ -88,16 +90,62 @@ li {
 }
 
 td, th {
-  padding: 7px;
   text-align: center;
 }
 
-tr > th {
+tr > th, tfoot {
   background: #888;
+}
+
+tfoot tr td {
+  text-align: left;
+}
+
+tfoot tr td {
+  border-radius: 0 0 4px 4px;
 }
 
 table {
   background: #DDD;
+  margin-bottom: 25px;
+  border-radius: 4px;
+  label {
+    margin-bottom: 0;
+  }
+}
+
+tr th:last-child {
+  border-radius: 0 4px 0 0;
+}
+
+tr th:first-child {
+  border-radius: 4px 0 0 0;
+}
+
+.interest-form-group {
+  margin-top: 15px;
+  text-align: center;
+  label {
+    margin-right: 5px;
+  }
+}
+
+#interestFormInput {
+  width: auto;
+  display: inline-block;
+}
+
+label {
+  color: white;
+}
+
+.profile-container, .invites-container {
+  background: #444;
+}
+
+.loggedin-container-cover, .invites-container-cover {
+  background: #444;
+  padding-top: 25px;
 }
 
 .email-button {
@@ -171,13 +219,14 @@ a[class*="Friends-"] {
   margin-left: 5px;
 }
 
-.modal-header h1 {
-  color: black;
+.modal .form-group {
+  margin-bottom: 5px;
 }
 
-label {
-  margin-bottom: 0px;
+.modal-body label.control-label, .modal-header h1{
+  color: #222
 }
+
 
 ////////////////////
 // Toggle buttons //

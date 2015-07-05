@@ -1,80 +1,80 @@
-nav.navbar.navbar-inverse.navbar-fixed-top
-  .container
-    .navbar-header
-      button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
-        span.sr-only Toggle navigation
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.navbar-brand(href='/#/')
-        object.canoe-icon(type="image/svg+xml" data="images/canoe.svg")
-    #navbar.collapse.navbar-collapse
-      ul.nav.navbar-nav.navbar-right
-        li.active
-          a(href='/#/invites') Invites
-        li
-          a(href='/#/loggedin') Profile
-        //- li
-        //-   a(href='/#/happenings') Happenings
-        li(ng-controller='FaceCtrl')
-          a(href='' ng-click='logout()') Log out
-.container
-  .someDiv(ng-controller="EventCtrl" ng-init="loggedInUser && updateCalendarAndGetInvites(loggedInUser)")
-    h1 Your Invites
-    //- button.btn.btn-info(ng-click="updateCalendarAndGetInvites(loggedInUser)") updateCalendarAndGetInvites(loggedInUser);
-    table.table
-      thead
-        tr
-          th Interest
-          th Day
-          th Time
-          th # Confirmed
-          th # Needed
-          th # Invited
-          th # Declined
-          th Minimum
-          th Maximum
-          th RSVP
-          th Messages
-      tbody(ng-repeat="invite in invites | filter: filterInvites" ng-init="inviteIndex = $index" ng-class="{'invite-confirmed': invite.userStatus === 'confirmed', 'bg-danger': invite.status === 'full', 'bg-success': invite.status === 'confirmed', 'bg-info': invite.status === 'needsConf', 'bg-warning': invite.status === 'needsInterest', 'bg-warning': invite.status === 'tooManyDeclines'}")
-        tr
-          td {{invite.interest}}
-          td {{invite.day}}
-          td {{invite.time}}
-          td {{invite.confirmedNum}}
-            a(href="" ng-if="invite.confirmedFriendsNum > 0" ng-click="$('.confirmedFriends-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" class="confirmedFriends-{{inviteIndex}}" data-content="{{invite.confirmedFriends}}" title="Confirmed Friends" data-html=true) ({{invite.confirmedFriendsNum}})
-          td {{invite.neededNum}}
-          td {{invite.invitedNum}}
-            a(href="" ng-if="invite.invitedFriendsNum > 0" ng-click="$('.invitedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" class="invitedFriends-{{inviteIndex}}" data-content="{{invite.invitedFriends}}" title="Invited Friends" data-html=true) ({{invite.invitedFriendsNum}})
-          td {{invite.declinedNum}}
-            a(href="" ng-if="invite.declinedFriendsNum > 0" ng-click="$('.declinedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" class="declinedFriends-{{inviteIndex}}" data-content="{{invite.declinedFriends}}" title="Declined Friends" data-html=true) ({{invite.declinedFriendsNum}})
-          td {{invite.minPeople}}
-          td {{invite.maxPeople}}
-          td.button-td
-            div(ng-hide="invite.userStatus === 'confirmed' || invite.userStatus === 'declined'")
-              button.btn.btn-success(ng-click="confirm(invite, inviteIndex); invite.userStatus = 'confirmed'" ng-disabled="invite.status === 'full'") Confirm
-              button.btn.btn-danger(ng-click="decline(invite, inviteIndex); invite.userStatus = 'declined'" ng-disabled="invite.status === 'full'") Decline
-            div(ng-show="invite.userStatus === 'confirmed'")
-              button.btn.btn-danger(ng-click="unConfirm(invite, inviteIndex); invite.userStatus = 'invited'") Un-confirm
-            div(ng-show="invite.userStatus === 'declined'")
-              button.btn.btn-info(ng-click="unDecline(invite, inviteIndex); invite.userStatus = 'invited'") Un-decline
-          td
-            div
-              button.btn.btn-default.email-button(ng-click="invite.showMessages = !invite.showMessages; watchMessages(invite, inviteIndex)" ng-class="{true: 'btn-primary'}[hasMessages(invite)]" aria-label="Messages")
-                span.glyphicon.glyphicon-envelope(aria-hidden="true")
-        tr(ng-show="invite.showMessages")
-          td.messages-td(colspan="11")
-            div
-              ul
-                li(ng-repeat="(messageUid, message) in invite.messages")
-                  div {{message.userName}}
-                  div {{message.timestamp}}
-                  div {{message.text}}
-                  div
-                    button.btn.btn-danger(ng-show="message.userName === loggedInUser" ng-click="deleteMessage(invite, inviteIndex, messageUid)")
-                      span &times;
-            div
-              input(type="text" ng-model="invite.newMessage")
-              button(ng-click="postMessage(invite, inviteIndex)") Post
-              button(ng-click="invite.newMessage = ''") Cancel
+.container-cover.invites-container-cover
+  nav.navbar.navbar-inverse.navbar-fixed-top
+    .container
+      .navbar-header
+        button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.navbar-brand(href='/#/')
+          object.canoe-icon(type="image/svg+xml" data="images/canoe.svg")
+      #navbar.collapse.navbar-collapse
+        ul.nav.navbar-nav.navbar-right
+          li.active
+            a(href='/#/invites') Invites
+          li
+            a(href='/#/loggedin') Profile
+          //- li
+          //-   a(href='/#/happenings') Happenings
+          li(ng-controller='FaceCtrl')
+            a(href='' ng-click='logout()') Log out
+  .container.invites-container
+    .someDiv(ng-controller="EventCtrl" ng-init="loggedInUser && updateCalendarAndGetInvites(loggedInUser)")
+      //- button.btn.btn-info(ng-click="updateCalendarAndGetInvites(loggedInUser)") updateCalendarAndGetInvites(loggedInUser);
+      table.table
+        thead
+          tr
+            th Interest
+            th Day
+            th Time
+            th # Confirmed
+            th # Needed
+            th # Invited
+            th # Declined
+            th Minimum
+            th Maximum
+            th RSVP
+            th Messages
+        tbody(ng-repeat="invite in invites | filter: filterInvites" ng-init="inviteIndex = $index" ng-class="{'invite-confirmed': invite.userStatus === 'confirmed', 'bg-danger': invite.status === 'full', 'bg-success': invite.status === 'confirmed', 'bg-info': invite.status === 'needsConf', 'bg-warning': invite.status === 'needsInterest', 'bg-warning': invite.status === 'tooManyDeclines'}")
+          tr
+            td {{invite.interest}}
+            td {{invite.day}}
+            td {{invite.time}}
+            td {{invite.confirmedNum}}
+              a(href="" ng-if="invite.confirmedFriendsNum > 0" ng-click="$('.confirmedFriends-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" class="confirmedFriends-{{inviteIndex}}" data-content="{{invite.confirmedFriends}}" title="Confirmed Friends" data-html=true) ({{invite.confirmedFriendsNum}})
+            td {{invite.neededNum}}
+            td {{invite.invitedNum}}
+              a(href="" ng-if="invite.invitedFriendsNum > 0" ng-click="$('.invitedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" class="invitedFriends-{{inviteIndex}}" data-content="{{invite.invitedFriends}}" title="Invited Friends" data-html=true) ({{invite.invitedFriendsNum}})
+            td {{invite.declinedNum}}
+              a(href="" ng-if="invite.declinedFriendsNum > 0" ng-click="$('.declinedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" class="declinedFriends-{{inviteIndex}}" data-content="{{invite.declinedFriends}}" title="Declined Friends" data-html=true) ({{invite.declinedFriendsNum}})
+            td {{invite.minPeople}}
+            td {{invite.maxPeople}}
+            td.button-td
+              div(ng-hide="invite.userStatus === 'confirmed' || invite.userStatus === 'declined'")
+                button.btn.btn-success(ng-click="confirm(invite, inviteIndex); invite.userStatus = 'confirmed'" ng-disabled="invite.status === 'full'") Confirm
+                button.btn.btn-danger(ng-click="decline(invite, inviteIndex); invite.userStatus = 'declined'" ng-disabled="invite.status === 'full'") Decline
+              div(ng-show="invite.userStatus === 'confirmed'")
+                button.btn.btn-danger(ng-click="unConfirm(invite, inviteIndex); invite.userStatus = 'invited'") Un-confirm
+              div(ng-show="invite.userStatus === 'declined'")
+                button.btn.btn-info(ng-click="unDecline(invite, inviteIndex); invite.userStatus = 'invited'") Un-decline
+            td
+              div
+                button.btn.btn-default.email-button(ng-click="invite.showMessages = !invite.showMessages; watchMessages(invite, inviteIndex)" ng-class="{true: 'btn-primary'}[hasMessages(invite)]" aria-label="Messages")
+                  span.glyphicon.glyphicon-envelope(aria-hidden="true")
+          tr(ng-show="invite.showMessages")
+            td.messages-td(colspan="11")
+              div
+                ul
+                  li(ng-repeat="(messageUid, message) in invite.messages")
+                    div {{message.userName}}
+                    div {{message.timestamp}}
+                    div {{message.text}}
+                    div
+                      button.btn.btn-danger(ng-show="message.userName === loggedInUser" ng-click="deleteMessage(invite, inviteIndex, messageUid)")
+                        span &times;
+              div
+                input(type="text" ng-model="invite.newMessage")
+                button(ng-click="postMessage(invite, inviteIndex)") Post
+                button(ng-click="invite.newMessage = ''") Cancel
 
