@@ -50,7 +50,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 
   // register listener to watch route changes
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
-    if ($rootScope.loggedInUser == null) {
+    if (typeof $rootScope.loggedInUser === 'undefined' || $rootScope.loggedInUser == null) {
       // no logged user, we should be going to #login
       if (next.templateUrl == 'views/landing.html') {} else {
         // not going to #login, we should redirect now
