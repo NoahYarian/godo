@@ -46,21 +46,22 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     // Insert the Facebook JS SDK into the DOM
     firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
   })();
-}).run(function ($rootScope, $location) {
+}).run(function ($rootScope, $location, $facebook) {
 
   // register listener to watch route changes
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
     console.log('next: ', next, 'current: ', current);
     if (typeof $rootScope.loggedInUser === 'undefined' || $rootScope.loggedInUser == null) {
-      // no logged user, we should be going to #login
-      if (next.templateUrl == 'views/landing.html') {} else {
-        // not going to #login, we should redirect now
-        $location.path('/');
-      }
-    } else {
-      if (next.templateUrl == 'views/landing.html') {
-        $location.path('/loggedin');
-      }
+      $facebook.getLoginStatus().then(function (response) {
+        if (reponse.$$state.value.status === 'connected') {
+          $rootScope.loggedInUser = response.$$state.value.authResponse.userID;
+          console.log(response.$$state.value.authResponse.userID);
+          $location.path('/loggedin');
+        } else {
+          console.log('not logged in');
+          $location.path('/');
+        }
+      });
     }
   });
 }).controller('FaceCtrl', function ($rootScope, $scope, $facebook, $location, $timeout) {
@@ -132,7 +133,14 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   };
 
   $scope.checkFBAuth = function () {
-    console.log($facebook.getLoginStatus());
+    $facebook.getLoginStatus().then(function (response) {
+      if (reponse.$$state.value.status === 'connected') {
+        $rootScope.loggedInUser = response.$$state.value.authResponse.userID;
+        console.log(response.$$state.value.authResponse.userID);
+      } else {
+        console.log('not logged in');
+      }
+    });
   };
 })
 
@@ -1119,4 +1127,3 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 
 //for something where it's about friends of friends there would need to be a list made of all friends on a site that are connected
 ;
-// already going to #login, no redirect needed
