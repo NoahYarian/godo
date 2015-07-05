@@ -7,6 +7,24 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     channelUrl: '//godo.tehcode.com/channel.html',
     xfbml: true
   });
+}).config(function ($routeProvider) {
+  $routeProvider.when('/', {
+    templateUrl: 'views/landing.html'
+  }).when('/happenings', {
+    templateUrl: 'views/happenings.html'
+  }).when('/profile', {
+    templateUrl: 'views/profile.html'
+  }).when('/loggedin', {
+    templateUrl: 'views/loggedin.html'
+  }).when('/invites', {
+    templateUrl: 'views/invites.html'
+  }).when('/time', {
+    templateUrl: 'views/timeselect.html'
+  }).when('/calendar', {
+    templateUrl: 'views/calendar.html'
+  }).when('/logout', {
+    templateUrl: 'views/landing.html'
+  });
 }).run(function ($rootScope) {
   // Load the facebook SDK asynchronously
   (function () {
@@ -28,30 +46,17 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     // Insert the Facebook JS SDK into the DOM
     firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
   })();
-}).config(function ($routeProvider) {
-  $routeProvider.when('/', {
-    controller: 'FaceCtrl',
-    templateUrl: function templateUrl(routeParams) {
-      if (loggedInUser) {
-        return 'views/landing.html';
-      } else {
-        return 'views/loggedIn.html';
+}).run(function ($rootScope, $location) {
+
+  // register listener to watch route changes
+  $rootScope.$on('$routeChangeStart', function (event, next, current) {
+    if ($rootScope.loggedInUser == null) {
+      // no logged user, we should be going to #login
+      if (next.templateUrl == 'views/landing.html') {} else {
+        // not going to #login, we should redirect now
+        $location.path('/');
       }
     }
-  }).when('/happenings', {
-    templateUrl: 'views/happenings.html'
-  }).when('/profile', {
-    templateUrl: 'views/profile.html'
-  }).when('/loggedin', {
-    templateUrl: 'views/loggedin.html'
-  }).when('/invites', {
-    templateUrl: 'views/invites.html'
-  }).when('/time', {
-    templateUrl: 'views/timeselect.html'
-  }).when('/calendar', {
-    templateUrl: 'views/calendar.html'
-  }).when('/logout', {
-    templateUrl: 'views/landing.html'
   });
 }).controller('FaceCtrl', function ($rootScope, $scope, $facebook) {
   $scope.login = function () {
@@ -1111,3 +1116,4 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
 
 //for something where it's about friends of friends there would need to be a list made of all friends on a site that are connected
 ;
+// already going to #login, no redirect needed
