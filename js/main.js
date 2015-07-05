@@ -129,16 +129,11 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     $facebook.logout().then(function () {
       $location.path('/');
     });
-  }
+  };
 
-  // $scope.getUrlBasedOnLogin = function(routeParams) {
-  //   if ($rootScope.loggedInUser) {
-  //     return "views/landing.html";
-  //   } else {
-  //     return "views/loggedIn.html";
-  //   }
-  // }
-  ;
+  $scope.checkFBAuth = function () {
+    console.log($facebook.getLoginStatus());
+  };
 })
 
 // .controller("LandingCtrl", function($scope, $firebaseObject) {
