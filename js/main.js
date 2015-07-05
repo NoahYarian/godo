@@ -84,7 +84,6 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       var facebookId = $rootScope.loggedInUser;
       $rootScope[facebookId] = {};
       $rootScope[facebookId].me = response;
-      $location.path = '/#/loggedin';
     });
     setTimeout(function () {
       $facebook.api('/me/friends').then(function (response) {
@@ -120,7 +119,7 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
       }, function (err) {
         console.log('first once err:', err);
       });
-      // $location.path = "/#/loggedin";
+      $location.path = '/#/loggedin';
     }, 4000);
   };
 
