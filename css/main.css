@@ -10,6 +10,9 @@
 html {
   background: url("../images/Group-Hike-opt.jpg") 70%/cover no-repeat fixed #222222; }
 
+html, body, div {
+  height: 100%; }
+
 .canoe-icon {
   height: 35px;
   margin-top: -6px;
