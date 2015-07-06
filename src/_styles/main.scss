@@ -81,6 +81,11 @@ h2 {
   font-size: 2.5em;
 }
 
+#invite-glowing {
+  color: lime;
+  font-weight: 400;
+}
+
 .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {
   outline: none;
 }
@@ -95,6 +100,11 @@ td, th {
 
 tr > th, tfoot {
   background: #888;
+}
+
+.schedule-table th{
+  color: whitesmoke;
+  font-size: 1.25em;
 }
 
 tfoot tr td {
@@ -122,9 +132,15 @@ tr th:first-child {
   border-radius: 4px 0 0 0;
 }
 
+#early td, #late td {
+  background: #C0C0C0
+}
+
 .interest-form-group {
   margin-top: 15px;
   text-align: center;
+  margin-bottom: 45px;
+
   label {
     margin-right: 5px;
   }
@@ -148,7 +164,15 @@ label {
   padding-top: 25px;
 }
 
+.inviteRow tr:last-child {
+  background: #ddd;
+}
+
 .email-button {
+  border: 1px solid transparent;
+  &:hover, &:active, &:focus {
+    border: 1px solid transparent;
+  }
   font-size: 2.3em;
   padding: 0px 7px;
   line-height: 0.8;
@@ -165,33 +189,91 @@ label {
   }
 }
 
+.btn-noMessages {
+  background: #BBB;
+  color: white;
+  &:focus {
+    background: #BBB;
+    color: white;
+  }
+  &:hover, &:active {
+    background: #797979;
+    color: #eee;
+  }
+}
+
+.btn-hasMessages {
+  background: #5959FF;
+  color: white;
+  &:focus {
+    background: #5959FF;
+    color: white;
+  }
+  &:hover, &:active {
+    background: #0304FF;
+    color: #eee;
+  }
+}
+
+.message-list {
+  text-align: left;
+  li {
+    display: block;
+    div {
+      display: inline-block;
+      font-weight: normal;
+    }
+  }
+  .messageTime {
+    width: 129px;
+    text-align: right;
+    color: #888;
+    font-weight: 200;
+  }
+  .messageName {
+    font-weight: 600;
+  }
+}
+
+.sendMessage {
+  font-weight: normal;
+}
+
+.message-delete {
+  width: 16px;
+  .btn {
+    padding: 3px;
+    position: relative;
+    top: -2px;
+    line-height: 0.5;
+  }
+}
+
+.sendMessage > * {
+  display: inline-block;
+}
+
 .button-td div {
   display: inline-block;
 }
 
-.invite-confirmed {
+.invite-userConfirmed {
   font-weight: bold;
 }
 
-// .row-full {
-//   background: red;
-// }
+.invite-full {
+  color: #A7A7A7;
+  background: #ccc;
+}
 
-// .row-confirmed {
-//   background: gold;
-// }
+.invite-confirmed {
+  background: #5CB85C;
+  color: #222;
+}
 
-// .row-needsConf {
-//   background: green;
-// }
-
-// .row-needsInterest {
-//   background: #888;
-// }
-
-// .row-tooManyDeclines {
-//   background: white;
-// }
+.invite-tooManyDeclines {
+  background: #ddd;
+}
 
 .timeTable {
   div {
@@ -227,6 +309,41 @@ a[class*="Friends-"] {
   color: #222
 }
 
+.schedule-table {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 25px;
+  .btn-info {
+   width: 100%;
+  }
+  .btn-info[data-target="#early"] {
+    width: 125px;
+  }
+  thead > tr, table {
+    background: #888;
+  }
+  tbody > tr {
+      background: #DDD;
+  }
+  tbody#early > tr, tbody#late > tr {
+    background: #C0C0C0;
+  }
+
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  padding: 5px;
+}
+
+.undecline, .unconfirm, .undecline button, .unconfirm button {
+  height: 100%;
+}
 
 ////////////////////
 // Toggle buttons //
@@ -295,4 +412,54 @@ a[class*="Friends-"] {
   }
 }
 
+@media (max-width: 560px) {
+  .schedule-table {
+    td {
+      letter-spacing: -0.03em;
+      font-size: 0.9em;
+    }
+    .btn {
+      #early {
+        width: 105px;
+      }
+      padding: 6px 3px;
+    }
+    .tgl + .tgl-btn {
+      width: 3.5em;
+      height: 1.75em
+    }
+  }
+  .invites-table {
+    padding: 2px;
+    .email-button {
+      padding: 16px 7px;
+    }
+  }
+}
 
+
+@media (max-width: 650px) {
+  .table > thead > tr > th,
+  .table > tbody > tr > th,
+  .table > tfoot > tr > th,
+  .table > thead > tr > td,
+  .table > tbody > tr > td,
+  .table > tfoot > tr > td {
+    padding: 2px;
+  }
+}
+
+@media (max-width: 990px) {
+  .email-button {
+    padding: 16px 7px;
+  }
+  .table > tbody > tr > td.button-td {
+    padding-right: 0;
+    div button {
+      width: 100%;
+    }
+  }
+  .undecline, .unconfirm, .undecline button, .unconfirm button {
+    width: 100%;
+  }
+}

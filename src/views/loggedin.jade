@@ -12,9 +12,10 @@
       #navbar.collapse.navbar-collapse
         ul.nav.navbar-nav.navbar-right
           li
-            a(ng-controller="ScheduleCtrl" href='/#/invites' ng-class="$('.scheduleForm').hasClass('ng-dirty') ? 'invite-glow' : 'invite-dull'") Invites
+            //- a(ng-controller="ScheduleCtrl" href='/#/invites' ng-class="$('.scheduleForm').hasClass('ng-dirty') ? 'invite-glow' : 'invite-dull'") Invites
+            a#invite-glowing(href='/#/invites') My Invites
           li.active
-            a(href='/#/loggedin') Profile
+            a(href='/#/loggedin') Schedule / Interests
           //- li
           //-   a(href='/#/happenings') Happenings
           li(ng-controller='FaceCtrl')
@@ -26,11 +27,11 @@
           h2 What do you want to do?
           ul
             li(ng-repeat="(key, value) in data")
-              button.btn(ng-click="pickInterest(key)", ng-class="{'btn-success': dataUser[key], 'btn-primary': !dataUser[key]}") {{key}}
+              button.btn(ng-click="pickInterest(key)", ng-class="{'btn-success': dataUser[key], 'btn-danger': !dataUser[key]}") {{key}}
           form(name="addInterestForm")
             .form-group.interest-form-group
               label.control-label Add Interest
-              input.form-control#interestFormInput(name="intName" type="text" placeholder='e.g. "Ultimate Frisbee"' ng-model="newInterest.name" required)
+              input.form-control#interestFormInput(name="intName" type="text" placeholder='e.g. "Ultimate Frisbee"' ng-model="newInterest.name")
               button.btn.btn-primary(ng-click="onModalLoad()") Add
           .modal.fade#modal
             .modal-dialog
@@ -40,32 +41,32 @@
                     span &times;
                   h4 Add Interest
                 .modal-body
-                  form(name="addInterestInfoForm", novalidate)
+                  form#addInterestInfo(name="addInterestInfoForm", ng-submit="addInterest(newInterest)" novalidate)
                     .form-group
                       label.control-label Interest Name:
-                      input.form-control(type="text" name="interestName" ng-model="newInterest.name")
+                      input.form-control(type="text" name="interestName" ng-model="newInterest.name" required)
                     .form-group
                       label.control-label Minimum # of People:
-                      input.form-control(type="number" name="minPeople" min="2" ng-model="newInterest.minPeople")
+                      input.form-control(type="number" name="minPeople" min="2" ng-model="newInterest.minPeople" required)
                     .form-group
                       label.control-label Maximum # of People:
-                      input.form-control(type="number" name="maxPeople" min="2" ng-model="newInterest.maxPeople")
+                      input.form-control(type="number" name="maxPeople" min="2" ng-model="newInterest.maxPeople" required)
                     .form-group
                       label.control-label Time Required (hours):
-                      input.form-control(type="number" name="interestTime" min=".5" step=".5" ng-model="newInterest.time")
-                    .form-group
+                      input.form-control(type="number" name="interestTime" min=".5" step=".5" ng-model="newInterest.time" required)
+                    //- .form-group
                       //- .slider
                 .modal-footer
                   button.btn.btn-danger(data-dismiss="modal") Cancel
-                  button.btn.btn-primary(ng-click="addInterest(newInterest)") Submit
+                  input.btn.btn-primary(type="submit" form="addInterestInfo" value="Submit")
       .col-md-6(ng-controller="ScheduleCtrl")
         h2 When are you available?
         form.scheduleForm(name="scheduleForm")
-          table
+          table.schedule-table
             thead
               tr
                 th
-                  button.btn.btn-primary(type="button" data-toggle="collapse" data-target="#early" aria-expanded="false" aria-controls="early") Show / Hide Earlier
+                  button.btn.btn-info(type="button" data-toggle="collapse" data-target="#early" aria-expanded="false" aria-controls="early") Earlier
                 th Mon
                 th Tue
                 th Wed
@@ -1186,5 +1187,5 @@
             tfoot
               tr
                 td(colspan="8")
-                  button.btn.btn-primary(type="button" data-toggle="collapse" data-target="#late" aria-expanded="false" aria-controls="late") Show / Hide Later
+                  button.btn.btn-info(type="button" data-toggle="collapse" data-target="#late" aria-expanded="false" aria-controls="late") Later
                   //- button.btn.btn-primary(type="button" data-toggle="collapse" data-target="#late" ng-if="laterShown === true" ng-click="laterShown = false") Hide Later

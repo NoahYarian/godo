@@ -13,6 +13,10 @@
         #navbar.collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-right
             li
+              a(href='/#/invites') My Invites
+            li
+              a(href='/#/loggedin') Schedule / Interests
+            li
               a(href="" ng-click="login()" ng-if="!loggedInUser") Log In
               a(href="" ng-click="logout()" ng-if="loggedInUser") Log out
     .landing

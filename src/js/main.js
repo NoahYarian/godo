@@ -65,10 +65,10 @@ var app = angular
   .run( function($rootScope, $location, $facebook) {
 
     // register listener to watch route changes
-    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-      if ( $rootScope.loggedInUser == null ) {
+    $rootScope.$on("$routeChangeStart", function(event, next, current) {
+      if ($rootScope.loggedInUser == null) {
         // no logged user, we should be going to #login
-        if ( next.templateUrl == "views/landing.html" ) {
+        if (next.templateUrl === "views/landing.html") {
           // already going to #login, no redirect needed
         } else {
           // $facebook.getLoginStatus()
@@ -85,6 +85,12 @@ var app = angular
             // });
 
         }
+      // } else {
+      //   if (current.templateUrl === "views/loggedin.html") {
+      //     if (next.templateUrl !== "views/invites.html") {
+      //       update invite calendar... can't get to scope though...
+      //     }
+      //   }
       }
 
 
@@ -639,21 +645,20 @@ var app = angular
       $scope.invites[inviteIndex].declinedNum--;
     }
 
-    $scope.filterInvites = function(invite, i, invites) {
-      if (invite.status === "tooManyDeclines") {
-        if (invite.userStatus !== "declined") {
-          return false;
-        }
-      }
-      return true;
-    }
+    // $scope.filterInvites = function(invite, i, invites) {
+    //   if (invite.status === "tooManyDeclines") {
+    //     if (invite.userStatus !== "declined") {
+    //       return false;
+    //     }
+    //   }
+    //   return true;
+    // }
 
     $scope.postMessage = function(invite, inviteIndex) {
       var ref = new Firebase(`http://goanddo.firebaseio.com/calendar/${invite.dayIndex}/${invite.halfHour}/${invite.interest}/messages`);
       var messageObj = {
         userName: $rootScope[facebookId].me.name,
-        userId: facebookId,
-        timestamp: Date(),
+        timestamp: $scope.getPrettyTimestamp(),
         text: invite.newMessage
       }
       var inviteString = `${invite.dayIndex}_${invite.halfHour}_${invite.interest}`;
@@ -704,24 +709,69 @@ var app = angular
       }
     }
 
+    $scope.getPrettyTimestamp = function() {
+      var dateObj= new Date()
+      // var shortYear = dateObj.getFullYear().toString().split('').splice(2,4)
+      var month = dateObj.getMonth() + 1;
+      var day = dateObj.getDate();
+      var weekday = $scope.getDay(dateObj.getDay());
+      var suffix, hour, hour24 = dateObj.getHours();
+      if (hour24 > 12) {
+        hour = hour24 - 12;
+        suffix = "PM";
+      } else {
+        hour = hour24;
+        suffix = "AM";
+      }
+      var minute, minuteArr, minuteNo0 = dateObj.getMinutes();
+      if (minuteNo0.toString().length === 1) {
+        minuteArr = minuteNo0.toString().split('');
+        minuteArr.unshift('0');
+        minute = minuteArr.join('');
+      } else {
+        minute = minuteNo0;
+      }
+      return `${month}/${day} ${weekday} ${hour}:${minute}${suffix}`;
+      //  7/5 Thursday 4:59PM   Noah Yarian:  Hey Guys!
+    }
+
     $scope.getDay = function(dayIndex) {
       switch (Number(dayIndex)) {
         case 0:
-          return "Monday";
+          return "Mon";
         case 1:
-          return "Tuesday";
+          return "Tue";
         case 2:
-          return "Wednesday";
+          return "Wed";
         case 3:
-          return "Thursday";
+          return "Thu";
         case 4:
-          return "Friday";
+          return "Fri";
         case 5:
-          return "Saturday";
+          return "Sat";
         case 6:
-          return "Sunday";
+          return "Sun";
       }
     }
+
+    // $scope.getFullDay = function(dayIndex) {
+    //   switch (Number(dayIndex)) {
+    //     case 0:
+    //       return "Monday";
+    //     case 1:
+    //       return "Tuesday";
+    //     case 2:
+    //       return "Wednesday";
+    //     case 3:
+    //       return "Thursday";
+    //     case 4:
+    //       return "Friday";
+    //     case 5:
+    //       return "Saturday";
+    //     case 6:
+    //       return "Sunday";
+    //   }
+    // }
 
     $scope.getTime = function(halfHour) {
       var hour = Number(halfHour.split('').slice(0,2).join(''));
