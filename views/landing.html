@@ -1,22 +1,33 @@
 
-<div ng-controller="FaceCtrl" class="container landing-container">
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">
-          <object type="image/svg+xml" data="images/canoe.svg" class="canoe-icon"></object></a>
+<div class="container-cover landing-container-cover">
+  <div ng-controller="FaceCtrl" class="container landing-container">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">
+            <object type="image/svg+xml" data="images/canoe.svg" class="canoe-icon"></object></a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/#/invites" ng-if="loggedInUser">Invites</a></li>
+            <li><a href="/#/loggedin" ng-if="loggedInUser">Profile</a></li>
+            <li><a href="" ng-click="login()" ng-if="!loggedInUser">Log In</a><a href="" ng-click="logout()" ng-if="loggedInUser">Log out</a></li>
+          </ul>
+        </div>
       </div>
-      <div id="navbar" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="" ng-click="login()" ng-if="!loggedInUser">Log In</a><a href="" ng-click="logout()" ng-if="loggedInUser">Log out</a></li>
-        </ul>
+    </nav>
+    <div class="landing">
+      <div class="title">
+        <h1><span>Go</span><span>&</span><span>Do</span></h1>
+        <h2>More social, less media.</h2>
+      </div><a href="" ng-click="login()" class="btn btn-block btn-social btn-lg btn-facebook">Sign in with Facebook<i class="fa fa-facebook"></i></a>
+      <div>
+        <button ng-click="loginAs('fakedata')">Log in as fakedata</button>
+        <button ng-click="loginAs('fakedata2')">Log in as fakedata2</button>
+        <button ng-click="loginAs('fakedata3')">Log in as fakedata3</button>
+        <button ng-click="loginAs('fakedata4')">Log in as fakedata4</button>
+        <button ng-click="loginAs('fakedata5')">Log in as fakedata5</button>
       </div>
     </div>
-  </nav>
-  <div class="landing">
-    <div class="title">
-      <h1><span>Go</span><span>&</span><span>Do</span></h1>
-      <h2>More social, less media.</h2>
-    </div><a href="" ng-click="login()" class="btn btn-block btn-social btn-lg btn-facebook">Sign in with Facebook<i class="fa fa-facebook"></i></a>
   </div>
 </div>

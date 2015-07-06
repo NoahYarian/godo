@@ -7,7 +7,7 @@
   src: url(../fonts/gapstown-b.ttf);
   font-weight: bold; }
 
-html {
+.landing-container-cover {
   background: url("../images/Group-Hike-opt.jpg") 70%/cover no-repeat fixed #222222; }
 
 html, body, .container-cover, .app, .container, .landing-container {
@@ -20,7 +20,7 @@ html, body, .container-cover, .app, .container, .landing-container {
 
 body {
   padding-top: 50px;
-  background: transparent; }
+  background: #444; }
 
 .landing-container {
   display: flex;
@@ -42,15 +42,17 @@ h1 {
   font-family: 'Gapstown';
   font-weight: bold;
   font-size: 8em;
-  margin: 0; }
+  margin: 0;
+  margin-bottom: -15px; }
   h1 span:nth-child(2) {
     margin: 0 32px; }
 
 h2 {
   font-family: 'Gapstown';
-  margin-top: -15px;
+  margin-top: -7px;
   color: white;
-  font-size: 40px; }
+  font-size: 40px;
+  text-align: center; }
 
 .navbar-brand {
   color: white;
@@ -64,14 +66,53 @@ li {
   display: inline-block; }
 
 td, th {
-  padding: 7px;
   text-align: center; }
 
-tr > th {
+tr > th, tfoot {
   background: #888; }
 
+tfoot tr td {
+  text-align: left; }
+
+tfoot tr td {
+  border-radius: 0 0 4px 4px; }
+
 table {
-  background: #DDD; }
+  background: #DDD;
+  margin-bottom: 25px;
+  border-radius: 4px; }
+  table label {
+    margin-bottom: 0; }
+
+tr th:last-child {
+  border-radius: 0 4px 0 0; }
+
+tr th:first-child {
+  border-radius: 4px 0 0 0; }
+
+#early td, #late td {
+  background: #C0C0C0; }
+
+.interest-form-group {
+  margin-top: 15px;
+  text-align: center;
+  margin-bottom: 45px; }
+  .interest-form-group label {
+    margin-right: 5px; }
+
+#interestFormInput {
+  width: auto;
+  display: inline-block; }
+
+label {
+  color: white; }
+
+.profile-container, .invites-container {
+  background: #444; }
+
+.loggedin-container-cover, .invites-container-cover {
+  background: #444;
+  padding-top: 25px; }
 
 .email-button {
   font-size: 2.3em;
@@ -87,6 +128,51 @@ table {
     position: relative;
     top: -2px;
     color: red; }
+
+.btn-noMessages {
+  background: #BBB;
+  color: white; }
+  .btn-noMessages:focus {
+    background: #BBB;
+    color: white; }
+  .btn-noMessages:hover, .btn-noMessages:active {
+    background: #797979;
+    color: #eee; }
+
+.btn-hasMessages {
+  background: #5959FF;
+  color: white; }
+  .btn-hasMessages:focus {
+    background: #5959FF;
+    color: white; }
+  .btn-hasMessages:hover, .btn-hasMessages:active {
+    background: #0304FF;
+    color: #eee; }
+
+.message-list {
+  text-align: left; }
+  .message-list li {
+    display: block; }
+    .message-list li div {
+      display: inline-block; }
+  .message-list .messageTime {
+    width: 129px;
+    text-align: right;
+    color: #888;
+    font-weight: 200; }
+  .message-list .messageName {
+    font-weight: 600; }
+
+.message-delete {
+  width: 16px; }
+  .message-delete .btn {
+    padding: 3px;
+    position: relative;
+    top: -2px;
+    line-height: 0.5; }
+
+.sendMessage > * {
+  display: inline-block; }
 
 .button-td div {
   display: inline-block; }
@@ -114,11 +200,38 @@ table {
 a[class*="Friends-"] {
   margin-left: 5px; }
 
-.modal-header h1 {
-  color: black; }
+.modal .form-group {
+  margin-bottom: 5px; }
 
-label {
-  margin-bottom: 0px; }
+.modal-body label.control-label, .modal-header h1 {
+  color: #222; }
+
+.schedule-table {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 25px; }
+  .schedule-table .btn-info {
+    width: 100%; }
+  .schedule-table .btn-info[data-target="#early"] {
+    width: 125px; }
+  .schedule-table thead > tr, .schedule-table table {
+    background: #888; }
+  .schedule-table tbody > tr {
+    background: #DDD; }
+  .schedule-table tbody#early > tr, .schedule-table tbody#late > tr {
+    background: #C0C0C0; }
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  padding: 5px; }
+
+.undecline, .unconfirm, .undecline button, .unconfirm button {
+  height: 100%; }
 
 .tgl {
   display: none; }
@@ -164,3 +277,36 @@ label {
 
 .tgl-light:checked + .tgl-btn {
   background: #9FD6AE; }
+
+@media (max-width: 560px) {
+  .schedule-table td {
+    letter-spacing: -0.03em;
+    font-size: 0.9em; }
+  .schedule-table .btn {
+    padding: 6px 3px; }
+    .schedule-table .btn #early {
+      width: 105px; }
+  .schedule-table .tgl + .tgl-btn {
+    width: 3.5em;
+    height: 1.75em; }
+  .invites-table {
+    padding: 2px; }
+    .invites-table .email-button {
+      padding: 16px 7px; } }
+
+@media (max-width: 650px) {
+  .table > thead > tr > th,
+  .table > tbody > tr > th,
+  .table > tfoot > tr > th,
+  .table > thead > tr > td,
+  .table > tbody > tr > td,
+  .table > tfoot > tr > td {
+    padding: 2px; } }
+
+@media (max-width: 768px) {
+  .email-button {
+    padding: 16px 7px; }
+  .table > tbody > tr > td.button-td {
+    padding-right: 0; }
+    .table > tbody > tr > td.button-td div button {
+      width: 100%; } }

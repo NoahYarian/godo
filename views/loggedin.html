@@ -1,1574 +1,1595 @@
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">
-        <object type="image/svg+xml" data="images/canoe.svg" class="canoe-icon"></object></a>
-    </div>
-    <div id="navbar" class="collapse navbar-collapse">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/#/invites">Invites</a></li>
-        <li class="active"><a href="/#/loggedin">Profile</a></li>
-        <li ng-controller="FaceCtrl"><a href="" ng-click="logout()">Log out</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<div class="container">
-  <div ng-controller="InterestsCtrl" class="interests">
-    <ul>
-      <li ng-repeat="(key, value) in data">
-        <button ng-click="pickInterest(key)" ng-class="{'btn-success': dataUser[key], 'btn-primary': !dataUser[key]}" class="btn">{{key}}</button>
-      </li>
-    </ul>
-    <form name="addInterestForm">
-      <div class="form-group">
-        <label class="control-label">Add Interest</label>
-        <input name="intName" type="text" placeholder="e.g. &quot;Ultimate Frisbee&quot;" ng-model="newInterest.name" required="required" class="form-control"/>
-        <button ng-click="onModalLoad()" class="btn btn-primary">Add</button>
+<div class="container-cover loggedin-container-cover">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">
+          <object type="image/svg+xml" data="images/canoe.svg" class="canoe-icon"></object></a>
       </div>
-    </form>
-    <div id="modal" class="modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button data-dismiss="modal" class="close"><span>&times;</span></button>
-            <h1>Add Interest</h1>
-          </div>
-          <div class="modal-body">
-            <form name="addInterestInfoForm" novalidate="novalidate">
-              <div class="form-group">
-                <label class="control-label">Interest Name:</label>
-                <input type="text" name="interestName" ng-model="newInterest.name" class="form-control"/>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a ng-controller="ScheduleCtrl" href="/#/invites" ng-class="$('.scheduleForm').hasClass('ng-dirty') ? 'invite-glow' : 'invite-dull'">Invites</a></li>
+          <li class="active"><a href="/#/loggedin">Profile</a></li>
+          <li ng-controller="FaceCtrl"><a href="" ng-click="logout()">Log out</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container profile-container">
+    <div class="row">
+      <div ng-controller="InterestsCtrl" class="col-md-6">
+        <div class="interests">
+          <h2>What do you want to do?</h2>
+          <ul>
+            <li ng-repeat="(key, value) in data">
+              <button ng-click="pickInterest(key)" ng-class="{'btn-success': dataUser[key], 'btn-danger': !dataUser[key]}" class="btn">{{key}}</button>
+            </li>
+          </ul>
+          <form name="addInterestForm">
+            <div class="form-group interest-form-group">
+              <label class="control-label">Add Interest</label>
+              <input id="interestFormInput" name="intName" type="text" placeholder="e.g. &quot;Ultimate Frisbee&quot;" ng-model="newInterest.name" class="form-control"/>
+              <button ng-click="onModalLoad()" class="btn btn-primary">Add</button>
+            </div>
+          </form>
+          <div id="modal" class="modal fade">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button data-dismiss="modal" class="close"><span>&times;</span></button>
+                  <h4>Add Interest</h4>
+                </div>
+                <div class="modal-body">
+                  <form id="addInterestInfo" name="addInterestInfoForm" ng-submit="addInterest(newInterest)" novalidate="novalidate">
+                    <div class="form-group">
+                      <label class="control-label">Interest Name:</label>
+                      <input type="text" name="interestName" ng-model="newInterest.name" required="required" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">Minimum # of People:</label>
+                      <input type="number" name="minPeople" min="2" ng-model="newInterest.minPeople" required="required" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">Maximum # of People:</label>
+                      <input type="number" name="maxPeople" min="2" ng-model="newInterest.maxPeople" required="required" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">Time Required (hours):</label>
+                      <input type="number" name="interestTime" min=".5" step=".5" ng-model="newInterest.time" required="required" class="form-control"/>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button data-dismiss="modal" class="btn btn-danger">Cancel</button>
+                  <input type="submit" form="addInterestInfo" value="Submit" class="btn btn-primary"/>
+                </div>
               </div>
-              <div class="form-group">
-                <label class="control-label">Minimum # of People:</label>
-                <input type="number" name="minPeople" min="2" ng-model="newInterest.minPeople" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label class="control-label">Maximum # of People:</label>
-                <input type="number" name="maxPeople" min="2" ng-model="newInterest.maxPeople" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label class="control-label">Time Required (hours):</label>
-                <input type="number" name="interestTime" min=".5" step=".5" ng-model="newInterest.time" class="form-control"/>
-              </div>
-              <div class="form-group">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button data-dismiss="modal" class="btn btn-danger">Cancel</button>
-            <button ng-click="addInterest(newInterest)" class="btn btn-primary">Submit</button>
+            </div>
           </div>
         </div>
       </div>
+      <div ng-controller="ScheduleCtrl" class="col-md-6">
+        <h2>When are you available?</h2>
+        <form name="scheduleForm" class="scheduleForm">
+          <table class="schedule-table">
+            <thead>
+              <tr>
+                <th>
+                  <button type="button" data-toggle="collapse" data-target="#early" aria-expanded="false" aria-controls="early" class="btn btn-info">Earlier</button>
+                </th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+                <th>Sun</th>
+              </tr>
+              <tbody id="early" class="collapse">
+                <tr>
+                  <td>12:00am - 12:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon0000" ng-model="userSchedule['0']['0000']" ng-click="$rootScope.calClicked = true" class="tgl tgl-light"/>
+                    <label for="mon0000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0000" ng-model="userSchedule['1']['0000']" class="tgl tgl-light"/>
+                    <label for="tue0000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0000" ng-model="userSchedule['2']['0000']" class="tgl tgl-light"/>
+                    <label for="wed0000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0000" ng-model="userSchedule['3']['0000']" class="tgl tgl-light"/>
+                    <label for="thu0000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0000" ng-model="userSchedule['4']['0000']" class="tgl tgl-light"/>
+                    <label for="fri0000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0000" ng-model="userSchedule['5']['0000']" class="tgl tgl-light"/>
+                    <label for="sat0000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0000" ng-model="userSchedule['6']['0000']" class="tgl tgl-light"/>
+                    <label for="sun0000" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>12:30am - 1:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon0030" ng-model="userSchedule['0']['0030']" class="tgl tgl-light"/>
+                    <label for="mon0030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0030" ng-model="userSchedule['1']['0030']" class="tgl tgl-light"/>
+                    <label for="tue0030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0030" ng-model="userSchedule['2']['0030']" class="tgl tgl-light"/>
+                    <label for="wed0030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0030" ng-model="userSchedule['3']['0030']" class="tgl tgl-light"/>
+                    <label for="thu0030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0030" ng-model="userSchedule['4']['0030']" class="tgl tgl-light"/>
+                    <label for="fri0030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0030" ng-model="userSchedule['5']['0030']" class="tgl tgl-light"/>
+                    <label for="sat0030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0030" ng-model="userSchedule['6']['0030']" class="tgl tgl-light"/>
+                    <label for="sun0030" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>1:00am - 1:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon0100" ng-model="userSchedule['0']['0100']" class="tgl tgl-light"/>
+                    <label for="mon0100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0100" ng-model="userSchedule['1']['0100']" class="tgl tgl-light"/>
+                    <label for="tue0100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0100" ng-model="userSchedule['2']['0100']" class="tgl tgl-light"/>
+                    <label for="wed0100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0100" ng-model="userSchedule['3']['0100']" class="tgl tgl-light"/>
+                    <label for="thu0100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0100" ng-model="userSchedule['4']['0100']" class="tgl tgl-light"/>
+                    <label for="fri0100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0100" ng-model="userSchedule['5']['0100']" class="tgl tgl-light"/>
+                    <label for="sat0100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0100" ng-model="userSchedule['6']['0100']" class="tgl tgl-light"/>
+                    <label for="sun0100" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>1:30am - 2:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon0130" ng-model="userSchedule['0']['0130']" class="tgl tgl-light"/>
+                    <label for="mon0130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0130" ng-model="userSchedule['1']['0130']" class="tgl tgl-light"/>
+                    <label for="tue0130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0130" ng-model="userSchedule['2']['0130']" class="tgl tgl-light"/>
+                    <label for="wed0130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0130" ng-model="userSchedule['3']['0130']" class="tgl tgl-light"/>
+                    <label for="thu0130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0130" ng-model="userSchedule['4']['0130']" class="tgl tgl-light"/>
+                    <label for="fri0130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0130" ng-model="userSchedule['5']['0130']" class="tgl tgl-light"/>
+                    <label for="sat0130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0130" ng-model="userSchedule['6']['0130']" class="tgl tgl-light"/>
+                    <label for="sun0130" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2:00am - 2:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon0200" ng-model="userSchedule['0']['0200']" class="tgl tgl-light"/>
+                    <label for="mon0200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0200" ng-model="userSchedule['1']['0200']" class="tgl tgl-light"/>
+                    <label for="tue0200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0200" ng-model="userSchedule['2']['0200']" class="tgl tgl-light"/>
+                    <label for="wed0200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0200" ng-model="userSchedule['3']['0200']" class="tgl tgl-light"/>
+                    <label for="thu0200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0200" ng-model="userSchedule['4']['0200']" class="tgl tgl-light"/>
+                    <label for="fri0200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0200" ng-model="userSchedule['5']['0200']" class="tgl tgl-light"/>
+                    <label for="sat0200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0200" ng-model="userSchedule['6']['0200']" class="tgl tgl-light"/>
+                    <label for="sun0200" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2:30am - 3:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon0230" ng-model="userSchedule['0']['0230']" class="tgl tgl-light"/>
+                    <label for="mon0230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0230" ng-model="userSchedule['1']['0230']" class="tgl tgl-light"/>
+                    <label for="tue0230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0230" ng-model="userSchedule['2']['0230']" class="tgl tgl-light"/>
+                    <label for="wed0230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0230" ng-model="userSchedule['3']['0230']" class="tgl tgl-light"/>
+                    <label for="thu0230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0230" ng-model="userSchedule['4']['0230']" class="tgl tgl-light"/>
+                    <label for="fri0230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0230" ng-model="userSchedule['5']['0230']" class="tgl tgl-light"/>
+                    <label for="sat0230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0230" ng-model="userSchedule['6']['0230']" class="tgl tgl-light"/>
+                    <label for="sun0230" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>3:00am - 3:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon0300" ng-model="userSchedule['0']['0300']" class="tgl tgl-light"/>
+                    <label for="mon0300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0300" ng-model="userSchedule['1']['0300']" class="tgl tgl-light"/>
+                    <label for="tue0300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0300" ng-model="userSchedule['2']['0300']" class="tgl tgl-light"/>
+                    <label for="wed0300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0300" ng-model="userSchedule['3']['0300']" class="tgl tgl-light"/>
+                    <label for="thu0300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0300" ng-model="userSchedule['4']['0300']" class="tgl tgl-light"/>
+                    <label for="fri0300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0300" ng-model="userSchedule['5']['0300']" class="tgl tgl-light"/>
+                    <label for="sat0300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0300" ng-model="userSchedule['6']['0300']" class="tgl tgl-light"/>
+                    <label for="sun0300" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>3:30am - 4:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon0330" ng-model="userSchedule['0']['0330']" class="tgl tgl-light"/>
+                    <label for="mon0330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0330" ng-model="userSchedule['1']['0330']" class="tgl tgl-light"/>
+                    <label for="tue0330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0330" ng-model="userSchedule['2']['0330']" class="tgl tgl-light"/>
+                    <label for="wed0330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0330" ng-model="userSchedule['3']['0330']" class="tgl tgl-light"/>
+                    <label for="thu0330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0330" ng-model="userSchedule['4']['0330']" class="tgl tgl-light"/>
+                    <label for="fri0330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0330" ng-model="userSchedule['5']['0330']" class="tgl tgl-light"/>
+                    <label for="sat0330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0330" ng-model="userSchedule['6']['0330']" class="tgl tgl-light"/>
+                    <label for="sun0330" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>4:00am - 4:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon0400" ng-model="userSchedule['0']['0400']" class="tgl tgl-light"/>
+                    <label for="mon0400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0400" ng-model="userSchedule['1']['0400']" class="tgl tgl-light"/>
+                    <label for="tue0400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0400" ng-model="userSchedule['2']['0400']" class="tgl tgl-light"/>
+                    <label for="wed0400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0400" ng-model="userSchedule['3']['0400']" class="tgl tgl-light"/>
+                    <label for="thu0400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0400" ng-model="userSchedule['4']['0400']" class="tgl tgl-light"/>
+                    <label for="fri0400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0400" ng-model="userSchedule['5']['0400']" class="tgl tgl-light"/>
+                    <label for="sat0400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0400" ng-model="userSchedule['6']['0400']" class="tgl tgl-light"/>
+                    <label for="sun0400" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>4:30am - 5:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon0430" ng-model="userSchedule['0']['0430']" class="tgl tgl-light"/>
+                    <label for="mon0430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0430" ng-model="userSchedule['1']['0430']" class="tgl tgl-light"/>
+                    <label for="tue0430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0430" ng-model="userSchedule['2']['0430']" class="tgl tgl-light"/>
+                    <label for="wed0430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0430" ng-model="userSchedule['3']['0430']" class="tgl tgl-light"/>
+                    <label for="thu0430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0430" ng-model="userSchedule['4']['0430']" class="tgl tgl-light"/>
+                    <label for="fri0430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0430" ng-model="userSchedule['5']['0430']" class="tgl tgl-light"/>
+                    <label for="sat0430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0430" ng-model="userSchedule['6']['0430']" class="tgl tgl-light"/>
+                    <label for="sun0430" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>5:00am - 5:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon0500" ng-model="userSchedule['0']['0500']" class="tgl tgl-light"/>
+                    <label for="mon0500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0500" ng-model="userSchedule['1']['0500']" class="tgl tgl-light"/>
+                    <label for="tue0500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0500" ng-model="userSchedule['2']['0500']" class="tgl tgl-light"/>
+                    <label for="wed0500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0500" ng-model="userSchedule['3']['0500']" class="tgl tgl-light"/>
+                    <label for="thu0500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0500" ng-model="userSchedule['4']['0500']" class="tgl tgl-light"/>
+                    <label for="fri0500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0500" ng-model="userSchedule['5']['0500']" class="tgl tgl-light"/>
+                    <label for="sat0500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0500" ng-model="userSchedule['6']['0500']" class="tgl tgl-light"/>
+                    <label for="sun0500" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>5:30am - 6:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon0530" ng-model="userSchedule['0']['0530']" class="tgl tgl-light"/>
+                    <label for="mon0530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0530" ng-model="userSchedule['1']['0530']" class="tgl tgl-light"/>
+                    <label for="tue0530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0530" ng-model="userSchedule['2']['0530']" class="tgl tgl-light"/>
+                    <label for="wed0530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0530" ng-model="userSchedule['3']['0530']" class="tgl tgl-light"/>
+                    <label for="thu0530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0530" ng-model="userSchedule['4']['0530']" class="tgl tgl-light"/>
+                    <label for="fri0530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0530" ng-model="userSchedule['5']['0530']" class="tgl tgl-light"/>
+                    <label for="sat0530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0530" ng-model="userSchedule['6']['0530']" class="tgl tgl-light"/>
+                    <label for="sun0530" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>6:00am - 6:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon0600" ng-model="userSchedule['0']['0600']" class="tgl tgl-light"/>
+                    <label for="mon0600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0600" ng-model="userSchedule['1']['0600']" class="tgl tgl-light"/>
+                    <label for="tue0600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0600" ng-model="userSchedule['2']['0600']" class="tgl tgl-light"/>
+                    <label for="wed0600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0600" ng-model="userSchedule['3']['0600']" class="tgl tgl-light"/>
+                    <label for="thu0600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0600" ng-model="userSchedule['4']['0600']" class="tgl tgl-light"/>
+                    <label for="fri0600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0600" ng-model="userSchedule['5']['0600']" class="tgl tgl-light"/>
+                    <label for="sat0600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0600" ng-model="userSchedule['6']['0600']" class="tgl tgl-light"/>
+                    <label for="sun0600" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>6:30am - 7:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon0630" ng-model="userSchedule['0']['0630']" class="tgl tgl-light"/>
+                    <label for="mon0630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0630" ng-model="userSchedule['1']['0630']" class="tgl tgl-light"/>
+                    <label for="tue0630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0630" ng-model="userSchedule['2']['0630']" class="tgl tgl-light"/>
+                    <label for="wed0630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0630" ng-model="userSchedule['3']['0630']" class="tgl tgl-light"/>
+                    <label for="thu0630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0630" ng-model="userSchedule['4']['0630']" class="tgl tgl-light"/>
+                    <label for="fri0630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0630" ng-model="userSchedule['5']['0630']" class="tgl tgl-light"/>
+                    <label for="sat0630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0630" ng-model="userSchedule['6']['0630']" class="tgl tgl-light"/>
+                    <label for="sun0630" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>7:00am - 7:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon0700" ng-model="userSchedule['0']['0700']" class="tgl tgl-light"/>
+                    <label for="mon0700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0700" ng-model="userSchedule['1']['0700']" class="tgl tgl-light"/>
+                    <label for="tue0700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0700" ng-model="userSchedule['2']['0700']" class="tgl tgl-light"/>
+                    <label for="wed0700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0700" ng-model="userSchedule['3']['0700']" class="tgl tgl-light"/>
+                    <label for="thu0700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0700" ng-model="userSchedule['4']['0700']" class="tgl tgl-light"/>
+                    <label for="fri0700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0700" ng-model="userSchedule['5']['0700']" class="tgl tgl-light"/>
+                    <label for="sat0700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0700" ng-model="userSchedule['6']['0700']" class="tgl tgl-light"/>
+                    <label for="sun0700" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>7:30am - 8:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon0730" ng-model="userSchedule['0']['0730']" class="tgl tgl-light"/>
+                    <label for="mon0730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0730" ng-model="userSchedule['1']['0730']" class="tgl tgl-light"/>
+                    <label for="tue0730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0730" ng-model="userSchedule['2']['0730']" class="tgl tgl-light"/>
+                    <label for="wed0730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0730" ng-model="userSchedule['3']['0730']" class="tgl tgl-light"/>
+                    <label for="thu0730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0730" ng-model="userSchedule['4']['0730']" class="tgl tgl-light"/>
+                    <label for="fri0730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0730" ng-model="userSchedule['5']['0730']" class="tgl tgl-light"/>
+                    <label for="sat0730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0730" ng-model="userSchedule['6']['0730']" class="tgl tgl-light"/>
+                    <label for="sun0730" class="tgl-btn"></label>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody class="daytime">
+                <tr>
+                  <td>8:00am - 8:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon0800" ng-model="userSchedule['0']['0800']" class="tgl tgl-light"/>
+                    <label for="mon0800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0800" ng-model="userSchedule['1']['0800']" class="tgl tgl-light"/>
+                    <label for="tue0800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0800" ng-model="userSchedule['2']['0800']" class="tgl tgl-light"/>
+                    <label for="wed0800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0800" ng-model="userSchedule['3']['0800']" class="tgl tgl-light"/>
+                    <label for="thu0800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0800" ng-model="userSchedule['4']['0800']" class="tgl tgl-light"/>
+                    <label for="fri0800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0800" ng-model="userSchedule['5']['0800']" class="tgl tgl-light"/>
+                    <label for="sat0800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0800" ng-model="userSchedule['6']['0800']" class="tgl tgl-light"/>
+                    <label for="sun0800" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>8:30am - 9:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon0830" ng-model="userSchedule['0']['0830']" class="tgl tgl-light"/>
+                    <label for="mon0830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0830" ng-model="userSchedule['1']['0830']" class="tgl tgl-light"/>
+                    <label for="tue0830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0830" ng-model="userSchedule['2']['0830']" class="tgl tgl-light"/>
+                    <label for="wed0830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0830" ng-model="userSchedule['3']['0830']" class="tgl tgl-light"/>
+                    <label for="thu0830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0830" ng-model="userSchedule['4']['0830']" class="tgl tgl-light"/>
+                    <label for="fri0830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0830" ng-model="userSchedule['5']['0830']" class="tgl tgl-light"/>
+                    <label for="sat0830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0830" ng-model="userSchedule['6']['0830']" class="tgl tgl-light"/>
+                    <label for="sun0830" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>9:00am - 9:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon0900" ng-model="userSchedule['0']['0900']" class="tgl tgl-light"/>
+                    <label for="mon0900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0900" ng-model="userSchedule['1']['0900']" class="tgl tgl-light"/>
+                    <label for="tue0900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0900" ng-model="userSchedule['2']['0900']" class="tgl tgl-light"/>
+                    <label for="wed0900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0900" ng-model="userSchedule['3']['0900']" class="tgl tgl-light"/>
+                    <label for="thu0900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0900" ng-model="userSchedule['4']['0900']" class="tgl tgl-light"/>
+                    <label for="fri0900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0900" ng-model="userSchedule['5']['0900']" class="tgl tgl-light"/>
+                    <label for="sat0900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0900" ng-model="userSchedule['6']['0900']" class="tgl tgl-light"/>
+                    <label for="sun0900" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>9:30am - 10:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon0930" ng-model="userSchedule['0']['0930']" class="tgl tgl-light"/>
+                    <label for="mon0930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue0930" ng-model="userSchedule['1']['0930']" class="tgl tgl-light"/>
+                    <label for="tue0930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed0930" ng-model="userSchedule['2']['0930']" class="tgl tgl-light"/>
+                    <label for="wed0930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu0930" ng-model="userSchedule['3']['0930']" class="tgl tgl-light"/>
+                    <label for="thu0930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri0930" ng-model="userSchedule['4']['0930']" class="tgl tgl-light"/>
+                    <label for="fri0930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat0930" ng-model="userSchedule['5']['0930']" class="tgl tgl-light"/>
+                    <label for="sat0930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun0930" ng-model="userSchedule['6']['0930']" class="tgl tgl-light"/>
+                    <label for="sun0930" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>10:00am - 10:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon1000" ng-model="userSchedule['0']['1000']" class="tgl tgl-light"/>
+                    <label for="mon1000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1000" ng-model="userSchedule['1']['1000']" class="tgl tgl-light"/>
+                    <label for="tue1000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1000" ng-model="userSchedule['2']['1000']" class="tgl tgl-light"/>
+                    <label for="wed1000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1000" ng-model="userSchedule['3']['1000']" class="tgl tgl-light"/>
+                    <label for="thu1000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1000" ng-model="userSchedule['4']['1000']" class="tgl tgl-light"/>
+                    <label for="fri1000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1000" ng-model="userSchedule['5']['1000']" class="tgl tgl-light"/>
+                    <label for="sat1000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1000" ng-model="userSchedule['6']['1000']" class="tgl tgl-light"/>
+                    <label for="sun1000" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>10:30am - 11:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon1030" ng-model="userSchedule['0']['1030']" class="tgl tgl-light"/>
+                    <label for="mon1030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1030" ng-model="userSchedule['1']['1030']" class="tgl tgl-light"/>
+                    <label for="tue1030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1030" ng-model="userSchedule['2']['1030']" class="tgl tgl-light"/>
+                    <label for="wed1030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1030" ng-model="userSchedule['3']['1030']" class="tgl tgl-light"/>
+                    <label for="thu1030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1030" ng-model="userSchedule['4']['1030']" class="tgl tgl-light"/>
+                    <label for="fri1030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1030" ng-model="userSchedule['5']['1030']" class="tgl tgl-light"/>
+                    <label for="sat1030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1030" ng-model="userSchedule['6']['1030']" class="tgl tgl-light"/>
+                    <label for="sun1030" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>11:00am - 11:30am</td>
+                  <td>
+                    <input type="checkbox" id="mon1100" ng-model="userSchedule['0']['1100']" class="tgl tgl-light"/>
+                    <label for="mon1100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1100" ng-model="userSchedule['1']['1100']" class="tgl tgl-light"/>
+                    <label for="tue1100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1100" ng-model="userSchedule['2']['1100']" class="tgl tgl-light"/>
+                    <label for="wed1100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1100" ng-model="userSchedule['3']['1100']" class="tgl tgl-light"/>
+                    <label for="thu1100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1100" ng-model="userSchedule['4']['1100']" class="tgl tgl-light"/>
+                    <label for="fri1100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1100" ng-model="userSchedule['5']['1100']" class="tgl tgl-light"/>
+                    <label for="sat1100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1100" ng-model="userSchedule['6']['1100']" class="tgl tgl-light"/>
+                    <label for="sun1100" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>11:30am - 12:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1130" ng-model="userSchedule['0']['1130']" class="tgl tgl-light"/>
+                    <label for="mon1130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1130" ng-model="userSchedule['1']['1130']" class="tgl tgl-light"/>
+                    <label for="tue1130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1130" ng-model="userSchedule['2']['1130']" class="tgl tgl-light"/>
+                    <label for="wed1130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1130" ng-model="userSchedule['3']['1130']" class="tgl tgl-light"/>
+                    <label for="thu1130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1130" ng-model="userSchedule['4']['1130']" class="tgl tgl-light"/>
+                    <label for="fri1130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1130" ng-model="userSchedule['5']['1130']" class="tgl tgl-light"/>
+                    <label for="sat1130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1130" ng-model="userSchedule['6']['1130']" class="tgl tgl-light"/>
+                    <label for="sun1130" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>12:00pm - 12:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1200" ng-model="userSchedule['0']['1200']" class="tgl tgl-light"/>
+                    <label for="mon1200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1200" ng-model="userSchedule['1']['1200']" class="tgl tgl-light"/>
+                    <label for="tue1200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1200" ng-model="userSchedule['2']['1200']" class="tgl tgl-light"/>
+                    <label for="wed1200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1200" ng-model="userSchedule['3']['1200']" class="tgl tgl-light"/>
+                    <label for="thu1200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1200" ng-model="userSchedule['4']['1200']" class="tgl tgl-light"/>
+                    <label for="fri1200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1200" ng-model="userSchedule['5']['1200']" class="tgl tgl-light"/>
+                    <label for="sat1200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1200" ng-model="userSchedule['6']['1200']" class="tgl tgl-light"/>
+                    <label for="sun1200" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>12:30pm - 1:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1230" ng-model="userSchedule['0']['1230']" class="tgl tgl-light"/>
+                    <label for="mon1230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1230" ng-model="userSchedule['1']['1230']" class="tgl tgl-light"/>
+                    <label for="tue1230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1230" ng-model="userSchedule['2']['1230']" class="tgl tgl-light"/>
+                    <label for="wed1230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1230" ng-model="userSchedule['3']['1230']" class="tgl tgl-light"/>
+                    <label for="thu1230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1230" ng-model="userSchedule['4']['1230']" class="tgl tgl-light"/>
+                    <label for="fri1230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1230" ng-model="userSchedule['5']['1230']" class="tgl tgl-light"/>
+                    <label for="sat1230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1230" ng-model="userSchedule['6']['1230']" class="tgl tgl-light"/>
+                    <label for="sun1230" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>1:00pm - 1:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1300" ng-model="userSchedule['0']['1300']" class="tgl tgl-light"/>
+                    <label for="mon1300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1300" ng-model="userSchedule['1']['1300']" class="tgl tgl-light"/>
+                    <label for="tue1300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1300" ng-model="userSchedule['2']['1300']" class="tgl tgl-light"/>
+                    <label for="wed1300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1300" ng-model="userSchedule['3']['1300']" class="tgl tgl-light"/>
+                    <label for="thu1300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1300" ng-model="userSchedule['4']['1300']" class="tgl tgl-light"/>
+                    <label for="fri1300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1300" ng-model="userSchedule['5']['1300']" class="tgl tgl-light"/>
+                    <label for="sat1300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1300" ng-model="userSchedule['6']['1300']" class="tgl tgl-light"/>
+                    <label for="sun1300" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>1:30pm - 2:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1330" ng-model="userSchedule['0']['1330']" class="tgl tgl-light"/>
+                    <label for="mon1330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1330" ng-model="userSchedule['1']['1330']" class="tgl tgl-light"/>
+                    <label for="tue1330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1330" ng-model="userSchedule['2']['1330']" class="tgl tgl-light"/>
+                    <label for="wed1330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1330" ng-model="userSchedule['3']['1330']" class="tgl tgl-light"/>
+                    <label for="thu1330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1330" ng-model="userSchedule['4']['1330']" class="tgl tgl-light"/>
+                    <label for="fri1330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1330" ng-model="userSchedule['5']['1330']" class="tgl tgl-light"/>
+                    <label for="sat1330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1330" ng-model="userSchedule['6']['1330']" class="tgl tgl-light"/>
+                    <label for="sun1330" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2:00pm - 2:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1400" ng-model="userSchedule['0']['1400']" class="tgl tgl-light"/>
+                    <label for="mon1400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1400" ng-model="userSchedule['1']['1400']" class="tgl tgl-light"/>
+                    <label for="tue1400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1400" ng-model="userSchedule['2']['1400']" class="tgl tgl-light"/>
+                    <label for="wed1400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1400" ng-model="userSchedule['3']['1400']" class="tgl tgl-light"/>
+                    <label for="thu1400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1400" ng-model="userSchedule['4']['1400']" class="tgl tgl-light"/>
+                    <label for="fri1400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1400" ng-model="userSchedule['5']['1400']" class="tgl tgl-light"/>
+                    <label for="sat1400" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1400" ng-model="userSchedule['6']['1400']" class="tgl tgl-light"/>
+                    <label for="sun1400" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2:30pm - 3:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1430" ng-model="userSchedule['0']['1430']" class="tgl tgl-light"/>
+                    <label for="mon1430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1430" ng-model="userSchedule['1']['1430']" class="tgl tgl-light"/>
+                    <label for="tue1430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1430" ng-model="userSchedule['2']['1430']" class="tgl tgl-light"/>
+                    <label for="wed1430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1430" ng-model="userSchedule['3']['1430']" class="tgl tgl-light"/>
+                    <label for="thu1430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1430" ng-model="userSchedule['4']['1430']" class="tgl tgl-light"/>
+                    <label for="fri1430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1430" ng-model="userSchedule['5']['1430']" class="tgl tgl-light"/>
+                    <label for="sat1430" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1430" ng-model="userSchedule['6']['1430']" class="tgl tgl-light"/>
+                    <label for="sun1430" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>3:00pm - 3:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1500" ng-model="userSchedule['0']['1500']" class="tgl tgl-light"/>
+                    <label for="mon1500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1500" ng-model="userSchedule['1']['1500']" class="tgl tgl-light"/>
+                    <label for="tue1500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1500" ng-model="userSchedule['2']['1500']" class="tgl tgl-light"/>
+                    <label for="wed1500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1500" ng-model="userSchedule['3']['1500']" class="tgl tgl-light"/>
+                    <label for="thu1500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1500" ng-model="userSchedule['4']['1500']" class="tgl tgl-light"/>
+                    <label for="fri1500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1500" ng-model="userSchedule['5']['1500']" class="tgl tgl-light"/>
+                    <label for="sat1500" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1500" ng-model="userSchedule['6']['1500']" class="tgl tgl-light"/>
+                    <label for="sun1500" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>3:30pm - 4:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1530" ng-model="userSchedule['0']['1530']" class="tgl tgl-light"/>
+                    <label for="mon1530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1530" ng-model="userSchedule['1']['1530']" class="tgl tgl-light"/>
+                    <label for="tue1530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1530" ng-model="userSchedule['2']['1530']" class="tgl tgl-light"/>
+                    <label for="wed1530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1530" ng-model="userSchedule['3']['1530']" class="tgl tgl-light"/>
+                    <label for="thu1530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1530" ng-model="userSchedule['4']['1530']" class="tgl tgl-light"/>
+                    <label for="fri1530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1530" ng-model="userSchedule['5']['1530']" class="tgl tgl-light"/>
+                    <label for="sat1530" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1530" ng-model="userSchedule['6']['1530']" class="tgl tgl-light"/>
+                    <label for="sun1530" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>4:00pm - 4:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1600" ng-model="userSchedule['0']['1600']" class="tgl tgl-light"/>
+                    <label for="mon1600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1600" ng-model="userSchedule['1']['1600']" class="tgl tgl-light"/>
+                    <label for="tue1600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1600" ng-model="userSchedule['2']['1600']" class="tgl tgl-light"/>
+                    <label for="wed1600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1600" ng-model="userSchedule['3']['1600']" class="tgl tgl-light"/>
+                    <label for="thu1600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1600" ng-model="userSchedule['4']['1600']" class="tgl tgl-light"/>
+                    <label for="fri1600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1600" ng-model="userSchedule['5']['1600']" class="tgl tgl-light"/>
+                    <label for="sat1600" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1600" ng-model="userSchedule['6']['1600']" class="tgl tgl-light"/>
+                    <label for="sun1600" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>4:30pm - 5:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1630" ng-model="userSchedule['0']['1630']" class="tgl tgl-light"/>
+                    <label for="mon1630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1630" ng-model="userSchedule['1']['1630']" class="tgl tgl-light"/>
+                    <label for="tue1630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1630" ng-model="userSchedule['2']['1630']" class="tgl tgl-light"/>
+                    <label for="wed1630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1630" ng-model="userSchedule['3']['1630']" class="tgl tgl-light"/>
+                    <label for="thu1630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1630" ng-model="userSchedule['4']['1630']" class="tgl tgl-light"/>
+                    <label for="fri1630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1630" ng-model="userSchedule['5']['1630']" class="tgl tgl-light"/>
+                    <label for="sat1630" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1630" ng-model="userSchedule['6']['1630']" class="tgl tgl-light"/>
+                    <label for="sun1630" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>5:00pm - 5:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1700" ng-model="userSchedule['0']['1700']" class="tgl tgl-light"/>
+                    <label for="mon1700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1700" ng-model="userSchedule['1']['1700']" class="tgl tgl-light"/>
+                    <label for="tue1700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1700" ng-model="userSchedule['2']['1700']" class="tgl tgl-light"/>
+                    <label for="wed1700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1700" ng-model="userSchedule['3']['1700']" class="tgl tgl-light"/>
+                    <label for="thu1700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1700" ng-model="userSchedule['4']['1700']" class="tgl tgl-light"/>
+                    <label for="fri1700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1700" ng-model="userSchedule['5']['1700']" class="tgl tgl-light"/>
+                    <label for="sat1700" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1700" ng-model="userSchedule['6']['1700']" class="tgl tgl-light"/>
+                    <label for="sun1700" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>5:30pm - 6:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1730" ng-model="userSchedule['0']['1730']" class="tgl tgl-light"/>
+                    <label for="mon1730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1730" ng-model="userSchedule['1']['1730']" class="tgl tgl-light"/>
+                    <label for="tue1730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1730" ng-model="userSchedule['2']['1730']" class="tgl tgl-light"/>
+                    <label for="wed1730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1730" ng-model="userSchedule['3']['1730']" class="tgl tgl-light"/>
+                    <label for="thu1730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1730" ng-model="userSchedule['4']['1730']" class="tgl tgl-light"/>
+                    <label for="fri1730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1730" ng-model="userSchedule['5']['1730']" class="tgl tgl-light"/>
+                    <label for="sat1730" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1730" ng-model="userSchedule['6']['1730']" class="tgl tgl-light"/>
+                    <label for="sun1730" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>6:00pm - 6:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1800" ng-model="userSchedule['0']['1800']" class="tgl tgl-light"/>
+                    <label for="mon1800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1800" ng-model="userSchedule['1']['1800']" class="tgl tgl-light"/>
+                    <label for="tue1800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1800" ng-model="userSchedule['2']['1800']" class="tgl tgl-light"/>
+                    <label for="wed1800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1800" ng-model="userSchedule['3']['1800']" class="tgl tgl-light"/>
+                    <label for="thu1800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1800" ng-model="userSchedule['4']['1800']" class="tgl tgl-light"/>
+                    <label for="fri1800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1800" ng-model="userSchedule['5']['1800']" class="tgl tgl-light"/>
+                    <label for="sat1800" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1800" ng-model="userSchedule['6']['1800']" class="tgl tgl-light"/>
+                    <label for="sun1800" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>6:30pm - 7:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1830" ng-model="userSchedule['0']['1830']" class="tgl tgl-light"/>
+                    <label for="mon1830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1830" ng-model="userSchedule['1']['1830']" class="tgl tgl-light"/>
+                    <label for="tue1830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1830" ng-model="userSchedule['2']['1830']" class="tgl tgl-light"/>
+                    <label for="wed1830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1830" ng-model="userSchedule['3']['1830']" class="tgl tgl-light"/>
+                    <label for="thu1830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1830" ng-model="userSchedule['4']['1830']" class="tgl tgl-light"/>
+                    <label for="fri1830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1830" ng-model="userSchedule['5']['1830']" class="tgl tgl-light"/>
+                    <label for="sat1830" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1830" ng-model="userSchedule['6']['1830']" class="tgl tgl-light"/>
+                    <label for="sun1830" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>7:00pm - 7:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1900" ng-model="userSchedule['0']['1900']" class="tgl tgl-light"/>
+                    <label for="mon1900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1900" ng-model="userSchedule['1']['1900']" class="tgl tgl-light"/>
+                    <label for="tue1900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1900" ng-model="userSchedule['2']['1900']" class="tgl tgl-light"/>
+                    <label for="wed1900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1900" ng-model="userSchedule['3']['1900']" class="tgl tgl-light"/>
+                    <label for="thu1900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1900" ng-model="userSchedule['4']['1900']" class="tgl tgl-light"/>
+                    <label for="fri1900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1900" ng-model="userSchedule['5']['1900']" class="tgl tgl-light"/>
+                    <label for="sat1900" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1900" ng-model="userSchedule['6']['1900']" class="tgl tgl-light"/>
+                    <label for="sun1900" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>7:30pm - 8:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon1930" ng-model="userSchedule['0']['1930']" class="tgl tgl-light"/>
+                    <label for="mon1930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue1930" ng-model="userSchedule['1']['1930']" class="tgl tgl-light"/>
+                    <label for="tue1930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed1930" ng-model="userSchedule['2']['1930']" class="tgl tgl-light"/>
+                    <label for="wed1930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu1930" ng-model="userSchedule['3']['1930']" class="tgl tgl-light"/>
+                    <label for="thu1930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri1930" ng-model="userSchedule['4']['1930']" class="tgl tgl-light"/>
+                    <label for="fri1930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat1930" ng-model="userSchedule['5']['1930']" class="tgl tgl-light"/>
+                    <label for="sat1930" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun1930" ng-model="userSchedule['6']['1930']" class="tgl tgl-light"/>
+                    <label for="sun1930" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>8:00pm - 8:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon2000" ng-model="userSchedule['0']['2000']" class="tgl tgl-light"/>
+                    <label for="mon2000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue2000" ng-model="userSchedule['1']['2000']" class="tgl tgl-light"/>
+                    <label for="tue2000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed2000" ng-model="userSchedule['2']['2000']" class="tgl tgl-light"/>
+                    <label for="wed2000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu2000" ng-model="userSchedule['3']['2000']" class="tgl tgl-light"/>
+                    <label for="thu2000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri2000" ng-model="userSchedule['4']['2000']" class="tgl tgl-light"/>
+                    <label for="fri2000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat2000" ng-model="userSchedule['5']['2000']" class="tgl tgl-light"/>
+                    <label for="sat2000" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun2000" ng-model="userSchedule['6']['2000']" class="tgl tgl-light"/>
+                    <label for="sun2000" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>8:30pm - 9:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon2030" ng-model="userSchedule['0']['2030']" class="tgl tgl-light"/>
+                    <label for="mon2030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue2030" ng-model="userSchedule['1']['2030']" class="tgl tgl-light"/>
+                    <label for="tue2030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed2030" ng-model="userSchedule['2']['2030']" class="tgl tgl-light"/>
+                    <label for="wed2030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu2030" ng-model="userSchedule['3']['2030']" class="tgl tgl-light"/>
+                    <label for="thu2030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri2030" ng-model="userSchedule['4']['2030']" class="tgl tgl-light"/>
+                    <label for="fri2030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat2030" ng-model="userSchedule['5']['2030']" class="tgl tgl-light"/>
+                    <label for="sat2030" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun2030" ng-model="userSchedule['6']['2030']" class="tgl tgl-light"/>
+                    <label for="sun2030" class="tgl-btn"></label>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody id="late" class="collapse">
+                <tr>
+                  <td>9:00pm - 9:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon2100" ng-model="userSchedule['0']['2100']" class="tgl tgl-light"/>
+                    <label for="mon2100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue2100" ng-model="userSchedule['1']['2100']" class="tgl tgl-light"/>
+                    <label for="tue2100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed2100" ng-model="userSchedule['2']['2100']" class="tgl tgl-light"/>
+                    <label for="wed2100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu2100" ng-model="userSchedule['3']['2100']" class="tgl tgl-light"/>
+                    <label for="thu2100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri2100" ng-model="userSchedule['4']['2100']" class="tgl tgl-light"/>
+                    <label for="fri2100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat2100" ng-model="userSchedule['5']['2100']" class="tgl tgl-light"/>
+                    <label for="sat2100" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun2100" ng-model="userSchedule['6']['2100']" class="tgl tgl-light"/>
+                    <label for="sun2100" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>9:30pm - 10:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon2130" ng-model="userSchedule['0']['2130']" class="tgl tgl-light"/>
+                    <label for="mon2130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue2130" ng-model="userSchedule['1']['2130']" class="tgl tgl-light"/>
+                    <label for="tue2130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed2130" ng-model="userSchedule['2']['2130']" class="tgl tgl-light"/>
+                    <label for="wed2130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu2130" ng-model="userSchedule['3']['2130']" class="tgl tgl-light"/>
+                    <label for="thu2130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri2130" ng-model="userSchedule['4']['2130']" class="tgl tgl-light"/>
+                    <label for="fri2130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat2130" ng-model="userSchedule['5']['2130']" class="tgl tgl-light"/>
+                    <label for="sat2130" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun2130" ng-model="userSchedule['6']['2130']" class="tgl tgl-light"/>
+                    <label for="sun2130" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>10:00pm - 10:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon2200" ng-model="userSchedule['0']['2200']" class="tgl tgl-light"/>
+                    <label for="mon2200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue2200" ng-model="userSchedule['1']['2200']" class="tgl tgl-light"/>
+                    <label for="tue2200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed2200" ng-model="userSchedule['2']['2200']" class="tgl tgl-light"/>
+                    <label for="wed2200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu2200" ng-model="userSchedule['3']['2200']" class="tgl tgl-light"/>
+                    <label for="thu2200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri2200" ng-model="userSchedule['4']['2200']" class="tgl tgl-light"/>
+                    <label for="fri2200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat2200" ng-model="userSchedule['5']['2200']" class="tgl tgl-light"/>
+                    <label for="sat2200" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun2200" ng-model="userSchedule['6']['2200']" class="tgl tgl-light"/>
+                    <label for="sun2200" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>10:30pm - 11:00pm</td>
+                  <td>
+                    <input type="checkbox" id="mon2230" ng-model="userSchedule['0']['2230']" class="tgl tgl-light"/>
+                    <label for="mon2230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue2230" ng-model="userSchedule['1']['2230']" class="tgl tgl-light"/>
+                    <label for="tue2230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed2230" ng-model="userSchedule['2']['2230']" class="tgl tgl-light"/>
+                    <label for="wed2230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu2230" ng-model="userSchedule['3']['2230']" class="tgl tgl-light"/>
+                    <label for="thu2230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri2230" ng-model="userSchedule['4']['2230']" class="tgl tgl-light"/>
+                    <label for="fri2230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat2230" ng-model="userSchedule['5']['2230']" class="tgl tgl-light"/>
+                    <label for="sat2230" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun2230" ng-model="userSchedule['6']['2230']" class="tgl tgl-light"/>
+                    <label for="sun2230" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>11:00pm - 11:30pm</td>
+                  <td>
+                    <input type="checkbox" id="mon2300" ng-model="userSchedule['0']['2300']" class="tgl tgl-light"/>
+                    <label for="mon2300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue2300" ng-model="userSchedule['1']['2300']" class="tgl tgl-light"/>
+                    <label for="tue2300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed2300" ng-model="userSchedule['2']['2300']" class="tgl tgl-light"/>
+                    <label for="wed2300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu2300" ng-model="userSchedule['3']['2300']" class="tgl tgl-light"/>
+                    <label for="thu2300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri2300" ng-model="userSchedule['4']['2300']" class="tgl tgl-light"/>
+                    <label for="fri2300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat2300" ng-model="userSchedule['5']['2300']" class="tgl tgl-light"/>
+                    <label for="sat2300" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun2300" ng-model="userSchedule['6']['2300']" class="tgl tgl-light"/>
+                    <label for="sun2300" class="tgl-btn"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>11:30pm - 12:00am</td>
+                  <td>
+                    <input type="checkbox" id="mon2330" ng-model="userSchedule['0']['2330']" class="tgl tgl-light"/>
+                    <label for="mon2330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="tue2330" ng-model="userSchedule['1']['2330']" class="tgl tgl-light"/>
+                    <label for="tue2330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="wed2330" ng-model="userSchedule['2']['2330']" class="tgl tgl-light"/>
+                    <label for="wed2330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="thu2330" ng-model="userSchedule['3']['2330']" class="tgl tgl-light"/>
+                    <label for="thu2330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="fri2330" ng-model="userSchedule['4']['2330']" class="tgl tgl-light"/>
+                    <label for="fri2330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sat2330" ng-model="userSchedule['5']['2330']" class="tgl tgl-light"/>
+                    <label for="sat2330" class="tgl-btn"></label>
+                  </td>
+                  <td>
+                    <input type="checkbox" id="sun2330" ng-model="userSchedule['6']['2330']" class="tgl tgl-light"/>
+                    <label for="sun2330" class="tgl-btn"></label>
+                  </td>
+                </tr>
+              </tbody>
+            </thead>
+            <tfoot>
+              <tr>
+                <td colspan="8">
+                  <button type="button" data-toggle="collapse" data-target="#late" aria-expanded="false" aria-controls="late" class="btn btn-info">Later</button>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </form>
+      </div>
     </div>
-  </div>
-  <div ng-controller="ScheduleCtrl" class="schedule">
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>Mon</th>
-          <th>Tue</th>
-          <th>Wed</th>
-          <th>Thu</th>
-          <th>Fri</th>
-          <th>Sat</th>
-          <th>Sun</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>12:00am - 12:30am</td>
-          <td>
-            <input type="checkbox" id="mon0000" ng-model="userSchedule['0']['0000']" class="tgl tgl-light"/>
-            <label for="mon0000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0000" ng-model="userSchedule['1']['0000']" class="tgl tgl-light"/>
-            <label for="tue0000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0000" ng-model="userSchedule['2']['0000']" class="tgl tgl-light"/>
-            <label for="wed0000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0000" ng-model="userSchedule['3']['0000']" class="tgl tgl-light"/>
-            <label for="thu0000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0000" ng-model="userSchedule['4']['0000']" class="tgl tgl-light"/>
-            <label for="fri0000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0000" ng-model="userSchedule['5']['0000']" class="tgl tgl-light"/>
-            <label for="sat0000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0000" ng-model="userSchedule['6']['0000']" class="tgl tgl-light"/>
-            <label for="sun0000" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>12:30am - 1:00am</td>
-          <td>
-            <input type="checkbox" id="mon0030" ng-model="userSchedule['0']['0030']" class="tgl tgl-light"/>
-            <label for="mon0030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0030" ng-model="userSchedule['1']['0030']" class="tgl tgl-light"/>
-            <label for="tue0030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0030" ng-model="userSchedule['2']['0030']" class="tgl tgl-light"/>
-            <label for="wed0030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0030" ng-model="userSchedule['3']['0030']" class="tgl tgl-light"/>
-            <label for="thu0030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0030" ng-model="userSchedule['4']['0030']" class="tgl tgl-light"/>
-            <label for="fri0030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0030" ng-model="userSchedule['5']['0030']" class="tgl tgl-light"/>
-            <label for="sat0030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0030" ng-model="userSchedule['6']['0030']" class="tgl tgl-light"/>
-            <label for="sun0030" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>1:00am - 1:30am</td>
-          <td>
-            <input type="checkbox" id="mon0100" ng-model="userSchedule['0']['0100']" class="tgl tgl-light"/>
-            <label for="mon0100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0100" ng-model="userSchedule['1']['0100']" class="tgl tgl-light"/>
-            <label for="tue0100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0100" ng-model="userSchedule['2']['0100']" class="tgl tgl-light"/>
-            <label for="wed0100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0100" ng-model="userSchedule['3']['0100']" class="tgl tgl-light"/>
-            <label for="thu0100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0100" ng-model="userSchedule['4']['0100']" class="tgl tgl-light"/>
-            <label for="fri0100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0100" ng-model="userSchedule['5']['0100']" class="tgl tgl-light"/>
-            <label for="sat0100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0100" ng-model="userSchedule['6']['0100']" class="tgl tgl-light"/>
-            <label for="sun0100" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>1:30am - 2:00am</td>
-          <td>
-            <input type="checkbox" id="mon0130" ng-model="userSchedule['0']['0130']" class="tgl tgl-light"/>
-            <label for="mon0130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0130" ng-model="userSchedule['1']['0130']" class="tgl tgl-light"/>
-            <label for="tue0130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0130" ng-model="userSchedule['2']['0130']" class="tgl tgl-light"/>
-            <label for="wed0130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0130" ng-model="userSchedule['3']['0130']" class="tgl tgl-light"/>
-            <label for="thu0130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0130" ng-model="userSchedule['4']['0130']" class="tgl tgl-light"/>
-            <label for="fri0130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0130" ng-model="userSchedule['5']['0130']" class="tgl tgl-light"/>
-            <label for="sat0130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0130" ng-model="userSchedule['6']['0130']" class="tgl tgl-light"/>
-            <label for="sun0130" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>2:00am - 2:30am</td>
-          <td>
-            <input type="checkbox" id="mon0200" ng-model="userSchedule['0']['0200']" class="tgl tgl-light"/>
-            <label for="mon0200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0200" ng-model="userSchedule['1']['0200']" class="tgl tgl-light"/>
-            <label for="tue0200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0200" ng-model="userSchedule['2']['0200']" class="tgl tgl-light"/>
-            <label for="wed0200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0200" ng-model="userSchedule['3']['0200']" class="tgl tgl-light"/>
-            <label for="thu0200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0200" ng-model="userSchedule['4']['0200']" class="tgl tgl-light"/>
-            <label for="fri0200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0200" ng-model="userSchedule['5']['0200']" class="tgl tgl-light"/>
-            <label for="sat0200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0200" ng-model="userSchedule['6']['0200']" class="tgl tgl-light"/>
-            <label for="sun0200" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>2:30am - 3:00am</td>
-          <td>
-            <input type="checkbox" id="mon0230" ng-model="userSchedule['0']['0230']" class="tgl tgl-light"/>
-            <label for="mon0230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0230" ng-model="userSchedule['1']['0230']" class="tgl tgl-light"/>
-            <label for="tue0230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0230" ng-model="userSchedule['2']['0230']" class="tgl tgl-light"/>
-            <label for="wed0230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0230" ng-model="userSchedule['3']['0230']" class="tgl tgl-light"/>
-            <label for="thu0230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0230" ng-model="userSchedule['4']['0230']" class="tgl tgl-light"/>
-            <label for="fri0230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0230" ng-model="userSchedule['5']['0230']" class="tgl tgl-light"/>
-            <label for="sat0230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0230" ng-model="userSchedule['6']['0230']" class="tgl tgl-light"/>
-            <label for="sun0230" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>3:00am - 3:30am</td>
-          <td>
-            <input type="checkbox" id="mon0300" ng-model="userSchedule['0']['0300']" class="tgl tgl-light"/>
-            <label for="mon0300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0300" ng-model="userSchedule['1']['0300']" class="tgl tgl-light"/>
-            <label for="tue0300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0300" ng-model="userSchedule['2']['0300']" class="tgl tgl-light"/>
-            <label for="wed0300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0300" ng-model="userSchedule['3']['0300']" class="tgl tgl-light"/>
-            <label for="thu0300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0300" ng-model="userSchedule['4']['0300']" class="tgl tgl-light"/>
-            <label for="fri0300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0300" ng-model="userSchedule['5']['0300']" class="tgl tgl-light"/>
-            <label for="sat0300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0300" ng-model="userSchedule['6']['0300']" class="tgl tgl-light"/>
-            <label for="sun0300" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>3:30am - 4:00am</td>
-          <td>
-            <input type="checkbox" id="mon0330" ng-model="userSchedule['0']['0330']" class="tgl tgl-light"/>
-            <label for="mon0330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0330" ng-model="userSchedule['1']['0330']" class="tgl tgl-light"/>
-            <label for="tue0330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0330" ng-model="userSchedule['2']['0330']" class="tgl tgl-light"/>
-            <label for="wed0330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0330" ng-model="userSchedule['3']['0330']" class="tgl tgl-light"/>
-            <label for="thu0330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0330" ng-model="userSchedule['4']['0330']" class="tgl tgl-light"/>
-            <label for="fri0330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0330" ng-model="userSchedule['5']['0330']" class="tgl tgl-light"/>
-            <label for="sat0330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0330" ng-model="userSchedule['6']['0330']" class="tgl tgl-light"/>
-            <label for="sun0330" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>4:00am - 4:30am</td>
-          <td>
-            <input type="checkbox" id="mon0400" ng-model="userSchedule['0']['0400']" class="tgl tgl-light"/>
-            <label for="mon0400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0400" ng-model="userSchedule['1']['0400']" class="tgl tgl-light"/>
-            <label for="tue0400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0400" ng-model="userSchedule['2']['0400']" class="tgl tgl-light"/>
-            <label for="wed0400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0400" ng-model="userSchedule['3']['0400']" class="tgl tgl-light"/>
-            <label for="thu0400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0400" ng-model="userSchedule['4']['0400']" class="tgl tgl-light"/>
-            <label for="fri0400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0400" ng-model="userSchedule['5']['0400']" class="tgl tgl-light"/>
-            <label for="sat0400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0400" ng-model="userSchedule['6']['0400']" class="tgl tgl-light"/>
-            <label for="sun0400" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>4:30am - 5:00am</td>
-          <td>
-            <input type="checkbox" id="mon0430" ng-model="userSchedule['0']['0430']" class="tgl tgl-light"/>
-            <label for="mon0430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0430" ng-model="userSchedule['1']['0430']" class="tgl tgl-light"/>
-            <label for="tue0430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0430" ng-model="userSchedule['2']['0430']" class="tgl tgl-light"/>
-            <label for="wed0430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0430" ng-model="userSchedule['3']['0430']" class="tgl tgl-light"/>
-            <label for="thu0430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0430" ng-model="userSchedule['4']['0430']" class="tgl tgl-light"/>
-            <label for="fri0430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0430" ng-model="userSchedule['5']['0430']" class="tgl tgl-light"/>
-            <label for="sat0430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0430" ng-model="userSchedule['6']['0430']" class="tgl tgl-light"/>
-            <label for="sun0430" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>5:00am - 5:30am</td>
-          <td>
-            <input type="checkbox" id="mon0500" ng-model="userSchedule['0']['0500']" class="tgl tgl-light"/>
-            <label for="mon0500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0500" ng-model="userSchedule['1']['0500']" class="tgl tgl-light"/>
-            <label for="tue0500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0500" ng-model="userSchedule['2']['0500']" class="tgl tgl-light"/>
-            <label for="wed0500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0500" ng-model="userSchedule['3']['0500']" class="tgl tgl-light"/>
-            <label for="thu0500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0500" ng-model="userSchedule['4']['0500']" class="tgl tgl-light"/>
-            <label for="fri0500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0500" ng-model="userSchedule['5']['0500']" class="tgl tgl-light"/>
-            <label for="sat0500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0500" ng-model="userSchedule['6']['0500']" class="tgl tgl-light"/>
-            <label for="sun0500" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>5:30am - 6:00am</td>
-          <td>
-            <input type="checkbox" id="mon0530" ng-model="userSchedule['0']['0530']" class="tgl tgl-light"/>
-            <label for="mon0530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0530" ng-model="userSchedule['1']['0530']" class="tgl tgl-light"/>
-            <label for="tue0530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0530" ng-model="userSchedule['2']['0530']" class="tgl tgl-light"/>
-            <label for="wed0530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0530" ng-model="userSchedule['3']['0530']" class="tgl tgl-light"/>
-            <label for="thu0530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0530" ng-model="userSchedule['4']['0530']" class="tgl tgl-light"/>
-            <label for="fri0530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0530" ng-model="userSchedule['5']['0530']" class="tgl tgl-light"/>
-            <label for="sat0530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0530" ng-model="userSchedule['6']['0530']" class="tgl tgl-light"/>
-            <label for="sun0530" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>6:00am - 6:30am</td>
-          <td>
-            <input type="checkbox" id="mon0600" ng-model="userSchedule['0']['0600']" class="tgl tgl-light"/>
-            <label for="mon0600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0600" ng-model="userSchedule['1']['0600']" class="tgl tgl-light"/>
-            <label for="tue0600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0600" ng-model="userSchedule['2']['0600']" class="tgl tgl-light"/>
-            <label for="wed0600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0600" ng-model="userSchedule['3']['0600']" class="tgl tgl-light"/>
-            <label for="thu0600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0600" ng-model="userSchedule['4']['0600']" class="tgl tgl-light"/>
-            <label for="fri0600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0600" ng-model="userSchedule['5']['0600']" class="tgl tgl-light"/>
-            <label for="sat0600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0600" ng-model="userSchedule['6']['0600']" class="tgl tgl-light"/>
-            <label for="sun0600" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>6:30am - 7:00am</td>
-          <td>
-            <input type="checkbox" id="mon0630" ng-model="userSchedule['0']['0630']" class="tgl tgl-light"/>
-            <label for="mon0630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0630" ng-model="userSchedule['1']['0630']" class="tgl tgl-light"/>
-            <label for="tue0630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0630" ng-model="userSchedule['2']['0630']" class="tgl tgl-light"/>
-            <label for="wed0630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0630" ng-model="userSchedule['3']['0630']" class="tgl tgl-light"/>
-            <label for="thu0630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0630" ng-model="userSchedule['4']['0630']" class="tgl tgl-light"/>
-            <label for="fri0630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0630" ng-model="userSchedule['5']['0630']" class="tgl tgl-light"/>
-            <label for="sat0630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0630" ng-model="userSchedule['6']['0630']" class="tgl tgl-light"/>
-            <label for="sun0630" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>7:00am - 7:30am</td>
-          <td>
-            <input type="checkbox" id="mon0700" ng-model="userSchedule['0']['0700']" class="tgl tgl-light"/>
-            <label for="mon0700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0700" ng-model="userSchedule['1']['0700']" class="tgl tgl-light"/>
-            <label for="tue0700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0700" ng-model="userSchedule['2']['0700']" class="tgl tgl-light"/>
-            <label for="wed0700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0700" ng-model="userSchedule['3']['0700']" class="tgl tgl-light"/>
-            <label for="thu0700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0700" ng-model="userSchedule['4']['0700']" class="tgl tgl-light"/>
-            <label for="fri0700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0700" ng-model="userSchedule['5']['0700']" class="tgl tgl-light"/>
-            <label for="sat0700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0700" ng-model="userSchedule['6']['0700']" class="tgl tgl-light"/>
-            <label for="sun0700" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>7:30am - 8:00am</td>
-          <td>
-            <input type="checkbox" id="mon0730" ng-model="userSchedule['0']['0730']" class="tgl tgl-light"/>
-            <label for="mon0730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0730" ng-model="userSchedule['1']['0730']" class="tgl tgl-light"/>
-            <label for="tue0730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0730" ng-model="userSchedule['2']['0730']" class="tgl tgl-light"/>
-            <label for="wed0730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0730" ng-model="userSchedule['3']['0730']" class="tgl tgl-light"/>
-            <label for="thu0730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0730" ng-model="userSchedule['4']['0730']" class="tgl tgl-light"/>
-            <label for="fri0730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0730" ng-model="userSchedule['5']['0730']" class="tgl tgl-light"/>
-            <label for="sat0730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0730" ng-model="userSchedule['6']['0730']" class="tgl tgl-light"/>
-            <label for="sun0730" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>8:00am - 8:30am</td>
-          <td>
-            <input type="checkbox" id="mon0800" ng-model="userSchedule['0']['0800']" class="tgl tgl-light"/>
-            <label for="mon0800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0800" ng-model="userSchedule['1']['0800']" class="tgl tgl-light"/>
-            <label for="tue0800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0800" ng-model="userSchedule['2']['0800']" class="tgl tgl-light"/>
-            <label for="wed0800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0800" ng-model="userSchedule['3']['0800']" class="tgl tgl-light"/>
-            <label for="thu0800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0800" ng-model="userSchedule['4']['0800']" class="tgl tgl-light"/>
-            <label for="fri0800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0800" ng-model="userSchedule['5']['0800']" class="tgl tgl-light"/>
-            <label for="sat0800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0800" ng-model="userSchedule['6']['0800']" class="tgl tgl-light"/>
-            <label for="sun0800" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>8:30am - 9:00am</td>
-          <td>
-            <input type="checkbox" id="mon0830" ng-model="userSchedule['0']['0830']" class="tgl tgl-light"/>
-            <label for="mon0830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0830" ng-model="userSchedule['1']['0830']" class="tgl tgl-light"/>
-            <label for="tue0830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0830" ng-model="userSchedule['2']['0830']" class="tgl tgl-light"/>
-            <label for="wed0830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0830" ng-model="userSchedule['3']['0830']" class="tgl tgl-light"/>
-            <label for="thu0830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0830" ng-model="userSchedule['4']['0830']" class="tgl tgl-light"/>
-            <label for="fri0830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0830" ng-model="userSchedule['5']['0830']" class="tgl tgl-light"/>
-            <label for="sat0830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0830" ng-model="userSchedule['6']['0830']" class="tgl tgl-light"/>
-            <label for="sun0830" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>9:00am - 9:30am</td>
-          <td>
-            <input type="checkbox" id="mon0900" ng-model="userSchedule['0']['0900']" class="tgl tgl-light"/>
-            <label for="mon0900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0900" ng-model="userSchedule['1']['0900']" class="tgl tgl-light"/>
-            <label for="tue0900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0900" ng-model="userSchedule['2']['0900']" class="tgl tgl-light"/>
-            <label for="wed0900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0900" ng-model="userSchedule['3']['0900']" class="tgl tgl-light"/>
-            <label for="thu0900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0900" ng-model="userSchedule['4']['0900']" class="tgl tgl-light"/>
-            <label for="fri0900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0900" ng-model="userSchedule['5']['0900']" class="tgl tgl-light"/>
-            <label for="sat0900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0900" ng-model="userSchedule['6']['0900']" class="tgl tgl-light"/>
-            <label for="sun0900" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>9:30am - 10:00am</td>
-          <td>
-            <input type="checkbox" id="mon0930" ng-model="userSchedule['0']['0930']" class="tgl tgl-light"/>
-            <label for="mon0930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue0930" ng-model="userSchedule['1']['0930']" class="tgl tgl-light"/>
-            <label for="tue0930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed0930" ng-model="userSchedule['2']['0930']" class="tgl tgl-light"/>
-            <label for="wed0930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu0930" ng-model="userSchedule['3']['0930']" class="tgl tgl-light"/>
-            <label for="thu0930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri0930" ng-model="userSchedule['4']['0930']" class="tgl tgl-light"/>
-            <label for="fri0930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat0930" ng-model="userSchedule['5']['0930']" class="tgl tgl-light"/>
-            <label for="sat0930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun0930" ng-model="userSchedule['6']['0930']" class="tgl tgl-light"/>
-            <label for="sun0930" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>10:00am - 10:30am</td>
-          <td>
-            <input type="checkbox" id="mon1000" ng-model="userSchedule['0']['1000']" class="tgl tgl-light"/>
-            <label for="mon1000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1000" ng-model="userSchedule['1']['1000']" class="tgl tgl-light"/>
-            <label for="tue1000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1000" ng-model="userSchedule['2']['1000']" class="tgl tgl-light"/>
-            <label for="wed1000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1000" ng-model="userSchedule['3']['1000']" class="tgl tgl-light"/>
-            <label for="thu1000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1000" ng-model="userSchedule['4']['1000']" class="tgl tgl-light"/>
-            <label for="fri1000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1000" ng-model="userSchedule['5']['1000']" class="tgl tgl-light"/>
-            <label for="sat1000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1000" ng-model="userSchedule['6']['1000']" class="tgl tgl-light"/>
-            <label for="sun1000" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>10:30am - 11:00am</td>
-          <td>
-            <input type="checkbox" id="mon1030" ng-model="userSchedule['0']['1030']" class="tgl tgl-light"/>
-            <label for="mon1030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1030" ng-model="userSchedule['1']['1030']" class="tgl tgl-light"/>
-            <label for="tue1030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1030" ng-model="userSchedule['2']['1030']" class="tgl tgl-light"/>
-            <label for="wed1030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1030" ng-model="userSchedule['3']['1030']" class="tgl tgl-light"/>
-            <label for="thu1030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1030" ng-model="userSchedule['4']['1030']" class="tgl tgl-light"/>
-            <label for="fri1030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1030" ng-model="userSchedule['5']['1030']" class="tgl tgl-light"/>
-            <label for="sat1030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1030" ng-model="userSchedule['6']['1030']" class="tgl tgl-light"/>
-            <label for="sun1030" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>11:00am - 11:30am</td>
-          <td>
-            <input type="checkbox" id="mon1100" ng-model="userSchedule['0']['1100']" class="tgl tgl-light"/>
-            <label for="mon1100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1100" ng-model="userSchedule['1']['1100']" class="tgl tgl-light"/>
-            <label for="tue1100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1100" ng-model="userSchedule['2']['1100']" class="tgl tgl-light"/>
-            <label for="wed1100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1100" ng-model="userSchedule['3']['1100']" class="tgl tgl-light"/>
-            <label for="thu1100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1100" ng-model="userSchedule['4']['1100']" class="tgl tgl-light"/>
-            <label for="fri1100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1100" ng-model="userSchedule['5']['1100']" class="tgl tgl-light"/>
-            <label for="sat1100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1100" ng-model="userSchedule['6']['1100']" class="tgl tgl-light"/>
-            <label for="sun1100" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>11:30am - 12:00pm</td>
-          <td>
-            <input type="checkbox" id="mon1130" ng-model="userSchedule['0']['1130']" class="tgl tgl-light"/>
-            <label for="mon1130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1130" ng-model="userSchedule['1']['1130']" class="tgl tgl-light"/>
-            <label for="tue1130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1130" ng-model="userSchedule['2']['1130']" class="tgl tgl-light"/>
-            <label for="wed1130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1130" ng-model="userSchedule['3']['1130']" class="tgl tgl-light"/>
-            <label for="thu1130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1130" ng-model="userSchedule['4']['1130']" class="tgl tgl-light"/>
-            <label for="fri1130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1130" ng-model="userSchedule['5']['1130']" class="tgl tgl-light"/>
-            <label for="sat1130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1130" ng-model="userSchedule['6']['1130']" class="tgl tgl-light"/>
-            <label for="sun1130" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>12:00pm - 12:30pm</td>
-          <td>
-            <input type="checkbox" id="mon1200" ng-model="userSchedule['0']['1200']" class="tgl tgl-light"/>
-            <label for="mon1200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1200" ng-model="userSchedule['1']['1200']" class="tgl tgl-light"/>
-            <label for="tue1200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1200" ng-model="userSchedule['2']['1200']" class="tgl tgl-light"/>
-            <label for="wed1200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1200" ng-model="userSchedule['3']['1200']" class="tgl tgl-light"/>
-            <label for="thu1200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1200" ng-model="userSchedule['4']['1200']" class="tgl tgl-light"/>
-            <label for="fri1200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1200" ng-model="userSchedule['5']['1200']" class="tgl tgl-light"/>
-            <label for="sat1200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1200" ng-model="userSchedule['6']['1200']" class="tgl tgl-light"/>
-            <label for="sun1200" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>12:30pm - 1:00pm</td>
-          <td>
-            <input type="checkbox" id="mon1230" ng-model="userSchedule['0']['1230']" class="tgl tgl-light"/>
-            <label for="mon1230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1230" ng-model="userSchedule['1']['1230']" class="tgl tgl-light"/>
-            <label for="tue1230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1230" ng-model="userSchedule['2']['1230']" class="tgl tgl-light"/>
-            <label for="wed1230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1230" ng-model="userSchedule['3']['1230']" class="tgl tgl-light"/>
-            <label for="thu1230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1230" ng-model="userSchedule['4']['1230']" class="tgl tgl-light"/>
-            <label for="fri1230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1230" ng-model="userSchedule['5']['1230']" class="tgl tgl-light"/>
-            <label for="sat1230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1230" ng-model="userSchedule['6']['1230']" class="tgl tgl-light"/>
-            <label for="sun1230" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>1:00pm - 1:30pm</td>
-          <td>
-            <input type="checkbox" id="mon1300" ng-model="userSchedule['0']['1300']" class="tgl tgl-light"/>
-            <label for="mon1300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1300" ng-model="userSchedule['1']['1300']" class="tgl tgl-light"/>
-            <label for="tue1300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1300" ng-model="userSchedule['2']['1300']" class="tgl tgl-light"/>
-            <label for="wed1300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1300" ng-model="userSchedule['3']['1300']" class="tgl tgl-light"/>
-            <label for="thu1300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1300" ng-model="userSchedule['4']['1300']" class="tgl tgl-light"/>
-            <label for="fri1300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1300" ng-model="userSchedule['5']['1300']" class="tgl tgl-light"/>
-            <label for="sat1300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1300" ng-model="userSchedule['6']['1300']" class="tgl tgl-light"/>
-            <label for="sun1300" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>1:30pm - 2:00pm</td>
-          <td>
-            <input type="checkbox" id="mon1330" ng-model="userSchedule['0']['1330']" class="tgl tgl-light"/>
-            <label for="mon1330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1330" ng-model="userSchedule['1']['1330']" class="tgl tgl-light"/>
-            <label for="tue1330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1330" ng-model="userSchedule['2']['1330']" class="tgl tgl-light"/>
-            <label for="wed1330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1330" ng-model="userSchedule['3']['1330']" class="tgl tgl-light"/>
-            <label for="thu1330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1330" ng-model="userSchedule['4']['1330']" class="tgl tgl-light"/>
-            <label for="fri1330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1330" ng-model="userSchedule['5']['1330']" class="tgl tgl-light"/>
-            <label for="sat1330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1330" ng-model="userSchedule['6']['1330']" class="tgl tgl-light"/>
-            <label for="sun1330" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>2:00pm - 2:30pm</td>
-          <td>
-            <input type="checkbox" id="mon1400" ng-model="userSchedule['0']['1400']" class="tgl tgl-light"/>
-            <label for="mon1400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1400" ng-model="userSchedule['1']['1400']" class="tgl tgl-light"/>
-            <label for="tue1400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1400" ng-model="userSchedule['2']['1400']" class="tgl tgl-light"/>
-            <label for="wed1400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1400" ng-model="userSchedule['3']['1400']" class="tgl tgl-light"/>
-            <label for="thu1400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1400" ng-model="userSchedule['4']['1400']" class="tgl tgl-light"/>
-            <label for="fri1400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1400" ng-model="userSchedule['5']['1400']" class="tgl tgl-light"/>
-            <label for="sat1400" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1400" ng-model="userSchedule['6']['1400']" class="tgl tgl-light"/>
-            <label for="sun1400" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>2:30pm - 3:00pm</td>
-          <td>
-            <input type="checkbox" id="mon1430" ng-model="userSchedule['0']['1430']" class="tgl tgl-light"/>
-            <label for="mon1430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1430" ng-model="userSchedule['1']['1430']" class="tgl tgl-light"/>
-            <label for="tue1430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1430" ng-model="userSchedule['2']['1430']" class="tgl tgl-light"/>
-            <label for="wed1430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1430" ng-model="userSchedule['3']['1430']" class="tgl tgl-light"/>
-            <label for="thu1430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1430" ng-model="userSchedule['4']['1430']" class="tgl tgl-light"/>
-            <label for="fri1430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1430" ng-model="userSchedule['5']['1430']" class="tgl tgl-light"/>
-            <label for="sat1430" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1430" ng-model="userSchedule['6']['1430']" class="tgl tgl-light"/>
-            <label for="sun1430" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>3:00pm - 3:30pm</td>
-          <td>
-            <input type="checkbox" id="mon1500" ng-model="userSchedule['0']['1500']" class="tgl tgl-light"/>
-            <label for="mon1500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1500" ng-model="userSchedule['1']['1500']" class="tgl tgl-light"/>
-            <label for="tue1500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1500" ng-model="userSchedule['2']['1500']" class="tgl tgl-light"/>
-            <label for="wed1500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1500" ng-model="userSchedule['3']['1500']" class="tgl tgl-light"/>
-            <label for="thu1500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1500" ng-model="userSchedule['4']['1500']" class="tgl tgl-light"/>
-            <label for="fri1500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1500" ng-model="userSchedule['5']['1500']" class="tgl tgl-light"/>
-            <label for="sat1500" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1500" ng-model="userSchedule['6']['1500']" class="tgl tgl-light"/>
-            <label for="sun1500" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>3:30pm - 4:00pm</td>
-          <td>
-            <input type="checkbox" id="mon1530" ng-model="userSchedule['0']['1530']" class="tgl tgl-light"/>
-            <label for="mon1530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1530" ng-model="userSchedule['1']['1530']" class="tgl tgl-light"/>
-            <label for="tue1530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1530" ng-model="userSchedule['2']['1530']" class="tgl tgl-light"/>
-            <label for="wed1530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1530" ng-model="userSchedule['3']['1530']" class="tgl tgl-light"/>
-            <label for="thu1530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1530" ng-model="userSchedule['4']['1530']" class="tgl tgl-light"/>
-            <label for="fri1530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1530" ng-model="userSchedule['5']['1530']" class="tgl tgl-light"/>
-            <label for="sat1530" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1530" ng-model="userSchedule['6']['1530']" class="tgl tgl-light"/>
-            <label for="sun1530" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>4:00pm - 4:30pm</td>
-          <td>
-            <input type="checkbox" id="mon1600" ng-model="userSchedule['0']['1600']" class="tgl tgl-light"/>
-            <label for="mon1600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1600" ng-model="userSchedule['1']['1600']" class="tgl tgl-light"/>
-            <label for="tue1600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1600" ng-model="userSchedule['2']['1600']" class="tgl tgl-light"/>
-            <label for="wed1600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1600" ng-model="userSchedule['3']['1600']" class="tgl tgl-light"/>
-            <label for="thu1600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1600" ng-model="userSchedule['4']['1600']" class="tgl tgl-light"/>
-            <label for="fri1600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1600" ng-model="userSchedule['5']['1600']" class="tgl tgl-light"/>
-            <label for="sat1600" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1600" ng-model="userSchedule['6']['1600']" class="tgl tgl-light"/>
-            <label for="sun1600" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>4:30pm - 5:00pm</td>
-          <td>
-            <input type="checkbox" id="mon1630" ng-model="userSchedule['0']['1630']" class="tgl tgl-light"/>
-            <label for="mon1630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1630" ng-model="userSchedule['1']['1630']" class="tgl tgl-light"/>
-            <label for="tue1630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1630" ng-model="userSchedule['2']['1630']" class="tgl tgl-light"/>
-            <label for="wed1630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1630" ng-model="userSchedule['3']['1630']" class="tgl tgl-light"/>
-            <label for="thu1630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1630" ng-model="userSchedule['4']['1630']" class="tgl tgl-light"/>
-            <label for="fri1630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1630" ng-model="userSchedule['5']['1630']" class="tgl tgl-light"/>
-            <label for="sat1630" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1630" ng-model="userSchedule['6']['1630']" class="tgl tgl-light"/>
-            <label for="sun1630" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>5:00pm - 5:30pm</td>
-          <td>
-            <input type="checkbox" id="mon1700" ng-model="userSchedule['0']['1700']" class="tgl tgl-light"/>
-            <label for="mon1700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1700" ng-model="userSchedule['1']['1700']" class="tgl tgl-light"/>
-            <label for="tue1700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1700" ng-model="userSchedule['2']['1700']" class="tgl tgl-light"/>
-            <label for="wed1700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1700" ng-model="userSchedule['3']['1700']" class="tgl tgl-light"/>
-            <label for="thu1700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1700" ng-model="userSchedule['4']['1700']" class="tgl tgl-light"/>
-            <label for="fri1700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1700" ng-model="userSchedule['5']['1700']" class="tgl tgl-light"/>
-            <label for="sat1700" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1700" ng-model="userSchedule['6']['1700']" class="tgl tgl-light"/>
-            <label for="sun1700" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>5:30pm - 6:00pm</td>
-          <td>
-            <input type="checkbox" id="mon1730" ng-model="userSchedule['0']['1730']" class="tgl tgl-light"/>
-            <label for="mon1730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1730" ng-model="userSchedule['1']['1730']" class="tgl tgl-light"/>
-            <label for="tue1730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1730" ng-model="userSchedule['2']['1730']" class="tgl tgl-light"/>
-            <label for="wed1730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1730" ng-model="userSchedule['3']['1730']" class="tgl tgl-light"/>
-            <label for="thu1730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1730" ng-model="userSchedule['4']['1730']" class="tgl tgl-light"/>
-            <label for="fri1730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1730" ng-model="userSchedule['5']['1730']" class="tgl tgl-light"/>
-            <label for="sat1730" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1730" ng-model="userSchedule['6']['1730']" class="tgl tgl-light"/>
-            <label for="sun1730" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>6:00pm - 6:30pm</td>
-          <td>
-            <input type="checkbox" id="mon1800" ng-model="userSchedule['0']['1800']" class="tgl tgl-light"/>
-            <label for="mon1800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1800" ng-model="userSchedule['1']['1800']" class="tgl tgl-light"/>
-            <label for="tue1800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1800" ng-model="userSchedule['2']['1800']" class="tgl tgl-light"/>
-            <label for="wed1800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1800" ng-model="userSchedule['3']['1800']" class="tgl tgl-light"/>
-            <label for="thu1800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1800" ng-model="userSchedule['4']['1800']" class="tgl tgl-light"/>
-            <label for="fri1800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1800" ng-model="userSchedule['5']['1800']" class="tgl tgl-light"/>
-            <label for="sat1800" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1800" ng-model="userSchedule['6']['1800']" class="tgl tgl-light"/>
-            <label for="sun1800" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>6:30pm - 7:00pm</td>
-          <td>
-            <input type="checkbox" id="mon1830" ng-model="userSchedule['0']['1830']" class="tgl tgl-light"/>
-            <label for="mon1830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1830" ng-model="userSchedule['1']['1830']" class="tgl tgl-light"/>
-            <label for="tue1830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1830" ng-model="userSchedule['2']['1830']" class="tgl tgl-light"/>
-            <label for="wed1830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1830" ng-model="userSchedule['3']['1830']" class="tgl tgl-light"/>
-            <label for="thu1830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1830" ng-model="userSchedule['4']['1830']" class="tgl tgl-light"/>
-            <label for="fri1830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1830" ng-model="userSchedule['5']['1830']" class="tgl tgl-light"/>
-            <label for="sat1830" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1830" ng-model="userSchedule['6']['1830']" class="tgl tgl-light"/>
-            <label for="sun1830" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>7:00pm - 7:30pm</td>
-          <td>
-            <input type="checkbox" id="mon1900" ng-model="userSchedule['0']['1900']" class="tgl tgl-light"/>
-            <label for="mon1900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1900" ng-model="userSchedule['1']['1900']" class="tgl tgl-light"/>
-            <label for="tue1900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1900" ng-model="userSchedule['2']['1900']" class="tgl tgl-light"/>
-            <label for="wed1900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1900" ng-model="userSchedule['3']['1900']" class="tgl tgl-light"/>
-            <label for="thu1900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1900" ng-model="userSchedule['4']['1900']" class="tgl tgl-light"/>
-            <label for="fri1900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1900" ng-model="userSchedule['5']['1900']" class="tgl tgl-light"/>
-            <label for="sat1900" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1900" ng-model="userSchedule['6']['1900']" class="tgl tgl-light"/>
-            <label for="sun1900" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>7:30pm - 8:00pm</td>
-          <td>
-            <input type="checkbox" id="mon1930" ng-model="userSchedule['0']['1930']" class="tgl tgl-light"/>
-            <label for="mon1930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue1930" ng-model="userSchedule['1']['1930']" class="tgl tgl-light"/>
-            <label for="tue1930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed1930" ng-model="userSchedule['2']['1930']" class="tgl tgl-light"/>
-            <label for="wed1930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu1930" ng-model="userSchedule['3']['1930']" class="tgl tgl-light"/>
-            <label for="thu1930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri1930" ng-model="userSchedule['4']['1930']" class="tgl tgl-light"/>
-            <label for="fri1930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat1930" ng-model="userSchedule['5']['1930']" class="tgl tgl-light"/>
-            <label for="sat1930" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun1930" ng-model="userSchedule['6']['1930']" class="tgl tgl-light"/>
-            <label for="sun1930" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>8:00pm - 8:30pm</td>
-          <td>
-            <input type="checkbox" id="mon2000" ng-model="userSchedule['0']['2000']" class="tgl tgl-light"/>
-            <label for="mon2000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue2000" ng-model="userSchedule['1']['2000']" class="tgl tgl-light"/>
-            <label for="tue2000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed2000" ng-model="userSchedule['2']['2000']" class="tgl tgl-light"/>
-            <label for="wed2000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu2000" ng-model="userSchedule['3']['2000']" class="tgl tgl-light"/>
-            <label for="thu2000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri2000" ng-model="userSchedule['4']['2000']" class="tgl tgl-light"/>
-            <label for="fri2000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat2000" ng-model="userSchedule['5']['2000']" class="tgl tgl-light"/>
-            <label for="sat2000" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun2000" ng-model="userSchedule['6']['2000']" class="tgl tgl-light"/>
-            <label for="sun2000" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>8:30pm - 9:00pm</td>
-          <td>
-            <input type="checkbox" id="mon2030" ng-model="userSchedule['0']['2030']" class="tgl tgl-light"/>
-            <label for="mon2030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue2030" ng-model="userSchedule['1']['2030']" class="tgl tgl-light"/>
-            <label for="tue2030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed2030" ng-model="userSchedule['2']['2030']" class="tgl tgl-light"/>
-            <label for="wed2030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu2030" ng-model="userSchedule['3']['2030']" class="tgl tgl-light"/>
-            <label for="thu2030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri2030" ng-model="userSchedule['4']['2030']" class="tgl tgl-light"/>
-            <label for="fri2030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat2030" ng-model="userSchedule['5']['2030']" class="tgl tgl-light"/>
-            <label for="sat2030" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun2030" ng-model="userSchedule['6']['2030']" class="tgl tgl-light"/>
-            <label for="sun2030" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>9:00pm - 9:30pm</td>
-          <td>
-            <input type="checkbox" id="mon2100" ng-model="userSchedule['0']['2100']" class="tgl tgl-light"/>
-            <label for="mon2100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue2100" ng-model="userSchedule['1']['2100']" class="tgl tgl-light"/>
-            <label for="tue2100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed2100" ng-model="userSchedule['2']['2100']" class="tgl tgl-light"/>
-            <label for="wed2100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu2100" ng-model="userSchedule['3']['2100']" class="tgl tgl-light"/>
-            <label for="thu2100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri2100" ng-model="userSchedule['4']['2100']" class="tgl tgl-light"/>
-            <label for="fri2100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat2100" ng-model="userSchedule['5']['2100']" class="tgl tgl-light"/>
-            <label for="sat2100" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun2100" ng-model="userSchedule['6']['2100']" class="tgl tgl-light"/>
-            <label for="sun2100" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>9:30pm - 10:00pm</td>
-          <td>
-            <input type="checkbox" id="mon2130" ng-model="userSchedule['0']['2130']" class="tgl tgl-light"/>
-            <label for="mon2130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue2130" ng-model="userSchedule['1']['2130']" class="tgl tgl-light"/>
-            <label for="tue2130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed2130" ng-model="userSchedule['2']['2130']" class="tgl tgl-light"/>
-            <label for="wed2130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu2130" ng-model="userSchedule['3']['2130']" class="tgl tgl-light"/>
-            <label for="thu2130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri2130" ng-model="userSchedule['4']['2130']" class="tgl tgl-light"/>
-            <label for="fri2130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat2130" ng-model="userSchedule['5']['2130']" class="tgl tgl-light"/>
-            <label for="sat2130" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun2130" ng-model="userSchedule['6']['2130']" class="tgl tgl-light"/>
-            <label for="sun2130" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>10:00pm - 10:30pm</td>
-          <td>
-            <input type="checkbox" id="mon2200" ng-model="userSchedule['0']['2200']" class="tgl tgl-light"/>
-            <label for="mon2200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue2200" ng-model="userSchedule['1']['2200']" class="tgl tgl-light"/>
-            <label for="tue2200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed2200" ng-model="userSchedule['2']['2200']" class="tgl tgl-light"/>
-            <label for="wed2200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu2200" ng-model="userSchedule['3']['2200']" class="tgl tgl-light"/>
-            <label for="thu2200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri2200" ng-model="userSchedule['4']['2200']" class="tgl tgl-light"/>
-            <label for="fri2200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat2200" ng-model="userSchedule['5']['2200']" class="tgl tgl-light"/>
-            <label for="sat2200" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun2200" ng-model="userSchedule['6']['2200']" class="tgl tgl-light"/>
-            <label for="sun2200" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>10:30pm - 11:00pm</td>
-          <td>
-            <input type="checkbox" id="mon2230" ng-model="userSchedule['0']['2230']" class="tgl tgl-light"/>
-            <label for="mon2230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue2230" ng-model="userSchedule['1']['2230']" class="tgl tgl-light"/>
-            <label for="tue2230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed2230" ng-model="userSchedule['2']['2230']" class="tgl tgl-light"/>
-            <label for="wed2230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu2230" ng-model="userSchedule['3']['2230']" class="tgl tgl-light"/>
-            <label for="thu2230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri2230" ng-model="userSchedule['4']['2230']" class="tgl tgl-light"/>
-            <label for="fri2230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat2230" ng-model="userSchedule['5']['2230']" class="tgl tgl-light"/>
-            <label for="sat2230" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun2230" ng-model="userSchedule['6']['2230']" class="tgl tgl-light"/>
-            <label for="sun2230" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>11:00pm - 11:30pm</td>
-          <td>
-            <input type="checkbox" id="mon2300" ng-model="userSchedule['0']['2300']" class="tgl tgl-light"/>
-            <label for="mon2300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue2300" ng-model="userSchedule['1']['2300']" class="tgl tgl-light"/>
-            <label for="tue2300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed2300" ng-model="userSchedule['2']['2300']" class="tgl tgl-light"/>
-            <label for="wed2300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu2300" ng-model="userSchedule['3']['2300']" class="tgl tgl-light"/>
-            <label for="thu2300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri2300" ng-model="userSchedule['4']['2300']" class="tgl tgl-light"/>
-            <label for="fri2300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat2300" ng-model="userSchedule['5']['2300']" class="tgl tgl-light"/>
-            <label for="sat2300" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun2300" ng-model="userSchedule['6']['2300']" class="tgl tgl-light"/>
-            <label for="sun2300" class="tgl-btn"></label>
-          </td>
-        </tr>
-        <tr>
-          <td>11:30pm - 12:00am</td>
-          <td>
-            <input type="checkbox" id="mon2330" ng-model="userSchedule['0']['2330']" class="tgl tgl-light"/>
-            <label for="mon2330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="tue2330" ng-model="userSchedule['1']['2330']" class="tgl tgl-light"/>
-            <label for="tue2330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="wed2330" ng-model="userSchedule['2']['2330']" class="tgl tgl-light"/>
-            <label for="wed2330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="thu2330" ng-model="userSchedule['3']['2330']" class="tgl tgl-light"/>
-            <label for="thu2330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="fri2330" ng-model="userSchedule['4']['2330']" class="tgl tgl-light"/>
-            <label for="fri2330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sat2330" ng-model="userSchedule['5']['2330']" class="tgl tgl-light"/>
-            <label for="sat2330" class="tgl-btn"></label>
-          </td>
-          <td>
-            <input type="checkbox" id="sun2330" ng-model="userSchedule['6']['2330']" class="tgl tgl-light"/>
-            <label for="sun2330" class="tgl-btn"></label>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </div>
