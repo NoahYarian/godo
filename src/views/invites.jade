@@ -34,8 +34,8 @@
             th Declined
             th Min.
             th Max.
-            th RSVP
-            th Message
+            th
+            th
         tbody.inviteRow(ng-repeat="invite in invites" ng-init="inviteIndex = $index" ng-class="{'invite-userConfirmed': invite.userStatus === 'confirmed', 'invite-full': invite.status === 'full', 'invite-confirmed': invite.status === 'confirmed', 'bg-info': invite.status === 'needsConf', 'bg-warning': invite.status === 'needsInterest', 'invite-tooManyDeclines': invite.status === 'tooManyDeclines'}")
           tr
             td {{invite.interest}}
@@ -69,7 +69,7 @@
                 ul.message-list
                   li.message(ng-repeat="(messageUid, message) in invite.messages")
                     div.message-delete
-                      button.btn.btn-danger(ng-if="message.userName === loggedInUser" ng-click="deleteMessage(invite, inviteIndex, messageUid)")
+                      button.btn.btn-danger(ng-if="message.userId === loggedInUser" ng-click="deleteMessage(invite, inviteIndex, messageUid)")
                         span &times;
                     div.messageTime {{message.timestamp}}
                     div.messageName {{message.userName}}:

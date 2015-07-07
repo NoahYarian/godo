@@ -8,7 +8,7 @@
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='/#/')
+          a.navbar-brand(href='' ng-click="showLoginAs = !showLoginAs")
             object.canoe-icon(type="image/svg+xml" data="images/canoe.svg")
         #navbar.collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-right
@@ -43,13 +43,20 @@
           //-    .benefit
           //-       h3.benefit-title Easy to use
           //-       p.benefit-text By preferring code over configuration, gulp keeps things simple and makes complex tasks manageable.
-      div
+      .testing-container(ng-show="showLoginAs")
         //- button(ng-click="checkFBAuth()") checkFBAuth()
-        button(ng-click="loginAs('fakedata')") Log in as fakedata
-        button(ng-click="loginAs('fakedata2')") Log in as fakedata2
-        button(ng-click="loginAs('fakedata3')") Log in as fakedata3
-        button(ng-click="loginAs('fakedata4')") Log in as fakedata4
-        button(ng-click="loginAs('fakedata5')") Log in as fakedata5
+        h4 Login As...
+        .testing
+          button.btn.btn-info(ng-click="loginAs('sharonfyles')") Sharon Fyles
+          button.btn.btn-info(ng-click="loginAs('mollykuehl')") Molly Kuehl
+          button.btn.btn-info(ng-click="loginAs('paigeturner')") Paige Turner
+          button.btn.btn-info(ng-click="loginAs('billfoldes')") Bill Foldes
+          button.btn.btn-info(ng-click="loginAs('sueflay')") Sue Flay
+          button.btn.btn-info(ng-click="loginAs('douggraves')") Doug Graves
+          button.btn.btn-info(ng-click="loginAs('johndess')") John Dess
+          button.btn.btn-info(ng-click="loginAs('matttress')") Matt Tress
+          button.btn.btn-info(ng-click="loginAs('genepoole')") Gene Poole
+          button.btn.btn-info(ng-click="loginAs('kaybull')") Kay Bull
         //- .container(ng-controller="EventCtrl")
           //- button.btn.btn-primary(ng-click="getAvailability('fakedata')") getAvailability('fakedata')
           //- button.btn.btn-primary(ng-click="getBlocks('fakedata3')") getBlocks('fakedata3')

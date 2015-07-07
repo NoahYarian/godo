@@ -437,8 +437,26 @@ a[class*="Friends-"] {
   }
 }
 
+.testing-container {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid #222;
+  width: 150px;
+  padding-bottom: 16px;
+  position: absolute;
+  left: 30px;
+  top: 81px;
+  .testing {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    .btn {
+      margin: 1px;
+    }
+  }
 
-@media (max-width: 650px) {
+}
+
+@media (max-width: 700px) {
   .table > thead > tr > th,
   .table > tbody > tr > th,
   .table > tfoot > tr > th,
@@ -446,6 +464,12 @@ a[class*="Friends-"] {
   .table > tbody > tr > td,
   .table > tfoot > tr > td {
     padding: 2px;
+  }
+  .table .btn {
+    padding: 6px 1px;
+  }
+  button.btn.btn-default.email-button {
+    height: 68px;
   }
 }
 
