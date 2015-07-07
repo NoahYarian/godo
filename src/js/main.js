@@ -668,8 +668,6 @@ var app = angular
       var inviteString = `${invite.dayIndex}_${invite.halfHour}_${invite.interest}`;
       var messageUidRef = ref.push(messageObj);
       var messageUid = messageUidRef.key();
-      console.log(messageObj);
-      // .split('').slice(-19).join('');
       if (!$scope.messages[inviteString]) {
         $scope.messages[inviteString] = {};
       }
