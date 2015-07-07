@@ -4,13 +4,13 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/#/" class="navbar-brand">
+          <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="" ng-click="showLoginAs = !showLoginAs" class="navbar-brand">
             <object type="image/svg+xml" data="images/canoe.svg" class="canoe-icon"></object></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/#/invites" ng-if="loggedInUser">Invites</a></li>
-            <li><a href="/#/loggedin" ng-if="loggedInUser">Profile</a></li>
+            <li><a href="/#/invites">My Invites</a></li>
+            <li><a href="/#/loggedin">Schedule / Interests</a></li>
             <li><a href="" ng-click="login()" ng-if="!loggedInUser">Log In</a><a href="" ng-click="logout()" ng-if="loggedInUser">Log out</a></li>
           </ul>
         </div>
@@ -21,12 +21,20 @@
         <h1><span>Go</span><span>&</span><span>Do</span></h1>
         <h2>More social, less media.</h2>
       </div><a href="" ng-click="login()" class="btn btn-block btn-social btn-lg btn-facebook">Sign in with Facebook<i class="fa fa-facebook"></i></a>
-      <div>
-        <button ng-click="loginAs('fakedata')">Log in as fakedata</button>
-        <button ng-click="loginAs('fakedata2')">Log in as fakedata2</button>
-        <button ng-click="loginAs('fakedata3')">Log in as fakedata3</button>
-        <button ng-click="loginAs('fakedata4')">Log in as fakedata4</button>
-        <button ng-click="loginAs('fakedata5')">Log in as fakedata5</button>
+      <div ng-show="showLoginAs" class="testing-container">
+        <h4>Login As...</h4>
+        <div class="testing">
+          <button ng-click="loginAs('sharonfyles')" class="btn btn-info">Sharon Fyles</button>
+          <button ng-click="loginAs('mollykuehl')" class="btn btn-info">Molly Kuehl</button>
+          <button ng-click="loginAs('paigeturner')" class="btn btn-info">Paige Turner</button>
+          <button ng-click="loginAs('billfoldes')" class="btn btn-info">Bill Foldes</button>
+          <button ng-click="loginAs('sueflay')" class="btn btn-info">Sue Flay</button>
+          <button ng-click="loginAs('douggraves')" class="btn btn-info">Doug Graves</button>
+          <button ng-click="loginAs('johndess')" class="btn btn-info">John Dess</button>
+          <button ng-click="loginAs('matttress')" class="btn btn-info">Matt Tress</button>
+          <button ng-click="loginAs('genepoole')" class="btn btn-info">Gene Poole</button>
+          <button ng-click="loginAs('kaybull')" class="btn btn-info">Kay Bull</button>
+        </div>
       </div>
     </div>
   </div>

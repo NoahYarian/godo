@@ -8,8 +8,9 @@
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li><a ng-controller="ScheduleCtrl" href="/#/invites" ng-class="$('.scheduleForm').hasClass('ng-dirty') ? 'invite-glow' : 'invite-dull'">Invites</a></li>
-          <li class="active"><a href="/#/loggedin">Profile</a></li>
+          <li><a id="invite-glowing" href="/#/invites">My Invites</a>
+          </li>
+          <li class="active"><a href="/#/loggedin">Schedule / Interests</a></li>
           <li ng-controller="FaceCtrl"><a href="" ng-click="logout()">Log out</a></li>
         </ul>
       </div>

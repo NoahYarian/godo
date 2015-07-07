@@ -8,8 +8,8 @@
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="/#/invites">Invites</a></li>
-          <li><a href="/#/loggedin">Profile</a></li>
+          <li class="active"><a href="/#/invites">My Invites</a></li>
+          <li><a href="/#/loggedin">Schedule / Interests</a></li>
           <li ng-controller="FaceCtrl"><a href="" ng-click="logout()">Log out</a></li>
         </ul>
       </div>
@@ -23,25 +23,26 @@
             <th>Interest</th>
             <th>Day</th>
             <th>Time</th>
-            <th>Going</th>
+            <th>Confirmed</th>
             <th>Needs</th>
             <th>Invited</th>
-            <th>Not Going</th>
+            <th>Declined</th>
             <th>Min.</th>
             <th>Max.</th>
             <th></th>
             <th></th>
           </tr>
         </thead>
-        <tbody ng-repeat="invite in invites | filter: filterInvites" ng-init="inviteIndex = $index" ng-class="{'invite-confirmed': invite.userStatus === 'confirmed', 'bg-danger': invite.status === 'full', 'bg-success': invite.status === 'confirmed', 'bg-info': invite.status === 'needsConf', 'bg-warning': invite.status === 'needsInterest', 'bg-warning': invite.status === 'tooManyDeclines'}">
+        <tbody ng-repeat="invite in invites" ng-init="inviteIndex = $index" ng-class="{'invite-userConfirmed': invite.userStatus === 'confirmed', 'invite-full': invite.status === 'full', 'invite-confirmed': invite.status === 'confirmed', 'bg-info': invite.status === 'needsConf', 'bg-warning': invite.status === 'needsInterest', 'invite-tooManyDeclines': invite.status === 'tooManyDeclines'}" class="inviteRow">
           <tr>
             <td>{{invite.interest}}</td>
             <td>{{invite.day}}</td>
             <td>{{invite.time}}</td>
-            <td>{{invite.confirmedNum}}<a href="" ng-if="invite.confirmedFriendsNum &gt; 0" ng-click="$('.confirmedFriends-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" data-content="{{invite.confirmedFriends}}" title="Confirmed Friends" data-html="data-html" class="confirmedFriends-{{inviteIndex}}">({{invite.confirmedFriendsNum}})</a></td>
-            <td>{{invite.neededNum}}</td>
-            <td>{{invite.invitedNum}}<a href="" ng-if="invite.invitedFriendsNum &gt; 0" ng-click="$('.invitedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" data-content="{{invite.invitedFriends}}" title="Invited Friends" data-html="data-html" class="invitedFriends-{{inviteIndex}}">({{invite.invitedFriendsNum}})</a></td>
-            <td>{{invite.declinedNum}}<a href="" ng-if="invite.declinedFriendsNum &gt; 0" ng-click="$('.declinedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="focus" tabindex="0" data-content="{{invite.declinedFriends}}" title="Declined Friends" data-html="data-html" class="declinedFriends-{{inviteIndex}}">({{invite.declinedFriendsNum}})</a></td>
+            <td>{{invite.confirmedNum}}<a href="" ng-if="invite.confirmedFriendsNum &gt; 0" ng-mouseover="$('.confirmedFriends-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="hover" tabindex="0" data-content="{{invite.confirmedFriends}}" title="Confirmed Friends" data-html="data-html" class="confirmedFriends-{{inviteIndex}}">({{invite.confirmedFriendsNum}})</a></td>
+            <td ng-if="invite.neededNum &gt; 0">{{invite.neededNum}} more</td>
+            <td ng-if="invite.neededNum &lt; 1"></td>
+            <td>{{invite.invitedNum}}<a href="" ng-if="invite.invitedFriendsNum &gt; 0" ng-mouseover="$('.invitedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="hover" tabindex="0" data-content="{{invite.invitedFriends}}" title="Invited Friends" data-html="data-html" class="invitedFriends-{{inviteIndex}}">({{invite.invitedFriendsNum}})</a></td>
+            <td>{{invite.declinedNum}}<a href="" ng-if="invite.declinedFriendsNum &gt; 0" ng-mouseover="$('.declinedFriendsNum-{{inviteIndex}}').popover(show)" data-toggle="popover" data-trigger="hover" tabindex="0" data-content="{{invite.declinedFriends}}" title="Declined Friends" data-html="data-html" class="declinedFriends-{{inviteIndex}}">({{invite.declinedFriendsNum}})</a></td>
             <td>{{invite.minPeople}}</td>
             <td>{{invite.maxPeople}}</td>
             <td class="button-td">
@@ -68,7 +69,7 @@
                 <ul class="message-list">
                   <li ng-repeat="(messageUid, message) in invite.messages" class="message">
                     <div class="message-delete">
-                      <button ng-if="message.userName === loggedInUser" ng-click="deleteMessage(invite, inviteIndex, messageUid)" class="btn btn-danger"><span>&times;</span></button>
+                      <button ng-if="message.userId === loggedInUser" ng-click="deleteMessage(invite, inviteIndex, messageUid)" class="btn btn-danger"><span>&times;</span></button>
                     </div>
                     <div class="messageTime">{{message.timestamp}}</div>
                     <div class="messageName">{{message.userName}}:</div>
@@ -79,9 +80,8 @@
               <div class="sendMessage">
                 <form name="newMessageForm" ng-submit="postMessage(invite, inviteIndex)">
                   <input type="text" ng-model="invite.newMessage"/>
-                  <input type="submit" value="Post"/>
+                  <input type="submit" value="Post Message"/>
                 </form>
-                <button ng-click="invite.newMessage = ''">Clear</button>
               </div>
             </td>
           </tr>

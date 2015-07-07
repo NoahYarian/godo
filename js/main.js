@@ -94,10 +94,13 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
   };
   $scope.loginAs = function (facebookId) {
     $rootScope.loggedInUser = facebookId;
-    $rootScope[facebookId] = { me: { name: facebookId } };
-    var ref = new Firebase('https://goanddo.firebaseio.com/users/' + facebookId + '/friends');
+    var ref = new Firebase('https://goanddo.firebaseio.com/users/' + facebookId + '/me/name');
     ref.once('value', function (dataSnapshot) {
-      $rootScope[facebookId].friends = dataSnapshot.val();
+      $rootScope[facebookId] = { me: { name: dataSnapshot.val() } };
+    });
+    var ref2 = new Firebase('https://goanddo.firebaseio.com/users/' + facebookId + '/friends');
+    ref2.once('value', function (dataSnapshot2) {
+      $rootScope[facebookId].friends = dataSnapshot2.val();
     });
     $location.path('/loggedin');
   };
@@ -609,25 +612,26 @@ var app = angular.module('goDo', ['ngRoute', 'firebase', 'ngFacebook']).config(f
     $scope.invites[inviteIndex].declinedNum--;
   };
 
-  $scope.filterInvites = function (invite, i, invites) {
-    if (invite.status === 'tooManyDeclines') {
-      if (invite.userStatus !== 'declined') {
-        return false;
-      }
-    }
-    return true;
-  };
+  // $scope.filterInvites = function(invite, i, invites) {
+  //   if (invite.status === "tooManyDeclines") {
+  //     if (invite.userStatus !== "declined") {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
 
   $scope.postMessage = function (invite, inviteIndex) {
     var ref = new Firebase('http://goanddo.firebaseio.com/calendar/' + invite.dayIndex + '/' + invite.halfHour + '/' + invite.interest + '/messages');
     var messageObj = {
+      userId: $rootScope.loggedInUser,
       userName: $rootScope[facebookId].me.name,
       timestamp: $scope.getPrettyTimestamp(),
       text: invite.newMessage
     };
     var inviteString = invite.dayIndex + '_' + invite.halfHour + '_' + invite.interest;
     var messageUidRef = ref.push(messageObj);
-    var messageUid = messageUidRef.key().split('').slice(-19).join('');
+    var messageUid = messageUidRef.key();
     if (!$scope.messages[inviteString]) {
       $scope.messages[inviteString] = {};
     }

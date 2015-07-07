@@ -59,6 +59,10 @@ h2 {
   font-family: 'Gapstown';
   font-size: 2.5em; }
 
+#invite-glowing {
+  color: lime;
+  font-weight: 400; }
+
 .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {
   outline: none; }
 
@@ -70,6 +74,10 @@ td, th {
 
 tr > th, tfoot {
   background: #888; }
+
+.schedule-table th {
+  color: whitesmoke;
+  font-size: 1.25em; }
 
 tfoot tr td {
   text-align: left; }
@@ -114,10 +122,16 @@ label {
   background: #444;
   padding-top: 25px; }
 
+.inviteRow tr:last-child {
+  background: #ddd; }
+
 .email-button {
+  border: 1px solid transparent;
   font-size: 2.3em;
   padding: 0px 7px;
   line-height: 0.8; }
+  .email-button:hover, .email-button:active, .email-button:focus {
+    border: 1px solid transparent; }
   .email-button p {
     display: inline-block;
     margin: 0;
@@ -154,7 +168,8 @@ label {
   .message-list li {
     display: block; }
     .message-list li div {
-      display: inline-block; }
+      display: inline-block;
+      font-weight: normal; }
   .message-list .messageTime {
     width: 129px;
     text-align: right;
@@ -162,6 +177,9 @@ label {
     font-weight: 200; }
   .message-list .messageName {
     font-weight: 600; }
+
+.sendMessage {
+  font-weight: normal; }
 
 .message-delete {
   width: 16px; }
@@ -177,8 +195,19 @@ label {
 .button-td div {
   display: inline-block; }
 
-.invite-confirmed {
+.invite-userConfirmed {
   font-weight: bold; }
+
+.invite-full {
+  color: #A7A7A7;
+  background: #ccc; }
+
+.invite-confirmed {
+  background: #5CB85C;
+  color: #222; }
+
+.invite-tooManyDeclines {
+  background: #ddd; }
 
 .timeTable div {
   background: white;
@@ -294,19 +323,40 @@ a[class*="Friends-"] {
     .invites-table .email-button {
       padding: 16px 7px; } }
 
-@media (max-width: 650px) {
+.testing-container {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #222;
+  width: 150px;
+  padding-bottom: 16px;
+  position: absolute;
+  left: 30px;
+  top: 81px; }
+  .testing-container .testing {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; }
+    .testing-container .testing .btn {
+      margin: 1px; }
+
+@media (max-width: 700px) {
   .table > thead > tr > th,
   .table > tbody > tr > th,
   .table > tfoot > tr > th,
   .table > thead > tr > td,
   .table > tbody > tr > td,
   .table > tfoot > tr > td {
-    padding: 2px; } }
+    padding: 2px; }
+  .table .btn {
+    padding: 6px 1px; }
+  button.btn.btn-default.email-button {
+    height: 68px; } }
 
-@media (max-width: 768px) {
+@media (max-width: 990px) {
   .email-button {
     padding: 16px 7px; }
   .table > tbody > tr > td.button-td {
     padding-right: 0; }
     .table > tbody > tr > td.button-td div button {
-      width: 100%; } }
+      width: 100%; }
+  .undecline, .unconfirm, .undecline button, .unconfirm button {
+    width: 100%; } }
