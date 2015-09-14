@@ -6,7 +6,7 @@ var app = angular
     $facebookProvider.setAppId('103273773349279');
     $facebookProvider.setPermissions("user_friends");
     $facebookProvider.setCustomInit({
-      channelUrl : '//godo.tehcode.com/channel.html',
+      channelUrl : '//godo.noahyarian.com/channel.html',
       xfbml      : true
     });
   })
